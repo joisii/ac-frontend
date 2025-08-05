@@ -22,7 +22,7 @@ function Services() {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/requests", {
+      const res = await fetch("https://ac-backend-cpsu.onrender.com/requests", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newRequest),
@@ -63,6 +63,7 @@ function Services() {
       id="services"
       className="font-sans text-gray-800 min-h-screen flex flex-col justify-center bg-gradient-to-b from-white via-blue-50 to-white relative overflow-hidden"
     >
+      {/* Header Section */}
       <div className="bg-gradient-to-r from-blue-800 via-blue-600 to-yellow-500 text-white py-20 text-center shadow-lg">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-xl">
@@ -74,6 +75,7 @@ function Services() {
         </div>
       </div>
 
+      {/* Service Cards */}
       <div className="flex-grow flex flex-col justify-center py-20">
         <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-12">
           {serviceData.map((item, idx) => (
@@ -97,6 +99,7 @@ function Services() {
           ))}
         </div>
 
+        {/* Training Section */}
         <motion.div
           className="mt-24 max-w-5xl mx-auto px-4"
           initial={{ opacity: 0, y: 50 }}
@@ -114,6 +117,7 @@ function Services() {
           </p>
         </motion.div>
 
+        {/* Packages Section */}
         <motion.div
           className="mt-24 max-w-7xl mx-auto px-4"
           initial={{ opacity: 0, y: 50 }}
