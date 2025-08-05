@@ -76,12 +76,13 @@ export default function TestimonialsPage() {
   const timeoutRef = useRef(null);
 
   // Make paginate stable and independent
-  const paginate = useCallback((newDirection) => {
-    setPage(([prevPage]) => [
-      (prevPage + newDirection + testimonials.length) % testimonials.length,
-      newDirection,
-    ]);
-  }, [testimonials.length]);
+ // Make paginate stable
+const paginate = useCallback((newDirection) => {
+  setPage(([prevPage]) => [
+    (prevPage + newDirection + testimonials.length) % testimonials.length,
+    newDirection,
+  ]);
+}, []); // Removed testimonials.length
 
   // Auto-play function that depends on paginate
   const startAutoPlay = useCallback(() => {
