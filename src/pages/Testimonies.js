@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const testimonials = [
@@ -54,7 +54,6 @@ const clients = [
   { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
   { name: "FATHIMA JEWELlERS", logo: "/assets/fathima.jpeg" },
   { name: " QSPIDERS A UNIT OF TEST YANTRA SOFTWARE SOLUTIONS INDIA PVT LTD", logo: "/assets/qspiders.png" },
-
 ];
 
 const variants = {
@@ -85,16 +84,17 @@ export default function TestimonialsPage() {
     startAutoPlay();
   };
 
-  const startAutoPlay = () => {
+  // Wrap startAutoPlay in useCallback so it’s stable and can be added as a dependency
+  const startAutoPlay = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
       paginate(1);
     }, 6000);
-  };
+  }, [page]); // depends on page
 
   useEffect(() => {
     startAutoPlay();
     return () => clearTimeout(timeoutRef.current);
-  }, [page]);
+  }, [page, startAutoPlay]); // added startAutoPlay here
 
   const testimonial = testimonials[page];
 
