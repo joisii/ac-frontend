@@ -75,27 +75,27 @@ export default function TestimonialsPage() {
   const [[page, direction], setPage] = useState([0, 0]);
   const timeoutRef = useRef(null);
 
-  // Wrap paginate in useCallback to stabilize its reference
+  // Make paginate stable and independent
   const paginate = useCallback((newDirection) => {
     setPage(([prevPage]) => [
       (prevPage + newDirection + testimonials.length) % testimonials.length,
       newDirection,
     ]);
-    clearTimeout(timeoutRef.current);
-    startAutoPlay();
-  }, []);
+  }, [testimonials.length]);
 
-  // Wrap startAutoPlay in useCallback and add paginate as a dependency
+  // Auto-play function that depends on paginate
   const startAutoPlay = useCallback(() => {
+    clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       paginate(1);
     }, 6000);
   }, [paginate]);
 
+  // Restart autoplay whenever page changes
   useEffect(() => {
     startAutoPlay();
     return () => clearTimeout(timeoutRef.current);
-  }, [page, startAutoPlay]);
+  }, [startAutoPlay]);
 
   const testimonial = testimonials[page];
 
