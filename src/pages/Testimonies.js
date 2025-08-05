@@ -53,7 +53,7 @@ const clients = [
   { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
   { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
   { name: "FATHIMA JEWELlERS", logo: "/assets/fathima.jpeg" },
-  { name: " QSPIDERS A UNIT OF TEST YANTRA SOFTWARE SOLUTIONS INDIA PVT LTD", logo: "/assets/qspiders.png" },
+  { name: "QSPIDERS A UNIT OF TEST YANTRA SOFTWARE SOLUTIONS INDIA PVT LTD", logo: "/assets/qspiders.png" },
 ];
 
 const variants = {
@@ -75,26 +75,27 @@ export default function TestimonialsPage() {
   const [[page, direction], setPage] = useState([0, 0]);
   const timeoutRef = useRef(null);
 
-  const paginate = (newDirection) => {
-    setPage([
-      (page + newDirection + testimonials.length) % testimonials.length,
+  // Wrap paginate in useCallback to stabilize its reference
+  const paginate = useCallback((newDirection) => {
+    setPage(([prevPage]) => [
+      (prevPage + newDirection + testimonials.length) % testimonials.length,
       newDirection,
     ]);
     clearTimeout(timeoutRef.current);
     startAutoPlay();
-  };
+  }, []);
 
-  // Wrap startAutoPlay in useCallback so it’s stable and can be added as a dependency
+  // Wrap startAutoPlay in useCallback and add paginate as a dependency
   const startAutoPlay = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
       paginate(1);
     }, 6000);
-  }, [page]); // depends on page
+  }, [paginate]);
 
   useEffect(() => {
     startAutoPlay();
     return () => clearTimeout(timeoutRef.current);
-  }, [page, startAutoPlay]); // added startAutoPlay here
+  }, [page, startAutoPlay]);
 
   const testimonial = testimonials[page];
 
