@@ -6,39 +6,48 @@ import API_BASE from '../config';
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [sales, setSales] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch data from backend instead of localStorage
   useEffect(() => {
-    // Fetch service requests
-    fetch(`${API_BASE}/requests`)
-      .then(res => res.json())
-      .then(data => setRequests(data))
-      .catch(err => console.error('Error fetching service requests:', err));
+    const fetchData = async () => {
+      try {
+        // Fetch service requests
+        const reqRes = await fetch(`${API_BASE}/requests`);
+        const reqData = await reqRes.json();
+        setRequests(Array.isArray(reqData) ? reqData : []);
 
-    // Fetch sales records
-    fetch(`${API_BASE}/sales`)
-      .then(res => res.json())
-      .then(data => setSales(data))
-      .catch(err => console.error('Error fetching sales:', err));
+        // Fetch sales records
+        const salesRes = await fetch(`${API_BASE}/sales`);
+        const salesData = await salesRes.json();
+        setSales(Array.isArray(salesData) ? salesData : []);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  // Delete request
   const handleDeleteRequest = (id) => {
     fetch(`${API_BASE}/requests/${id}`, { method: 'DELETE' })
       .then(() => setRequests(prev => prev.filter(req => req._id !== id)))
       .catch(err => console.error('Error deleting request:', err));
   };
 
-  // Delete sale
   const handleDeleteSale = (id) => {
     fetch(`${API_BASE}/sales/${id}`, { method: 'DELETE' })
       .then(() => setSales(prev => prev.filter(s => s._id !== id)))
       .catch(err => console.error('Error deleting sale:', err));
   };
 
+  if (loading) {
+    return <div className="p-6 text-center text-gray-500">Loading data...</div>;
+  }
+
   return (
     <div className="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-200 min-h-screen font-sans">
-      {/* Admin Greeting */}
       <div className="bg-white shadow rounded-xl p-6 mb-8 border border-gray-300 flex justify-between items-center">
         <div>
           <h2 className="text-3xl font-bold text-gray-800">Welcome, Admin</h2>
@@ -54,12 +63,10 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Service Requests */}
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300 mb-10">
         <ServiceRequestsTable requests={requests} onDelete={handleDeleteRequest} />
       </div>
 
-      {/* Sales Records */}
       <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-300">
         <SalesTable sales={sales} onDelete={handleDeleteSale} />
       </div>
