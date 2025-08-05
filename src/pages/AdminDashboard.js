@@ -1,31 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import ServiceRequestsTable from './ServiceRequestsTable';
 import SalesTable from './SalesTable';
+import API_BASE from '../config';
 
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [sales, setSales] = useState([]);
 
-  // Load data from localStorage
+  // Fetch data from backend instead of localStorage
   useEffect(() => {
-    const storedRequests = JSON.parse(localStorage.getItem('serviceRequests')) || [];
-    const storedSales = JSON.parse(localStorage.getItem('salesRecords')) || [];
-    setRequests(storedRequests);
-    setSales(storedSales);
+    // Fetch service requests
+    fetch(`${API_BASE}/requests`)
+      .then(res => res.json())
+      .then(data => setRequests(data))
+      .catch(err => console.error('Error fetching service requests:', err));
+
+    // Fetch sales records
+    fetch(`${API_BASE}/sales`)
+      .then(res => res.json())
+      .then(data => setSales(data))
+      .catch(err => console.error('Error fetching sales:', err));
   }, []);
 
-  const handleDeleteRequest = (index) => {
-    const updatedRequests = [...requests];
-    updatedRequests.splice(index, 1);
-    setRequests(updatedRequests);
-    localStorage.setItem('serviceRequests', JSON.stringify(updatedRequests));
+  // Delete request
+  const handleDeleteRequest = (id) => {
+    fetch(`${API_BASE}/requests/${id}`, { method: 'DELETE' })
+      .then(() => setRequests(prev => prev.filter(req => req._id !== id)))
+      .catch(err => console.error('Error deleting request:', err));
   };
 
-  const handleDeleteSale = (index) => {
-    const updatedSales = [...sales];
-    updatedSales.splice(index, 1);
-    setSales(updatedSales);
-    localStorage.setItem('salesRecords', JSON.stringify(updatedSales));
+  // Delete sale
+  const handleDeleteSale = (id) => {
+    fetch(`${API_BASE}/sales/${id}`, { method: 'DELETE' })
+      .then(() => setSales(prev => prev.filter(s => s._id !== id)))
+      .catch(err => console.error('Error deleting sale:', err));
   };
 
   return (
