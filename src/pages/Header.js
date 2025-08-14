@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
-import { motion, AnimatePresence, useAnimation } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -73,14 +73,6 @@ const Header = () => {
     </>
   );
 
-  const logoControls = useAnimation();
-  useEffect(() => {
-    logoControls.start({
-      y: [0, -5, 0],
-      transition: { repeat: Infinity, duration: 3, ease: 'easeInOut' },
-    });
-  }, [logoControls]);
-
   return (
     <nav className="bg-gradient-to-r from-blue-900/80 via-blue-800/70 to-blue-900/80 backdrop-blur-3xl text-white shadow-2xl sticky top-0 z-50 rounded-b-3xl">
       <motion.div
@@ -89,11 +81,12 @@ const Header = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        <motion.div className="flex items-center space-x-5" animate={logoControls}>
+        {/* Logo + Title without bounce */}
+        <div className="flex items-center space-x-5">
           <motion.img
             src="/assets/logo.jpg"
             alt="GVJ Aircon Logo"
-            className="h-16 w-16 object-contain rounded-full p-2 "
+            className="h-16 w-16 object-contain rounded-full p-2"
             whileHover={{ scale: 1.2, rotate: 10 }}
             transition={{ type: 'spring', stiffness: 300 }}
           />
@@ -101,9 +94,9 @@ const Header = () => {
             className="text-4xl font-black tracking-widest text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
             whileHover={{ scale: 1.15 }}
           >
-            GVJ Aircon
+            GVJ AIRCON
           </motion.h1>
-        </motion.div>
+        </div>
 
         <div className="hidden md:flex space-x-8 text-lg items-center">
           <AnimatePresence>

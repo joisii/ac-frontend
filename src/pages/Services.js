@@ -29,7 +29,7 @@ function Services() {
       });
 
       if (res.ok) {
-        alert("Service request submitted successfully!");
+        alert("Submitted successfully!");
         setFormData({ name: "", contact: "", issue: "" });
       } else {
         alert("Error submitting request");

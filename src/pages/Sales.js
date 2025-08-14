@@ -106,7 +106,7 @@ function Sales() {
       });
 
       if (res.ok) {
-        alert('Sales request submitted successfully!');
+        alert('Submitted successfully!');
         setFormData({ name: '', email: '', phone: '', message: '' });
       } else {
         alert('Failed to submit sales request');
