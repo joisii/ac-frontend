@@ -5,14 +5,13 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 const acProducts = [
   {
     title: "Cassette Air Conditioner",
-    image: "/assets/casette.png",
+    image: "/assets/casette.jpg",
     specs: [
       "Elegant design, seamlessly blending with interiors",
       "Super Silent operation with BLDC motor",
       "360° air flow for uniform cooling",
       "Inverter compressor for efficient performance",
     ],
-    link: "https://www.bluestarindia.com/products/cassette-air-conditioners",
   },
   {
     title: "Ducted Split AC",
@@ -23,7 +22,6 @@ const acProducts = [
       "Can cater any area above 400 Sq Ft",
       "Save 20-25% of your electricity bill",
     ],
-    link: "https://www.bluestarindia.com/products/ducted-split-air-conditioners",
   },
   {
     title: "Verticool AC",
@@ -34,32 +32,29 @@ const acProducts = [
       "Comfort Sleep",
       "Super Sleek Design"
     ],
-    link: "https://www.bluestarindia.com/products/verticool-air-conditioners"
   },
   {
     title: "Full Inverter VRF Systems",
-    image: "/assets/vrf (1).jpg",
+    image: "/assets/vrf.jpg",
     specs: [
       "Varied indoor units to suit interior requirements",
       "Elegant Design",
       "Very efficient in part-load applications",
       "Saves 5-30% electricity bills",
     ],
-    link: "https://www.bluestarindia.com/products/central-air-conditioning/vrf-systems"
   },
   {
-    title: "Ducted Packages",
-    image: "/assets/ducted.webp",
+    title: "Ducted Packages AC",
+    image: "/assets/package.jpg",
     specs: [
       "Highly energy efficient",
       "Meant for large floor areas",
       "Effective in part-load applications",
       "Widely used in corporate, commercial buildings",
     ],
-    link: "https://www.bluestarindia.com/products/central-air-conditioning/ducted-packages",
   },
   {
-    title: "H1 Wall Split",
+    title: "HI Wall Split AC",
     image: "/assets/vert.png",
     specs: [
       "Varied indoor units to suit interior requirements",
@@ -67,7 +62,6 @@ const acProducts = [
       "Saves 5-30% electricity bills",
       "Varied intelligent control options available",
     ],
-    link: "https://www.daikinindia.com/product-category/splitac"
   },
 ];
 
@@ -106,7 +100,7 @@ function Sales() {
       });
 
       if (res.ok) {
-        alert('Submitted successfully!');
+        alert('S65ubmitted successfully!');
         setFormData({ name: '', email: '', phone: '', message: '' });
       } else {
         alert('Failed to submit sales request');

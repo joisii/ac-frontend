@@ -123,7 +123,7 @@ const AboutUs = () => {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               <span className="text-3xl md:text-4xl font-bold text-blue-700 mb-1">
-                <CountUp end={19500} duration={3} separator="," /> TR
+                <CountUp end={20000} duration={3} separator="," /> TR
               </span>
               <span className="text-sm">Cooling Installed</span>
             </motion.div>

@@ -67,7 +67,7 @@ function Services() {
       <div className="bg-gradient-to-r from-blue-800 via-blue-600 to-yellow-500 text-white py-20 text-center shadow-lg">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-xl">
-            Premium HVAC Services & Training
+          HVAC Services & Training
           </h2>
           <p className="mt-6 text-xl max-w-3xl mx-auto text-blue-100">
             Comprehensive solutions from installation to after-sales service, with industry-leading training programs for tomorrow's HVAC professionals.

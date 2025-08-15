@@ -5,22 +5,22 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 
 const projects = [
   {
-    title: "Restaurant-Jalpaan",
+    title: "Restaurant",
     description: "Installed a customized 80-ton HVAC system to maintain optimal dining comfort, even during peak hours and large gatherings.",
     image: "/assets/restaurant.jpg",
   },
   {
-    title: "Gym-20x7",
+    title: "Gym",
     description: "Deployed a high-efficiency ducted HVAC system built for continuous 24/7 operation, ensuring fresh airflow for fitness enthusiasts around the clock.",
     image: "/assets/gym.jpg",
   },
   {
-    title: "Textile Shop-Diadem T Nagar",
+    title: "Textile Shop",
     description: "Integrated a smart VRF system across 5 floors to keep the shopping space cool, energy-efficient, and comfortable for both customers and staff.",
     image: "/assets/tex.jpg",
   },
   {
-    title: "Banquet Hall-Velachery",
+    title: "Banquet Hall",
     description: "Delivered a noise-free, high-capacity HVAC solution designed to handle the demands of large functions, weddings, and conferences with ease.",
     image: "/assets/hall.jpg",
   },
@@ -30,22 +30,22 @@ const projects = [
     image: "/assets/chruch.jpg",
   },
   {
-    title: "Super Market-Fresh 2 day",
+    title: "Super Market",
     description: "Installed a robust HVAC system that balances cooling efficiency with noise control, keeping shoppers and staff comfortable throughout the day.",
     image: "/assets/supermar.jpg",
   },
  {
-  title: "VS Hospital",
+  title: "Hospital",
   description: "Delivered a precision-controlled HVAC system tailored for healthcare, ensuring patient comfort, air purity, and low noise in critical care zones.",
   image: "/assets/vs ho.webp",
 },
 {
-  title: "Corporate Office - Indique",
+  title: "Corporate Office",
   description: "Designed a smart, energy-efficient HVAC setup that supports a productive work environment with silent airflow and optimized zoning for office spaces.",
   image: "/assets/indique.jpg",
 },
 {
-  title: "Conference Hall - Amritha Institution",
+  title: "Conference Hall",
   description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.",
   image: "/assets/conf.jpg",
 },

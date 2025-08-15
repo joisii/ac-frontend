@@ -93,7 +93,7 @@ const HeroSection = () => {
           variants={childVariants}
           className="text-2xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 to-blue-500 drop-shadow-lg"
         >
-          Centralized Air Conditioning Experts
+          Air Conditioning Experts
         </motion.h2>
 
         <motion.p
