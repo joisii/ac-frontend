@@ -45,7 +45,7 @@ const clients = [
   { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
   { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
   { name: "FATHIMA JEWELLERS", logo: "/assets/fathima.jpeg" },
-  { name: "QSPIDERS", logo: "/assets/qspiders.png" },
+  { name: "Qspiders", logo: "/assets/qspiders.png" },
 ];
 
 const variants = {

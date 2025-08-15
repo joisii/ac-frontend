@@ -79,9 +79,6 @@ const AboutUs = () => {
                 onClick={() => setPopupImage("/assets/gvj1.jpg")}
                 className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-105 rounded-2xl cursor-pointer"
               />
-              <div className="absolute top-4 left-4 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-                30+ Years of Excellence
-              </div>
             </motion.div>
           </Tilt>
         </motion.div>
