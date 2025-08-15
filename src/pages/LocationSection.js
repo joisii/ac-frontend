@@ -21,20 +21,20 @@ const LocationSection = () => {
           className="mb-6 text-lg text-gray-700 hover:text-blue-800 transition duration-300 cursor-pointer group"
           onClick={() =>
             navigator.clipboard.writeText(
-              "No 37 Rathinavel Padiyan Street, Golden George Nagar, Neekundram, Chennai 600107"
+              "GVJ AIRCON PROJECT AND SERVICES, 37. Rathinam Pandiyan Street, Golden George Nagar, Nerkundrum, Chennai - 600107"
             )
           }
           title="Click to copy address"
         >
           📍 <span className="group-hover:underline">
-            No 37 Rathinavel Padiyan Street, Golden George Nagar, Neekundram, Chennai 600107
+            GVJ AIRCON PROJECT AND SERVICES, 37. Rathinam Pandiyan Street, Golden George Nagar, Nerkundrum, Chennai - 600107
           </span>
         </p>
 
         <div className="rounded-2xl overflow-hidden shadow-lg border-4 border-blue-300 hover:shadow-blue-400 transition-all duration-500">
           <iframe
             title="Google Map"
-            src="https://www.google.com/maps?q=No+37+Rathinavel+Padiyan+Street,+Golden+George+Nagar,+Neekundram,+Chennai+600107&output=embed"
+            src="https://www.google.com/maps?q=13.0747213,80.185621&output=embed"
             width="100%"
             height="350"
             style={{ border: 0 }}
@@ -46,7 +46,7 @@ const LocationSection = () => {
 
         <div className="mt-6 text-center">
           <a
-            href="https://www.google.com/maps?q=No+37+Rathinavel+Padiyan+Street,+Golden+George+Nagar,+Neekundram,+Chennai+600107"
+            href="https://www.google.com/maps?q=13.0747213,80.185621"
             target="_blank"
             rel="noopener noreferrer"
           >

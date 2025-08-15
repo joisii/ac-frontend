@@ -10,11 +10,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const sections = ['hero', 'about', 'projects', 'sales', 'services', 'testimonials', 'location'];
+    const sections = ['hero', 'sales', 'projects', 'services', 'about'];
 
     const handleScroll = () => {
       if (location.pathname !== '/') {
-        setActiveSection(null); // no highlight on other pages
+        setActiveSection(null);
         return;
       }
 
@@ -66,10 +66,10 @@ const Header = () => {
   const navLinks = (
     <>
       <button onClick={() => handleNavClick('hero')} className={navLinkClass('hero')}>Home</button>
-      <button onClick={() => handleNavClick('about')} className={navLinkClass('about')}>About</button>
       <button onClick={() => handleNavClick('sales')} className={navLinkClass('sales')}>Sales</button>
       <button onClick={() => handleNavClick('projects')} className={navLinkClass('projects')}>Projects</button>
-      <button onClick={() => handleNavClick('services')} className={navLinkClass('services')}>Services</button>
+      <button onClick={() => handleNavClick('services')} className={navLinkClass('services')}>Service</button>
+      <button onClick={() => handleNavClick('about')} className={navLinkClass('about')}>About</button>
     </>
   );
 
@@ -81,7 +81,7 @@ const Header = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        {/* Logo + Title without bounce */}
+        {/* Logo + Title */}
         <div className="flex items-center space-x-5">
           <motion.img
             src="/assets/logo.jpg"
@@ -98,6 +98,7 @@ const Header = () => {
           </motion.h1>
         </div>
 
+        {/* Desktop Nav */}
         <div className="hidden md:flex space-x-8 text-lg items-center">
           <AnimatePresence>
             {navLinks && React.Children.map(navLinks.props.children, (child, i) => (
@@ -114,6 +115,7 @@ const Header = () => {
           <a href="/admin/login" className="text-sm text-gray-300 hover:text-purple-300">Admin Login</a>
         </div>
 
+        {/* Mobile Menu Button */}
         <motion.button
           className="md:hidden focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -124,6 +126,7 @@ const Header = () => {
         </motion.button>
       </motion.div>
 
+      {/* Mobile Nav */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div

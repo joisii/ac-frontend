@@ -15,24 +15,22 @@ const AboutUs = () => {
 
   const [popupImage, setPopupImage] = useState(null);
 
-  // Close on ESC key + Disable background scroll when modal is open
+  // Close on ESC key
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') setPopupImage(null);
     };
     window.addEventListener('keydown', handleEsc);
+    return () => window.removeEventListener('keydown', handleEsc);
+  }, []);
 
-    // Lock/unlock scroll
+  // Freeze background scroll when popup is open
+  useEffect(() => {
     if (popupImage) {
       document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = 'auto';
     }
-
-    return () => {
-      window.removeEventListener('keydown', handleEsc);
-      document.body.style.overflow = ''; // reset on unmount
-    };
   }, [popupImage]);
 
   return (
@@ -127,7 +125,7 @@ const AboutUs = () => {
             viewport={{ once: true }}
           >
             <motion.div
-              className="p-4 rounded-xl bg-white/50 backdrop-blur shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
+              className="p-4 rounded-xl bg-white/50 shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               <span className="text-3xl md:text-4xl font-bold text-blue-700 mb-1">
@@ -137,7 +135,7 @@ const AboutUs = () => {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-xl bg-white/50 backdrop-blur shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
+              className="p-4 rounded-xl bg-white/50 shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               <span className="text-3xl md:text-4xl font-bold text-yellow-600 mb-1">
@@ -162,7 +160,7 @@ const AboutUs = () => {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="flex items-start gap-3 p-2 rounded-xl bg-white/40 backdrop-blur hover:scale-105 transition-transform duration-300 shadow-md"
+                className="flex items-start gap-3 p-2 rounded-xl bg-white/40 hover:scale-105 transition-transform duration-300 shadow-md"
                 variants={{
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
@@ -185,7 +183,7 @@ const AboutUs = () => {
 
       {/* 📸 Popup Image Modal */}
       {popupImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white transition-opacity duration-300">
           <div className="relative p-4 w-full max-w-4xl">
             <img
               src={popupImage}
@@ -195,7 +193,7 @@ const AboutUs = () => {
             />
             <button
               onClick={() => setPopupImage(null)}
-              className="absolute top-4 right-4 text-white text-3xl font-bold bg-black/70 rounded-full px-3 py-1 hover:bg-black/90 transition"
+              className="absolute top-4 right-4 text-black text-3xl font-bold bg-white rounded-full px-3 py-1 hover:bg-gray-200 transition"
             >
               ✕
             </button>
