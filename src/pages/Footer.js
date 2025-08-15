@@ -1,5 +1,3 @@
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaTwitter } from 'react-icons/fa';
-
 const Footer = () => {
   return (
     <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-gray-300 mt-16">
@@ -55,40 +53,6 @@ const Footer = () => {
           <h4 className="text-white text-lg font-bold mb-4 border-b border-gray-600 pb-2 inline-block">
             Connect with us
           </h4>
-          <div className="flex justify-center md:justify-start gap-5 mb-6">
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-500 transform hover:scale-110 transition duration-300"
-            >
-              <FaFacebookF size={20} />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-pink-500 transform hover:scale-110 transition duration-300"
-            >
-              <FaInstagram size={20} />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-blue-400 transform hover:scale-110 transition duration-300"
-            >
-              <FaLinkedinIn size={20} />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-sky-400 transform hover:scale-110 transition duration-300"
-            >
-              <FaTwitter size={20} />
-            </a>
-          </div>
 
           {/* Phone Numbers */}
           <div className="mb-4 text-sm text-gray-400">

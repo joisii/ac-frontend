@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Tilt from 'react-parallax-tilt';
 import CountUp from 'react-countup';
 
 const AboutUs = () => {
@@ -26,11 +25,7 @@ const AboutUs = () => {
 
   // Freeze background scroll when popup is open
   useEffect(() => {
-    if (popupImage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = popupImage ? 'hidden' : 'auto';
   }, [popupImage]);
 
   return (
@@ -51,7 +46,7 @@ const AboutUs = () => {
 
       {/* CONTENT */}
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 items-center gap-12 relative z-10">
-        {/* Left - Image with Tilt */}
+        {/* Left - Static Image */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -59,26 +54,14 @@ const AboutUs = () => {
           viewport={{ once: true }}
           className="relative mx-auto w-72"
         >
-          <Tilt tiltMaxAngleX={15} tiltMaxAngleY={15} glareEnable glareMaxOpacity={0.2}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 0.4, scale: 1 }}
-              transition={{ duration: 1 }}
-              className="absolute -top-5 -left-5 w-80 h-80 bg-blue-300 rounded-full blur-3xl z-0"
+          <div className="relative z-10 rounded-2xl shadow-2xl overflow-hidden">
+            <img
+              src="/assets/gvj1.jpg"
+              alt="GVJ Aircon Team"
+              onClick={() => setPopupImage("/assets/gvj1.jpg")}
+              className="w-full h-auto object-cover rounded-2xl cursor-pointer"
             />
-            <motion.div
-              whileHover={{ y: -10, scale: 1.05 }}
-              transition={{ type: 'spring', stiffness: 300 }}
-              className="relative z-10 rounded-2xl shadow-2xl overflow-hidden group"
-            >
-              <img
-                src="/assets/gvj1.jpg"
-                alt="GVJ Aircon Team"
-                onClick={() => setPopupImage("/assets/gvj1.jpg")}
-                className="w-full h-auto object-cover transition-transform duration-500 ease-in-out group-hover:scale-105 rounded-2xl cursor-pointer"
-              />
-            </motion.div>
-          </Tilt>
+          </div>
         </motion.div>
 
         {/* Right - Text + Stats */}
@@ -125,7 +108,7 @@ const AboutUs = () => {
             viewport={{ once: true }}
           >
             <motion.div
-              className="p-4 rounded-xl bg-white/50 shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
+              className="p-4 rounded-xl bg-white/50 shadow-md flex flex-col items-start"
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               <span className="text-3xl md:text-4xl font-bold text-blue-700 mb-1">
@@ -135,7 +118,7 @@ const AboutUs = () => {
             </motion.div>
 
             <motion.div
-              className="p-4 rounded-xl bg-white/50 shadow-md hover:scale-105 transition-transform duration-300 flex flex-col items-start"
+              className="p-4 rounded-xl bg-white/50 shadow-md flex flex-col items-start"
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
             >
               <span className="text-3xl md:text-4xl font-bold text-yellow-600 mb-1">
@@ -160,28 +143,22 @@ const AboutUs = () => {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="flex items-start gap-3 p-2 rounded-xl bg-white/40 hover:scale-105 transition-transform duration-300 shadow-md"
+                className="flex items-start gap-3 p-2 rounded-xl bg-white/40 shadow-md"
                 variants={{
                   hidden: { opacity: 0, y: 20 },
                   visible: { opacity: 1, y: 0 },
                 }}
                 transition={{ duration: 0.5 }}
               >
-                <motion.span
-                  whileHover={{ scale: 1.3, rotate: 10 }}
-                  transition={{ type: 'spring', stiffness: 200 }}
-                  className="text-green-600 text-xl shadow-md"
-                >
-                  ✔
-                </motion.span>
-                <span className="transition-opacity duration-300 hover:opacity-100">{item}</span>
+                <span className="text-green-600 text-xl shadow-md">✔</span>
+                <span>{item}</span>
               </motion.div>
             ))}
           </motion.div>
         </motion.div>
       </div>
 
-      {/* 📸 Popup Image Modal */}
+      {/* Popup Image Modal */}
       {popupImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-white transition-opacity duration-300">
           <div className="relative p-4 w-full max-w-4xl">
