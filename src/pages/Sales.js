@@ -100,7 +100,7 @@ function Sales() {
       });
 
       if (res.ok) {
-        alert('S65ubmitted successfully!');
+        alert('Submitted successfully!');
         setFormData({ name: '', email: '', phone: '', message: '' });
       } else {
         alert('Failed to submit sales request');
@@ -165,14 +165,14 @@ function Sales() {
                     <img
                       src={product.image}
                       alt={product.title}
-                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </a>
                 ) : (
                   <img
                     src={product.image}
                     alt={product.title}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 )}
               </div>
