@@ -36,14 +36,6 @@ const testimonials = [
 ];
 
 const clients = [
-  { name: "AVM Productions", logo: "/assets/avm.png" },
-  { name: "AMCH", logo: "/assets/amch.png" },
-  { name: "Titan", logo: "/assets/titan.png" },
-  { name: "Hapag-Lloyd", logo: "/assets/loyd.png" },
-  { name: "Ramaniyam", logo: "/assets/rama.png" },
-  { name: "Maharishi International Residential School", logo: "/assets/school.png" },
-  { name: "Madras Boat Club", logo: "/assets/madras.png" },
-  { name: "SIMS", logo: "/assets/sims.png" },
   { name: "IndiQube Limited", logo: "/assets/indie.jpeg" },
   { name: "Sree Gupta Bhavan", logo: "/assets/srb.png" },
   { name: "Esskay Design Structures Private", logo: "/assets/Esskey.jpeg" },
@@ -52,8 +44,8 @@ const clients = [
   { name: "LKS Old House", logo: "/assets/Lks.png" },
   { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
   { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
-  { name: "FATHIMA JEWELlERS", logo: "/assets/fathima.jpeg" },
-  { name: "QSPIDERS A UNIT OF TEST YANTRA SOFTWARE SOLUTIONS INDIA PVT LTD", logo: "/assets/qspiders.png" },
+  { name: "FATHIMA JEWELLERS", logo: "/assets/fathima.jpeg" },
+  { name: "QSPIDERS", logo: "/assets/qspiders.png" },
 ];
 
 const variants = {

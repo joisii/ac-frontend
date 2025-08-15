@@ -15,14 +15,25 @@ const AboutUs = () => {
 
   const [popupImage, setPopupImage] = useState(null);
 
-  // Close on ESC key
+  // Close on ESC key + Disable background scroll when modal is open
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') setPopupImage(null);
     };
     window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, []);
+
+    // Lock/unlock scroll
+    if (popupImage) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+      document.body.style.overflow = ''; // reset on unmount
+    };
+  }, [popupImage]);
 
   return (
     <section
@@ -183,7 +194,6 @@ const AboutUs = () => {
               src={popupImage}
               alt="Popup"
               className="mx-auto rounded-2xl shadow-2xl border-4 border-white"
-              // 👇 YOU CAN ADJUST SIZE HERE
               style={{ maxHeight: '80vh', maxWidth: '100%' }}
             />
             <button

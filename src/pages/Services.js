@@ -129,18 +129,10 @@ function Services() {
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              "Comprehensive AMC",
+              "Comprehensive",
               "Only Labour Contract",
               "Revamp/Re-installation of A/C Systems",
-              "Energy-efficient specialty service products",
-              "Duct Cleaning and Air Balancing: Improves indoor air quality by cleaning ducts and balancing airflow.",
-              "Indoor Air Quality Audit: Identifies air quality issues and recommends solutions.",
-              "Energy Saving Products: Save 15%+ energy in air-cooled condensers annually.",
-              "Auto Tube Cleaning Systems: Maintain condenser tubes, increase cooling capacity, save 10-25% energy.",
-              "Water Management Services: Eco-friendly water treatment for better efficiency and protection.",
-              "UVC Emitters: Deep cleaning of cooling coils for better efficiency and hygiene.",
-              "Eco Savers: Smart retrofits for split ACs, optimizing compressor operation.",
-              "Variable Frequency Drives: VFDs for AHUs, pumps, and cooling towers with top brands like Danfoss, ABB, Siemens.",
+              "Duct Cleaning and Air Balancing",
             ].map((pkg, index) => (
               <motion.div
                 key={index}

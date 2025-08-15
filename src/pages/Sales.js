@@ -55,7 +55,7 @@ const acProducts = [
   },
   {
     title: "HI Wall Split AC",
-    image: "/assets/vert.png",
+    image: "/assets/hI.jpg",
     specs: [
       "Varied indoor units to suit interior requirements",
       "Very efficient in part-load applications",
