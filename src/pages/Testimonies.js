@@ -1,37 +1,49 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const testimonials = [
   {
-    name: "Ravi Kumar",
-    company: "TechNest Pvt Ltd",
+    name: "Solomon Petra",
+    company: "",
     rating: 5,
-    comment: "GVJ Aircon's team is professional and reliable. Our office AC installation was seamless and on-time!",
+    comment:
+      "We recently referred GVJ Aircon, led by Mr. John, to a Church for their air conditioning needs, and we couldn't be more pleased with the outcome. The team at GVJ Aircon demonstrated exceptional professionalism, delivering top-quality service with meticulous attention to detail. The client was thoroughly satisfied with the prompt installation and the high performance of the units. We highly recommend GVJ Aircon to anyone in need of reliable HVAC solutions.",
   },
   {
-    name: "Anita George",
-    company: "Homeowner, Chennai",
+    name: "Sinosh Kumar",
+    company: "",
     rating: 5,
-    comment: "Prompt service and quality maintenance. Highly recommend them for any AC needs.",
+    comment:
+      "I have recently purchased Split Air-conditioner from GVJ Aircon Projects and Services. The rate of the split A/c is very competitive and the installation and services provided by Mr. John sir and the team is very good and excellent. I appreciate your team members and I am also strongly recommending GVJ Aircon Projects and Services to our Group of companies, to my Friends and neighbors too. I wish all the best for the strong service team.",
   },
   {
-    name: "Manoj Pillai",
-    company: "CoolTech Engineers",
-    rating: 4,
-    comment: "They offered smart solutions and their AMC plans saved us from frequent repairs.",
-  },
-  {
-    name: "Shalini Joseph",
-    company: "Villa Owner, ECR",
+    name: "Storey Inside Interiors",
+    company: "",
     rating: 5,
-    comment: "We love the silent cooling system they installed. Our entire villa feels climate controlled perfectly!",
+    comment:
+      "For one of our projects, the entire Air conditioning services were handled by GVJ Aircon. They are a professionally trained team and gave the best advice. They eft us happy and satisfied with the quality & service. We recommend GVJ Air cons to all our clients. Thank you for providing the best services and wish you all the best.",
   },
   {
-    name: "Priya Chandran",
-    company: "Hospital Admin, MedicoCare",
-    rating: 4,
-    comment: "Smoothest ducted AC setup I’ve seen in 15 years of managing facilities. Will work with them again.",
+    name: "SMP Sales",
+    company: "",
+    rating: 5,
+    comment:
+      "Excellent consultation and dedicated team...GVJ aricon services made the installation of Air-conditioning unit at our factory site. The task was challenging due to logistical and technical complexity, but GVJ aircon team made the process so easy we never had to worry about the installation. Keep up the good work.",
+  },
+  {
+    name: "Aruns Dental Art, R.A. Puram",
+    company: "Dr. Sandhya Arunkumar, Pearls Dentistry",
+    rating: 5,
+    comment:
+      "This is Dr Sandhya Arunkumar, a Dentist from Pearls Dentistry, Raja Annamalai Puram. I have used AC services from GVJ Aircon multiple times, both for our clinic as well as residence. Their service is prompt, neat and very professional. They maintain all basic hygiene precautions. The quality of their work is too good, that shows their competency in their job. Would definitely recommend GVJ Aircon for all types of AC services.",
+  },
+  {
+    name: "CA Nivedhitha",
+    company: "",
+    rating: 5,
+    comment:
+      "We availed their AC maintenance service yesterday. We called and within 12 hours their staff were allotted and promptly addressed our requirements. They were so professional and adhere to all safety norms required for this time. Happy to refer them to my friends and business contacts.Highly appreciate their commitment towards their stakeholders.",
   },
 ];
 
@@ -40,7 +52,7 @@ const clients = [
   { name: "Sree Gupta Bhavan", logo: "/assets/srb.png" },
   { name: "Esskay Design Structures Private", logo: "/assets/Esskey.jpeg" },
   { name: "BELRISE INDUSTRIES LTD", logo: "/assets/Belrise.jpeg" },
-  { name: "Southern Chemical India Private Limited ", logo: "/assets/southern chemical.jpeg" },
+  { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg" },
   { name: "LKS Old House", logo: "/assets/Lks.png" },
   { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
   { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
@@ -67,16 +79,13 @@ export default function TestimonialsPage() {
   const [[page, direction], setPage] = useState([0, 0]);
   const timeoutRef = useRef(null);
 
-  // Make paginate stable and independent
- // Make paginate stable
-const paginate = useCallback((newDirection) => {
-  setPage(([prevPage]) => [
-    (prevPage + newDirection + testimonials.length) % testimonials.length,
-    newDirection,
-  ]);
-}, []); // Removed testimonials.length
+  const paginate = useCallback((newDirection) => {
+    setPage(([prevPage]) => [
+      (prevPage + newDirection + testimonials.length) % testimonials.length,
+      newDirection,
+    ]);
+  }, []);
 
-  // Auto-play function that depends on paginate
   const startAutoPlay = useCallback(() => {
     clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
@@ -84,7 +93,6 @@ const paginate = useCallback((newDirection) => {
     }, 6000);
   }, [paginate]);
 
-  // Restart autoplay whenever page changes
   useEffect(() => {
     startAutoPlay();
     return () => clearTimeout(timeoutRef.current);
@@ -118,7 +126,7 @@ const paginate = useCallback((newDirection) => {
         </motion.h2>
 
         {/* Testimonials Carousel */}
-        <div className="relative max-w-3xl mx-auto overflow-hidden min-h-[380px]">
+        <div className="relative max-w-3xl mx-auto overflow-hidden min-h-[320px]">
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
               key={page}
@@ -138,20 +146,15 @@ const paginate = useCallback((newDirection) => {
               }}
             >
               <motion.div
-                className="bg-white/80 backdrop-blur-2xl border border-blue-200 shadow-2xl rounded-3xl p-10 text-center mx-4"
+                className="bg-white/90 backdrop-blur-2xl border border-blue-200 shadow-2xl rounded-3xl p-10 text-center mx-4"
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.4 }}
               >
-                <div className="flex justify-center mb-6">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-20 h-20 rounded-full border-4 border-blue-400 shadow-lg object-cover"
-                  />
-                </div>
                 <h4 className="text-xl font-semibold text-blue-800">{testimonial.name}</h4>
-                <p className="text-sm text-gray-600 mb-3">{testimonial.company}</p>
+                {testimonial.company && (
+                  <p className="text-sm text-gray-600 mb-3">{testimonial.company}</p>
+                )}
                 <div className="flex justify-center text-yellow-400 mb-4">
                   {Array(testimonial.rating)
                     .fill()
