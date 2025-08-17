@@ -44,7 +44,7 @@ function Services() {
     {
       title: "Installation",
       desc: "Custom installation of centralized AC systems for commercial and industrial facilities. Ensuring precision, efficiency, and adherence to industry standards.",
-      img: "/assets/work.png",
+      img: "/assets/install.png",
     },
     {
       title: "Repair & Maintenance",

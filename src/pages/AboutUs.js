@@ -87,7 +87,7 @@ const AboutUs = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            <strong className="text-blue-700">GVJ Aircon Projects and Services</strong> is the authorized partner for Bluestar centralized air conditioning solutions. We tailor systems backed by decades of engineering expertise.
+<strong className="text-blue-700">GVJ Aircon Projects and Services</strong> specializes in delivering high-quality centralized air conditioning solutions, tailored with decades of engineering expertise.
           </motion.p>
 
           <motion.p
