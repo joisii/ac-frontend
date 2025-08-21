@@ -83,6 +83,8 @@ function Sales() {
     message: ''
   });
 
+  const [loading, setLoading] = useState(false); // prevent spam clicks
+
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,6 +94,10 @@ function Sales() {
   // Submit form to backend
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // ignore if already submitting
+    setLoading(true);
+
     try {
       const res = await fetch('https://ac-backend-cpsu.onrender.com/sales', {
         method: 'POST',
@@ -108,6 +114,8 @@ function Sales() {
     } catch (err) {
       console.error('Error submitting sales request:', err);
       alert('Server error!');
+    } finally {
+      setLoading(false); // re-enable submit button
     }
   };
 
@@ -160,21 +168,11 @@ function Sales() {
               viewport={{ once: true }}
             >
               <div className="w-full h-40 bg-gray-200 rounded-2xl flex items-center justify-center mb-6 overflow-hidden">
-                {product.link ? (
-                  <a href={product.link} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </a>
-                ) : (
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                )}
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
               </div>
               <h4 className="text-2xl font-bold mb-4 text-green-800">{product.title}</h4>
               <ul className="list-none text-gray-700 space-y-3 text-sm">
@@ -239,9 +237,14 @@ function Sales() {
           />
           <button
             type="submit"
-            className="bg-green-700 text-white px-6 py-3 rounded hover:bg-green-800 transition"
+            disabled={loading}
+            className={`px-6 py-3 rounded transition text-white ${
+              loading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-700 hover:bg-green-800"
+            }`}
           >
-            Submit Request
+            {loading ? "Submitting..." : "Submit Request"}
           </button>
         </form>
       </div>

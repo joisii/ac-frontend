@@ -8,6 +8,8 @@ function Services() {
     issue: "",
   });
 
+  const [loading, setLoading] = useState(false); // prevent multiple clicks
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -15,6 +17,9 @@ function Services() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (loading) return; // block if already submitting
+    setLoading(true);
 
     const newRequest = {
       ...formData,
@@ -37,6 +42,8 @@ function Services() {
     } catch (err) {
       console.error(err);
       alert("Failed to connect to backend");
+    } finally {
+      setLoading(false); // re-enable button
     }
   };
 
@@ -67,10 +74,12 @@ function Services() {
       <div className="bg-gradient-to-r from-blue-800 via-blue-600 to-yellow-500 text-white py-20 text-center shadow-lg">
         <div className="max-w-5xl mx-auto px-4">
           <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight drop-shadow-xl">
-          HVAC Services & Training
+            HVAC Services & Training
           </h2>
           <p className="mt-6 text-xl max-w-3xl mx-auto text-blue-100">
-            Comprehensive solutions from installation to after-sales service, with industry-leading training programs for tomorrow's HVAC professionals.
+            Comprehensive solutions from installation to after-sales service,
+            with industry-leading training programs for tomorrow's HVAC
+            professionals.
           </p>
         </div>
       </div>
@@ -110,10 +119,18 @@ function Services() {
             Launch Your Career in HVAC Engineering
           </h3>
           <p className="text-gray-700 text-lg mb-4">
-            HVAC Engineering is a booming industry with immense demand for skilled professionals. Our training offers comprehensive knowledge of HVAC basics to prepare you for independent project handling from day one. We recruit freshers from Engineering (Mech, EEE, ECE) and Diploma (Mech, EEE, ECE) streams via written tests, providing stipend-based training and opportunities to join <strong>GVJ Aircon Projects & Services</strong>.
+            HVAC Engineering is a booming industry with immense demand for
+            skilled professionals. Our training offers comprehensive knowledge
+            of HVAC basics to prepare you for independent project handling from
+            day one. We recruit freshers from Engineering (Mech, EEE, ECE) and
+            Diploma (Mech, EEE, ECE) streams via written tests, providing
+            stipend-based training and opportunities to join{" "}
+            <strong>GVJ Aircon Projects & Services</strong>.
           </p>
           <p className="text-gray-700 text-lg mb-4">
-            We believe in precision engineering, quality installation, and regular maintenance to enhance equipment lifespan and reduce energy consumption.
+            We believe in precision engineering, quality installation, and
+            regular maintenance to enhance equipment lifespan and reduce energy
+            consumption.
           </p>
         </motion.div>
 
@@ -185,9 +202,14 @@ function Services() {
             ></textarea>
             <button
               type="submit"
-              className="bg-blue-700 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-800 transition"
+              disabled={loading}
+              className={`px-6 py-3 rounded-lg shadow-md transition text-white ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-700 hover:bg-blue-800"
+              }`}
             >
-              Submit Request
+              {loading ? "Submitting..." : "Submit Request"}
             </button>
           </form>
         </div>
