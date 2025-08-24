@@ -56,12 +56,12 @@ function Services() {
     {
       title: "Repair & Maintenance",
       desc: "Fast, reliable repairs with flexible AMC plans. Proactive servicing that extends your system’s life and minimizes unexpected breakdowns.",
-      img: "/assets/service.png",
+      img: "/assets/install.png",
     },
     {
       title: "Training & Development",
       desc: "Job-oriented HVAC training programs to prepare you for a successful career. Comprehensive study of all HVAC basics with placement assistance.",
-      img: "/assets/train.png",
+      img: "/assets/install.png",
     },
   ];
 
