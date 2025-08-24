@@ -12,6 +12,7 @@ import LocationSection from './pages/LocationSection';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import Footer from './pages/Footer';
+import GymProjects from "./pages/GymProjects";
 
 const Home = () => {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/projects/gym" element={<GymProjects />} />
           </Routes>
         </div>
         <Footer />

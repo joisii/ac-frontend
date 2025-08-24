@@ -1,68 +1,96 @@
-// src/pages/Projects.js
+import React, { useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+// Static sample data for Restaurant preview (from hotel.xlsx)
+const restaurantClients = [
+  { id: 1, name: "Hotel Sangeetha", location: "Chennai", acType: "VRF" },
+  { id: 2, name: "M/s. Touch Stone", location: "Chennai", acType: "Cassette SAC" },
+  { id: 3, name: "Some Other Hotel", location: "Bangalore", acType: "Ducted AC" },
+];
 
 const projects = [
   {
     title: "Restaurant",
-    description: "Installed a customized 80-ton HVAC system to maintain optimal dining comfort, even during peak hours and large gatherings.",
+    description:
+      "Installed a customized 80-ton HVAC system to maintain optimal dining comfort, even during peak hours and large gatherings.",
     image: "/assets/restaurant.jpg",
   },
   {
     title: "Gym",
-    description: "Deployed a high-efficiency ducted HVAC system built for continuous 24/7 operation, ensuring fresh airflow for fitness enthusiasts around the clock.",
+    description:
+      "Deployed a high-efficiency ducted HVAC system built for continuous 20/7 operation, ensuring fresh airflow for fitness enthusiasts around the clock.",
     image: "/assets/gym.jpg",
   },
   {
     title: "Textile Shop",
-    description: "Integrated a smart VRF system across 5 floors to keep the shopping space cool, energy-efficient, and comfortable for both customers and staff.",
+    description:
+      "Integrated a smart VRF system across 5 floors to keep the shopping space cool, energy-efficient, and comfortable for both customers and staff.",
     image: "/assets/tex.jpg",
   },
   {
     title: "Banquet Hall",
-    description: "Delivered a noise-free, high-capacity HVAC solution designed to handle the demands of large functions, weddings, and conferences with ease.",
+    description:
+      "Delivered a noise-free, high-capacity HVAC solution designed to handle the demands of large functions, weddings, and conferences with ease.",
     image: "/assets/hall.jpg",
   },
   {
     title: "Worship Center",
-    description: "Engineered a silent, climate-controlled environment to ensure peaceful, distraction-free spiritual gatherings and prayer sessions.",
+    description:
+      "Engineered a silent, climate-controlled environment to ensure peaceful, distraction-free spiritual gatherings and prayer sessions.",
     image: "/assets/chruch.jpg",
   },
   {
     title: "Super Market",
-    description: "Installed a robust HVAC system that balances cooling efficiency with noise control, keeping shoppers and staff comfortable throughout the day.",
+    description:
+      "Installed a robust HVAC system that balances cooling efficiency with noise control, keeping shoppers and staff comfortable throughout the day.",
     image: "/assets/supermar.jpg",
   },
- {
-  title: "Hospital",
-  description: "Delivered a precision-controlled HVAC system tailored for healthcare, ensuring patient comfort, air purity, and low noise in critical care zones.",
-  image: "/assets/vs ho.webp",
-},
-{
-  title: "Corporate Office",
-  description: "Designed a smart, energy-efficient HVAC setup that supports a productive work environment with silent airflow and optimized zoning for office spaces.",
-  image: "/assets/indique.jpg",
-},
-{
-  title: "Conference Hall",
-  description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.",
-  image: "/assets/conf.jpg",
-},
-
+  {
+    title: "Hospital",
+    description:
+      "Delivered a precision-controlled HVAC system tailored for healthcare, ensuring patient comfort, air purity, and low noise in critical care zones.",
+    image: "/assets/vs ho.webp",
+  },
+  {
+    title: "Corporate Office",
+    description:
+      "Designed a smart, energy-efficient HVAC setup that supports a productive work environment with silent airflow and optimized zoning for office spaces.",
+    image: "/assets/indique.jpg",
+  },
+  {
+    title: "Conference Hall",
+    description:
+      "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.",
+    image: "/assets/conf.jpg",
+  },
 ];
 
 export default function Projects() {
   const sectionRef = useRef(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const navigate = useNavigate();
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start end', 'end start'],
+    offset: ["start end", "end start"],
   });
 
   const blobX = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const blobY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  const handleProjectClick = (project) => {
+    if (project.title === "Gym") {
+      navigate("/projects/gym"); // redirect to Gym page
+    } else {
+      setSelectedProject(project);
+    }
+  };
 
   return (
     <div
@@ -96,7 +124,8 @@ export default function Projects() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
         >
-          Each project reflects our commitment to excellence, precision engineering, and client satisfaction.
+          Each project reflects our commitment to excellence, precision
+          engineering, and client satisfaction.
         </motion.p>
       </section>
 
@@ -111,7 +140,7 @@ export default function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: index * 0.1 }}
               viewport={{ once: true }}
-              onClick={() => setSelectedProject(project)}
+              onClick={() => handleProjectClick(project)}
             >
               <div className="overflow-hidden relative h-56 rounded-t-3xl">
                 <img
@@ -134,7 +163,7 @@ export default function Projects() {
 
       {/* Lightbox Modal */}
       <AnimatePresence>
-        {selectedProject && (
+        {selectedProject && selectedProject.title === "Restaurant" && (
           <motion.div
             className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
             initial={{ opacity: 0 }}
@@ -147,7 +176,7 @@ export default function Projects() {
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside modal
+              onClick={(e) => e.stopPropagation()}
             >
               <img
                 src={selectedProject.image}
@@ -155,8 +184,45 @@ export default function Projects() {
                 className="w-full h-80 object-cover rounded-t-2xl"
               />
               <div className="p-6">
-                <h2 className="text-3xl font-bold mb-4 text-blue-800">{selectedProject.title}</h2>
-                <p className="text-gray-700 text-lg">{selectedProject.description}</p>
+                <h2 className="text-3xl font-bold mb-4 text-blue-800">
+                  {selectedProject.title}
+                </h2>
+                <p className="text-gray-700 text-lg mb-6">
+                  {selectedProject.description}
+                </p>
+
+                {/* Extra for Restaurant */}
+                <h3 className="text-xl font-semibold mb-3 text-gray-800">
+                  Some of Our Restaurant Clients
+                </h3>
+                <table className="w-full border border-gray-300 mb-4 text-left text-sm">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="p-2 border">#</th>
+                      <th className="p-2 border">Name</th>
+                      <th className="p-2 border">Location</th>
+                      <th className="p-2 border">AC Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {restaurantClients.slice(0, 3).map((c) => (
+                      <tr key={c.id} className="hover:bg-gray-50">
+                        <td className="p-2 border">{c.id}</td>
+                        <td className="p-2 border">{c.name}</td>
+                        <td className="p-2 border">{c.location}</td>
+                        <td className="p-2 border">{c.acType}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <a
+                  href="/assets/data/hotel.xlsx"
+                  download
+                  className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+                >
+                  Download Full List (Excel)
+                </a>
               </div>
               <button
                 className="absolute top-4 right-4 bg-red-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-red-700 transition"
