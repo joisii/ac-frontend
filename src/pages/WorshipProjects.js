@@ -1,31 +1,38 @@
-// src/pages/GymProjects.js
+// src/pages/WorshipProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ for animations
+import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 
-// Temporary static data (replace with Excel import later)
-const gymClients = [
-  { id: 1, name: "Score Gym", location: "Chennai", application: "Gym Area", acType: "DSAC " },
-  { id: 2, name: "Air force Officers Mess ", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 3, name: "KDH Investments Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 4, name: "Pedal Beat", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 5, name: "Ramaniam at omr", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
-  { id: 6, name: "Flux Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 7, name: "PINK Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 8, name: "SPIN Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "Casst " },
-  { id: 9, name: "Stringrays Swimming and Fittness Centre", location: "Chennai",application:"Gym Area", acType: "DSAC " },
- { id: 10, name: "24 x 7 Fitness Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 11, name: "Gym Square", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 12, name: "Sky Motors (Gym)", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-];  
+// Static data (replace with Excel import later)
+const worshipClients = [
+  { id: 1, name: "Apostolic Christian Fellowship", location: "Chennai", application: "Church", acType: "PAC" },
+  { id: 2, name: "Shekina Assembly Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 3, name: "RZIM", location: "Chennai", application: "Church", acType: "SAC" },
+  { id: 4, name: "Hebron Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 5, name: "Arc of Victory Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 6, name: "Christ Vision Church Trust", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 7, name: "Blue Breeze AC", location: "Coimbatore", application: "Church", acType: "DSAC" },
+  { id: 8, name: "Harvest Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 9, name: "AG Church at Anagaputur", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 10, name: "CSI Holy Redeemers church", location: "Coimbatore", application: "Church", acType: "V Cool" },
+  { id: 11, name: "Pastor Hagai Melkizethek", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 12, name: "ECI - St Peters Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 13, name: "Full Gospel AG Church", location: "Chennai", application: "Church", acType: "DSAC" },
+  { id: 14, name: "CSI – Immanuel Church", location: "Chennai", application: "Church", acType: "PAC" },
+  { id: 15, name: "Shree Jain Sangh Trust", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
+  { id: 16, name: "ECI – Thirumangalamp", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
+  { id: 17, name: "Healing Gospel Church (HGC)", location: "Chennai", application: "Church", acType: "V Cool" },
+  { id: 18, name: "'Elohim Ministries", location: "Chennai", application: "Church", acType: "SAC" },
+  { id: 19, name: "'Pastor John Jebaraj Ministries", location: "Coimbatore", application: "Church", acType: "V Cool" },
+];
 
-
-// Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "gym_clients.csv") => {
+// CSV download helper
+const downloadCSV = (data, filename = "worship_clients.csv") => {
   const headers = Object.keys(data[0]).join(",") + "\n";
   const rows = data.map((row) => Object.values(row).join(",")).join("\n");
   const csv = headers + rows;
+
   const blob = new Blob([csv], { type: "text/csv" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -35,7 +42,7 @@ const downloadCSV = (data, filename = "gym_clients.csv") => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function GymProjects() {
+export default function WorshipProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -43,23 +50,17 @@ export default function GymProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = gymClients.filter(
+  const filteredClients = worshipClients.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.location.toLowerCase().includes(search.toLowerCase()) ||
       c.acType.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants for staggered fade-in
+  // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
   };
 
   const itemVariants = {
@@ -74,12 +75,12 @@ export default function GymProjects() {
 
   return (
     <motion.div
-      key="gym-page"
+      key="worship-page"
       initial="hidden"
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      className={`min-h-screen bg-gradient-to-b ${gradients.gym} py-16 px-6 font-sans`}
+      className={`min-h-screen bg-gradient-to-b ${gradients.worship} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
       <motion.div variants={itemVariants} className="max-w-5xl mx-auto mb-6">
@@ -94,9 +95,9 @@ export default function GymProjects() {
       {/* Title */}
       <motion.h1
         variants={itemVariants}
-        className="text-4xl font-bold text-center mb-10 text-teal-800"
+        className="text-4xl font-bold text-center mb-10 text-blue-800"
       >
-        Gym Projects
+        Worship Center Projects
       </motion.h1>
 
       {/* Search + Download */}
@@ -109,11 +110,11 @@ export default function GymProjects() {
           placeholder="Search by name, location, or AC type..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
-          onClick={() => downloadCSV(gymClients)}
-          className="px-5 py-3 bg-teal-600 text-white rounded-xl shadow hover:bg-teal-700 transition"
+          onClick={() => downloadCSV(worshipClients)}
+          className="px-5 py-3 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 text-white rounded-xl shadow hover:opacity-90 transition"
         >
           ⬇ Download All
         </button>
@@ -143,7 +144,7 @@ export default function GymProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
+                    background: "linear-gradient(90deg, rgba(0,0,255,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
@@ -156,7 +157,7 @@ export default function GymProjects() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
+                <td colSpan="5" className="p-4 text-center text-gray-500">
                   No results found
                 </td>
               </tr>

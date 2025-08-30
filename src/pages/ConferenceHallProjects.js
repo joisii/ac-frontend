@@ -1,31 +1,22 @@
-// src/pages/GymProjects.js
+// src/pages/ConferenceHallProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ for animations
+import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 
-// Temporary static data (replace with Excel import later)
-const gymClients = [
-  { id: 1, name: "Score Gym", location: "Chennai", application: "Gym Area", acType: "DSAC " },
-  { id: 2, name: "Air force Officers Mess ", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 3, name: "KDH Investments Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 4, name: "Pedal Beat", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 5, name: "Ramaniam at omr", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
-  { id: 6, name: "Flux Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 7, name: "PINK Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 8, name: "SPIN Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "Casst " },
-  { id: 9, name: "Stringrays Swimming and Fittness Centre", location: "Chennai",application:"Gym Area", acType: "DSAC " },
- { id: 10, name: "24 x 7 Fitness Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 11, name: "Gym Square", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 12, name: "Sky Motors (Gym)", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-];  
-
+// Temporary static data (replace later with Excel import)
+const conferenceClients = [
+  { id: 1, name: "Anytime Fitness", location: "Chennai", application: "Hotel", acType: "Ducted AC" },
+  { id: 2, name: "Gold’s Gym", location: "Bangalore", application: "Hotel", acType: "VRF" },
+  { id: 3, name: "Cult.Fit", location: "Hyderabad", application: "Hotel", acType: "Cassette AC" },
+];
 
 // Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "gym_clients.csv") => {
+const downloadCSV = (data, filename = "conference_clients.csv") => {
   const headers = Object.keys(data[0]).join(",") + "\n";
   const rows = data.map((row) => Object.values(row).join(",")).join("\n");
   const csv = headers + rows;
+
   const blob = new Blob([csv], { type: "text/csv" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -35,7 +26,7 @@ const downloadCSV = (data, filename = "gym_clients.csv") => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function GymProjects() {
+export default function ConferenceHallProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -43,22 +34,22 @@ export default function GymProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = gymClients.filter(
+  const filteredClients = conferenceClients.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.location.toLowerCase().includes(search.toLowerCase()) ||
       c.acType.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants for staggered fade-in
+  // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
+        delayChildren: 0.2
+      }
     },
   };
 
@@ -74,12 +65,12 @@ export default function GymProjects() {
 
   return (
     <motion.div
-      key="gym-page"
+      key="conference-page"
       initial="hidden"
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      className={`min-h-screen bg-gradient-to-b ${gradients.gym} py-16 px-6 font-sans`}
+      className={`min-h-screen bg-gradient-to-b ${gradients.orange} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
       <motion.div variants={itemVariants} className="max-w-5xl mx-auto mb-6">
@@ -91,29 +82,25 @@ export default function GymProjects() {
         </button>
       </motion.div>
 
-      {/* Title */}
-      <motion.h1
-        variants={itemVariants}
-        className="text-4xl font-bold text-center mb-10 text-teal-800"
+      <motion.h1 
+        variants={itemVariants} 
+        className="text-4xl font-bold text-center mb-10 text-orange-800"
       >
-        Gym Projects
+        Conference Hall Projects
       </motion.h1>
 
       {/* Search + Download */}
-      <motion.div
-        variants={itemVariants}
-        className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
-      >
+      <motion.div variants={itemVariants} className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4">
         <input
           type="text"
           placeholder="Search by name, location, or AC type..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
+          className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
         <button
-          onClick={() => downloadCSV(gymClients)}
-          className="px-5 py-3 bg-teal-600 text-white rounded-xl shadow hover:bg-teal-700 transition"
+          onClick={() => downloadCSV(conferenceClients)}
+          className="px-5 py-3 bg-orange-600 text-white rounded-xl shadow hover:bg-orange-700 transition"
         >
           ⬇ Download All
         </button>
@@ -143,7 +130,7 @@ export default function GymProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
+                    background: "linear-gradient(90deg, rgba(255,165,0,0.1), rgba(255,255,255,0.05))"
                   }}
                   className="cursor-pointer"
                 >
@@ -156,7 +143,7 @@ export default function GymProjects() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
+                <td colSpan="5" className="p-4 text-center text-gray-500">
                   No results found
                 </td>
               </tr>

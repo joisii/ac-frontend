@@ -1,31 +1,40 @@
-// src/pages/GymProjects.js
+// src/pages/HospitalProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ for animations
+import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 
-// Temporary static data (replace with Excel import later)
-const gymClients = [
-  { id: 1, name: "Score Gym", location: "Chennai", application: "Gym Area", acType: "DSAC " },
-  { id: 2, name: "Air force Officers Mess ", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 3, name: "KDH Investments Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 4, name: "Pedal Beat", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 5, name: "Ramaniam at omr", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
-  { id: 6, name: "Flux Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 7, name: "PINK Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 8, name: "SPIN Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "Casst " },
-  { id: 9, name: "Stringrays Swimming and Fittness Centre", location: "Chennai",application:"Gym Area", acType: "DSAC " },
- { id: 10, name: "24 x 7 Fitness Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 11, name: "Gym Square", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 12, name: "Sky Motors (Gym)", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-];  
+// Static data (replace with Excel import later)
+const hospitalClients = [
+  { id: 1, name: "Sri Manakula Vinayakar Medical college and Hospital", location: "Pondichery", application: "Hospital Area", acType: "Casstte SAC" },
+  { id: 2, name: "SRM Institute of Medical Sciences", location: "Chennai", application: "Hospital Area", acType: "DSAC/LDPA" },
+  { id: 3, name: "Vedant Air Management Products", location: "Chennai", application: "Operation Theatre", acType: "DSAC" },
+  { id: 4, name: "Aditya Floor Tech Pvtl Ltd (For Balaji Hospital )", location: "Chennai", application: "Hospital Area", acType: "DSAC" },
+  { id: 5, name: "I Clean", location: "Chennai", application: "Clean Room", acType: "DSAC" },
+  { id: 6, name: "BM Hospital", location: "Chennai", application: "Hospital Area", acType: "DSAC/LDPA" },
+  { id: 7, name: "SRM Institute of Medical Sciences", location: "Chennai", application: "Clinic", acType: "DSAC" },
+  { id: 8, name: "Vijaya Diagnostic Centre", location: "Nellore", application: "Lab Area", acType: "Free Match" },
+  { id: 9, name: "Sugam Hospital", location: "Chennai", application: "Hospital Area", acType: "DSAC" },
+  { id: 10, name: "Capelin Point", location: "Chennai", application: "Pharma Storage", acType: "DSAC" },
+  { id: 11, name: "Westminister health care", location: "Chennai", application: "Hospital Area", acType: "VRF" },
+  { id: 12, name: "Jananam Hospital", location: "Chennai", application: "Lab Area", acType: "DSAC" },
+  { id: 13, name: "Eakcon Systems Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "DSAC" },
+  { id: 14, name: "Dr Kamatchi Memorial Hospital", location: "Chennai", application: "Diagnostic Lab Area", acType: "DSAC" },
+  { id: 15, name: "Stanley Hospital (Blood Bank)", location: "Chennai", application: "Blood Bank", acType: "PAC" },
+  { id: 16, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
+  { id: 17, name: "'Scitus Pharma Services Pvt Ltd", location: "Chennai", application: "Pharma ", acType: "SAC" },
+  { id: 18, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
+  { id: 19, name: "Cure Healthcare Systems Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "SAC" },
+  { id: 20, name: "'Infinity Projects - NOVA IVF", location: "Madurai", application: "Hospital", acType: "VRV" },
+  { id: 21, name: "'Varian Medical Systems (JIPMER)", location: "Pondichery", application: "Hospital", acType: "DSAC" },
+];
 
-
-// Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "gym_clients.csv") => {
+// CSV download helper
+const downloadCSV = (data, filename = "hospital_clients.csv") => {
   const headers = Object.keys(data[0]).join(",") + "\n";
   const rows = data.map((row) => Object.values(row).join(",")).join("\n");
   const csv = headers + rows;
+
   const blob = new Blob([csv], { type: "text/csv" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -35,7 +44,7 @@ const downloadCSV = (data, filename = "gym_clients.csv") => {
   window.URL.revokeObjectURL(url);
 };
 
-export default function GymProjects() {
+export default function HospitalProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -43,23 +52,17 @@ export default function GymProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = gymClients.filter(
+  const filteredClients = hospitalClients.filter(
     (c) =>
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.location.toLowerCase().includes(search.toLowerCase()) ||
       c.acType.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants for staggered fade-in
+  // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
   };
 
   const itemVariants = {
@@ -74,12 +77,12 @@ export default function GymProjects() {
 
   return (
     <motion.div
-      key="gym-page"
+      key="hospital-page"
       initial="hidden"
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      className={`min-h-screen bg-gradient-to-b ${gradients.gym} py-16 px-6 font-sans`}
+      className={`min-h-screen bg-gradient-to-b ${gradients.hospital} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
       <motion.div variants={itemVariants} className="max-w-5xl mx-auto mb-6">
@@ -96,7 +99,7 @@ export default function GymProjects() {
         variants={itemVariants}
         className="text-4xl font-bold text-center mb-10 text-teal-800"
       >
-        Gym Projects
+        Hospital Projects
       </motion.h1>
 
       {/* Search + Download */}
@@ -112,8 +115,8 @@ export default function GymProjects() {
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
         <button
-          onClick={() => downloadCSV(gymClients)}
-          className="px-5 py-3 bg-teal-600 text-white rounded-xl shadow hover:bg-teal-700 transition"
+          onClick={() => downloadCSV(hospitalClients)}
+          className="px-5 py-3 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-700 text-white rounded-xl shadow hover:opacity-90 transition"
         >
           ⬇ Download All
         </button>
@@ -156,7 +159,7 @@ export default function GymProjects() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
+                <td colSpan="5" className="p-4 text-center text-gray-500">
                   No results found
                 </td>
               </tr>

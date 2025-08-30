@@ -13,6 +13,17 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import Footer from './pages/Footer';
 import GymProjects from "./pages/GymProjects";
+import RestaurantProjects from "./pages/RestaurantProjects";
+import TextileShopProjects from './pages/TextileShopProjects'; 
+import BanquetProjects from './pages/BanquetProjects'; 
+import WorshipProjects from "./pages/WorshipProjects";
+import SuperMarketProjects from "./pages/SuperMarketProjects";
+import HospitalProjects from "./pages/HospitalProjects";
+import CorporateOfficeProjects from "./pages/CorporateOfficeProjects";
+import ConferenceHallProjects from "./pages/ConferenceHallProjects";
+
+
+
 
 const Home = () => {
   return (
@@ -42,6 +53,17 @@ function App() {
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/projects/gym" element={<GymProjects />} />
+            <Route path="/projects/restaurant" element={<RestaurantProjects />} />
+            <Route path="/projects/textile" element={<TextileShopProjects />} />
+            <Route path="/projects/banquet" element={<BanquetProjects />} />
+            <Route path="/projects/worship" element={<WorshipProjects />} />
+            <Route path="/projects/supermarket" element={<SuperMarketProjects />} />
+            <Route path="/projects/hospital" element={<HospitalProjects />} />
+            <Route path="/projects/office" element={<CorporateOfficeProjects />} />
+            <Route path="/projects/conference" element={<ConferenceHallProjects />} />
+
+
+
           </Routes>
         </div>
         <Footer />
