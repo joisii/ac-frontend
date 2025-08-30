@@ -193,7 +193,7 @@ function Sales() {
 
       {/* Sales Form */}
       <div className="relative z-10 bg-white rounded-3xl shadow-xl max-w-4xl mx-auto my-24 p-10">
-        <h2 className="text-3xl font-bold mb-4 text-gray-800">Talk to Our Sales Team</h2>
+        <h2 className="text-3xl font-bold mb-4 text-gray-800">Discuss with Our Sales Team</h2>
         <p className="text-gray-600 mb-6">
           Fill in your details and our team will get back to you within 24 hours.
         </p>
