@@ -11,7 +11,7 @@ const projects = [
   { title: "Super Market", description: "Installed a robust HVAC system that balances cooling efficiency with noise control, keeping shoppers and staff comfortable throughout the day.", image: "/assets/supermar.jpg" },
   { title: "Hospital", description: "Delivered a precision-controlled HVAC system tailored for healthcare, ensuring patient comfort, air purity, and low noise in critical care zones.", image: "/assets/vs ho.webp" },
   { title: "Corporate Office", description: "Designed a smart, energy-efficient HVAC setup that supports a productive work environment with silent airflow and optimized zoning for office spaces.", image: "/assets/indique.jpg" },
-  { title: "Residence", description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.", image: "/assets/conf.jpg" },
+  { title: "Residence", description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.", image: "/assets/confe.png" },
 ];
 
 export default function Projects() {
