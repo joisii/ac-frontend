@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaSnowflake, FaFan } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { FaSnowflake, FaFan } from "react-icons/fa";
 
 const HeroSection = () => {
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+      section.scrollIntoView({ behavior: "smooth" });
     } else {
       console.warn(`Section with id "${id}" not found.`);
     }
@@ -16,9 +16,13 @@ const HeroSection = () => {
   useEffect(() => {
     const checkWidth = () => setIsMobile(window.innerWidth < 768);
     checkWidth();
-    window.addEventListener('resize', checkWidth);
-    return () => window.removeEventListener('resize', checkWidth);
+    window.addEventListener("resize", checkWidth);
+    return () => window.removeEventListener("resize", checkWidth);
   }, []);
+
+  // 👇 ref + inView for scroll animation
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const parentVariants = {
     hidden: { opacity: 0 },
@@ -27,19 +31,24 @@ const HeroSection = () => {
       transition: {
         staggerChildren: 0.3,
         duration: 1,
-        ease: 'easeOut',
+        ease: "easeOut",
       },
     },
   };
 
   const childVariants = {
     hidden: { opacity: 0, y: isMobile ? 30 : 50 },
-    show: { opacity: 1, y: 0, transition: { duration: isMobile ? 0.8 : 1.2, ease: 'easeOut' } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: isMobile ? 0.8 : 1.2, ease: "easeOut" },
+    },
   };
 
   return (
     <section
       id="hero"
+      ref={ref}
       className="
         relative overflow-hidden bg-gradient-to-br from-blue-100 via-white to-blue-50
         py-12 px-6 md:px-12 min-h-screen flex flex-col justify-center
@@ -49,14 +58,14 @@ const HeroSection = () => {
       <motion.div
         className="absolute top-10 left-10 text-blue-300 text-4xl z-0 opacity-50"
         animate={{ y: [0, -15, 15, 0], rotate: [0, 20, -20, 0] }}
-        transition={{ repeat: Infinity, duration: 8, ease: 'easeInOut' }}
+        transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
       >
         <FaSnowflake />
       </motion.div>
       <motion.div
         className="absolute bottom-10 right-10 text-yellow-200 text-5xl z-0 opacity-40"
         animate={{ y: [0, 20, -20, 0], rotate: [0, -15, 15, 0] }}
-        transition={{ repeat: Infinity, duration: 10, ease: 'easeInOut' }}
+        transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
       >
         <FaFan />
       </motion.div>
@@ -65,20 +74,19 @@ const HeroSection = () => {
       <motion.div
         className="absolute -top-32 -left-32 w-96 h-96 bg-white rounded-full blur-3xl opacity-25 z-0"
         animate={{ x: [0, 40, -40, 0], y: [0, -30, 30, 0] }}
-        transition={{ repeat: Infinity, duration: 18, ease: 'easeInOut' }}
+        transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
       />
       <motion.div
         className="absolute -bottom-24 -right-24 w-80 h-80 bg-yellow-300 rounded-full blur-3xl opacity-20 z-0"
         animate={{ x: [0, -30, 30, 0], y: [0, 25, -25, 0] }}
-        transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
+        transition={{ repeat: Infinity, duration: 15, ease: "easeInOut" }}
       />
 
-      {/* Hero Content (Card with fade-in effect) */}
+      {/* Hero Content with scroll animation */}
       <motion.div
         variants={parentVariants}
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
+        initial="hidden"
+        animate={isInView ? "show" : "hidden"} // 👈 animate on scroll
         className="
           relative z-10 text-center max-w-2xl mx-auto
           backdrop-blur-lg bg-white/30 rounded-2xl
@@ -89,7 +97,7 @@ const HeroSection = () => {
           variants={childVariants}
           src="/assets/ac.jpg"
           alt="Air Conditioning"
-          style={{ marginTop: '0.5rem' }}
+          style={{ marginTop: "0.5rem" }}
           className="h-45 mx-auto mb-10 object-contain shadow-6xl animate-float"
         />
 
@@ -114,7 +122,7 @@ const HeroSection = () => {
           <motion.button
             whileHover={{ scale: 1.1, rotate: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => scrollToSection('projects')}
+            onClick={() => scrollToSection("projects")}
             className="bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-xl hover:bg-blue-800 transition"
           >
             Explore Projects
@@ -123,7 +131,7 @@ const HeroSection = () => {
           <motion.button
             whileHover={{ scale: 1.1, rotate: 2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => scrollToSection('services')}
+            onClick={() => scrollToSection("services")}
             className="bg-white text-blue-700 border border-blue-700 px-8 py-4 rounded-xl font-semibold hover:bg-blue-50 transition"
           >
             Our Services
