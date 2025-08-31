@@ -163,6 +163,45 @@ function Services() {
         </motion.div>
       </div>
 
+      {/* PDF Section */}
+      <motion.div
+        className="py-20 bg-gradient-to-r from-blue-50 to-white"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9 }}
+      >
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h3 className="text-4xl font-bold text-blue-800 mb-6">
+            Company Authenticity Report
+          </h3>
+          <p className="text-gray-700 mb-10">
+            Our credibility is backed by performance. Below is the official
+            document showing the marks and ratings given for each activity done
+            by <strong>GVJ Aircon Projects & Services</strong>.
+          </p>
+
+          {/* Embedded PDF */}
+          <div className="w-full h-[600px] border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg mb-8">
+            <iframe
+              src="/assets/data/mark.pdf" // <-- update with your actual PDF path
+              title="Company Authenticity PDF"
+              className="w-full h-full"
+            ></iframe>
+          </div>
+
+          {/* Download Button */}
+          <a
+            href="/assets/data/mark-list.pdf"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-blue-700 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-blue-800 transition text-lg font-semibold"
+          >
+            📄 Download Full Report
+          </a>
+        </div>
+      </motion.div>
+
       {/* Service Request Form */}
       <div className="py-20 flex-shrink-0 bg-white">
         <div className="max-w-3xl mx-auto px-4">

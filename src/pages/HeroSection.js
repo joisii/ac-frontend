@@ -21,10 +21,13 @@ const HeroSection = () => {
   }, []);
 
   const parentVariants = {
-    hidden: {},
+    hidden: { opacity: 0 },
     show: {
+      opacity: 1,
       transition: {
         staggerChildren: 0.3,
+        duration: 1,
+        ease: 'easeOut',
       },
     },
   };
@@ -70,15 +73,16 @@ const HeroSection = () => {
         transition={{ repeat: Infinity, duration: 15, ease: 'easeInOut' }}
       />
 
-      {/* Hero Content */}
+      {/* Hero Content (Card with fade-in effect) */}
       <motion.div
         variants={parentVariants}
-        initial="hidden"
-        animate="show"
+        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
         className="
           relative z-10 text-center max-w-2xl mx-auto
           backdrop-blur-lg bg-white/30 rounded-2xl
-         p-4 md:py-12 shadow-2xl
+          p-4 md:py-12 shadow-2xl
         "
       >
         <motion.img

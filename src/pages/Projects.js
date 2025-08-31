@@ -11,7 +11,7 @@ const projects = [
   { title: "Super Market", description: "Installed a robust HVAC system that balances cooling efficiency with noise control, keeping shoppers and staff comfortable throughout the day.", image: "/assets/supermar.jpg" },
   { title: "Hospital", description: "Delivered a precision-controlled HVAC system tailored for healthcare, ensuring patient comfort, air purity, and low noise in critical care zones.", image: "/assets/vs ho.webp" },
   { title: "Corporate Office", description: "Designed a smart, energy-efficient HVAC setup that supports a productive work environment with silent airflow and optimized zoning for office spaces.", image: "/assets/indique.jpg" },
-  { title: "Conference Hall", description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.", image: "/assets/conf.jpg" },
+  { title: "Residence", description: "Installed a high-capacity, low-noise HVAC system engineered for large gatherings, maintaining consistent comfort during seminars and academic events.", image: "/assets/conf.jpg" },
 ];
 
 export default function Projects() {
@@ -37,7 +37,7 @@ export default function Projects() {
       "Super Market": "/projects/supermarket",
       "Hospital": "/projects/hospital",
       "Corporate Office": "/projects/office",
-      "Conference Hall": "/projects/conference",
+      "Residence": "/projects/conference",
     };
     setTimeout(() => {
       if (routes[project.title]) navigate(routes[project.title]);
@@ -75,19 +75,34 @@ export default function Projects() {
 
         {/* Project Cards */}
         <section className="flex-grow flex flex-col justify-center max-w-7xl mx-auto px-6 pb-24 relative z-10">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: {},
+              show: {
+                transition: { staggerChildren: 0.15 },
+              },
+            }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10"
+          >
             {projects.map((project, index) => (
               <motion.div
                 key={index}
                 className="bg-white/40 backdrop-blur-lg shadow-xl rounded-3xl overflow-hidden transform hover:scale-105 transition-all duration-500 group relative cursor-pointer"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 40, scale: 0.95 },
+                  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
+                }}
                 exit={{ opacity: clickedProject === project ? 0 : 1, scale: clickedProject === project ? 0.95 : 1 }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
                 onClick={() => handleProjectClick(project)}
               >
                 <div className="overflow-hidden relative h-56 rounded-t-3xl">
-                  <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-t-3xl" />
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 rounded-t-3xl"
+                  />
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-80 flex items-center justify-center text-white text-lg font-semibold transition-opacity duration-300 rounded-t-3xl">
                     Click here to see the list
@@ -101,20 +116,7 @@ export default function Projects() {
                 </div>
               </motion.div>
             ))}
-          </div>
-
-          {/* PDF Button */}
-          <div className="mt-16 text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Company Authenticity</h2>
-            <a
-              href="/assets/data/mark.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-700 text-white px-6 py-3 rounded-full hover:bg-blue-800 transition-colors duration-300 font-semibold shadow-lg"
-            >
-              View Company Mark List PDF
-            </a>
-          </div>
+          </motion.div>
         </section>
       </motion.div>
     </AnimatePresence>
