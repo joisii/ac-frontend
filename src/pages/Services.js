@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 function Services() {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ function Services() {
     issue: "",
   });
 
-  const [loading, setLoading] = useState(false); // prevent multiple clicks
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,14 +18,10 @@ function Services() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (loading) return; // block if already submitting
+    if (loading) return;
     setLoading(true);
 
-    const newRequest = {
-      ...formData,
-      status: "New",
-    };
+    const newRequest = { ...formData, status: "New" };
 
     try {
       const res = await fetch("https://ac-backend-cpsu.onrender.com/requests", {
@@ -43,7 +40,7 @@ function Services() {
       console.error(err);
       alert("Failed to connect to backend");
     } finally {
-      setLoading(false); // re-enable button
+      setLoading(false);
     }
   };
 
@@ -64,6 +61,15 @@ function Services() {
       img: "/assets/train.png",
     },
   ];
+
+  // --- AC Inspection Summary (from Butterfly.xlsx) ---
+  // Example counts from your file (replace with real dynamic fetch if needed)
+  const inspectionData = [
+    { name: "To be replaced", value: 4 },
+    { name: "OK / Normal", value: 14 },
+  ];
+
+  const COLORS = ["#EF4444", "#3B82F6"]; // red, blue
 
   return (
     <section
@@ -161,6 +167,43 @@ function Services() {
             ))}
           </div>
         </motion.div>
+
+        {/* AC Inspection Chart Section */}
+        <motion.div
+          className="mt-24 max-w-5xl mx-auto px-4 text-center"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h3 className="text-4xl font-bold text-blue-800 mb-6">
+            AC Health Inspection Summary
+          </h3>
+          <p className="text-gray-700 mb-8">
+            Based on our latest inspection report for Butterfly Gandhimathi
+            Appliances, here’s the overall condition of the units:
+          </p>
+          <div className="w-full h-96">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={inspectionData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={120}
+                  label
+                >
+                  {inspectionData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
       </div>
 
       {/* PDF Section */}
@@ -183,7 +226,7 @@ function Services() {
           {/* Embedded PDF */}
           <div className="w-full h-[600px] border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg mb-8">
             <iframe
-              src="/assets/data/mark.pdf" // <-- update with your actual PDF path
+              src="/assets/data/mark.pdf"
               title="Company Authenticity PDF"
               className="w-full h-full"
             ></iframe>
