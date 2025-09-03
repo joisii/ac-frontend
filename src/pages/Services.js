@@ -62,8 +62,7 @@ function Services() {
     },
   ];
 
-  // --- AC Inspection Summary (from Butterfly.xlsx) ---
-  // Example counts from your file (replace with real dynamic fetch if needed)
+  // --- AC Inspection Summary ---
   const inspectionData = [
     { name: "To be replaced", value: 4 },
     { name: "OK / Normal", value: 14 },
@@ -241,6 +240,32 @@ function Services() {
             className="inline-block bg-blue-700 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-blue-800 transition text-lg font-semibold"
           >
             📄 Download Full Report
+          </a>
+        </div>
+      </motion.div>
+
+      {/* Customer List Download Section */}
+      <motion.div
+        className="py-16 bg-gradient-to-r from-white to-blue-50"
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9 }}
+      >
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <h3 className="text-3xl font-bold text-blue-800 mb-6">
+            Customer List
+          </h3>
+          <p className="text-gray-700 mb-8">
+            Download the official customer list for reference.
+          </p>
+          <a
+            href="/assets/data/Customer List.xlsx"
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-green-600 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-green-700 transition text-lg font-semibold"
+          >
+            📊 Download Customer List
           </a>
         </div>
       </motion.div>
