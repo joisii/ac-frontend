@@ -1,6 +1,7 @@
+// src/pages/Services.js
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { motion, AnimatePresence } from "framer-motion";
+import * as XLSX from "xlsx";
 
 function Services() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,11 @@ function Services() {
   });
 
   const [loading, setLoading] = useState(false);
+
+  // New states
+  const [activeTab, setActiveTab] = useState(null); // Track which card is open
+  const [excelData, setExcelData] = useState([]);
+  const [activeDataset, setActiveDataset] = useState("customer"); // Track which dataset is selected
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,31 +50,51 @@ function Services() {
     }
   };
 
+  // Load Excel data dynamically
+  const loadExcelData = async (filePath, dataset) => {
+    try {
+      const response = await fetch(filePath);
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+      setExcelData(jsonData);
+      setActiveDataset(dataset);
+    } catch (error) {
+      console.error("Error loading Excel file", error);
+    }
+  };
+
   const serviceData = [
     {
       title: "Installation",
-      desc: "Custom installation of centralized AC systems for commercial and industrial facilities. Ensuring precision, efficiency, and adherence to industry standards.",
+      desc: "Custom installation of centralized AC systems for commercial and industrial facilities.",
       img: "/assets/install.png",
     },
     {
       title: "Repair & Maintenance",
-      desc: "Fast, reliable repairs with flexible AMC plans. Proactive servicing that extends your system’s life and minimizes unexpected breakdowns.",
+      desc: "Fast, reliable repairs with flexible AMC plans.",
       img: "/assets/service.png",
+      tab: "repair", // 👈 Tab id
     },
     {
       title: "Training & Development",
-      desc: "Job-oriented HVAC training programs to prepare you for a successful career. Comprehensive study of all HVAC basics with placement assistance.",
+      desc: "Job-oriented HVAC training programs to prepare you for a successful career.",
       img: "/assets/train.png",
     },
   ];
 
-  // --- AC Inspection Summary ---
-  const inspectionData = [
-    { name: "To be replaced", value: 4 },
-    { name: "OK / Normal", value: 14 },
-  ];
-
-  const COLORS = ["#EF4444", "#3B82F6"]; // red, blue
+  const toggleTab = (tabId) => {
+    if (activeTab === tabId) {
+      setActiveTab(null);
+    } else {
+      setActiveTab(tabId);
+      if (tabId === "repair") {
+        loadExcelData("/assets/data/customer.xlsx", "customer"); // default dataset
+      }
+    }
+  };
 
   return (
     <section
@@ -95,8 +121,11 @@ function Services() {
           {serviceData.map((item, idx) => (
             <motion.div
               key={idx}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition group relative overflow-hidden"
+              whileHover={{ scale: 1.05 }}
+              onClick={item.tab ? () => toggleTab(item.tab) : undefined}
+              className={`bg-white rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition group relative overflow-hidden cursor-pointer ${
+                activeTab === item.tab ? "border-4 border-yellow-400" : ""
+              }`}
             >
               <div className="h-40 bg-gray-200 rounded-xl flex items-center justify-center mb-6 overflow-hidden">
                 <img
@@ -113,97 +142,132 @@ function Services() {
           ))}
         </div>
 
-        {/* Training Section */}
-        <motion.div
-          className="mt-24 max-w-5xl mx-auto px-4"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h3 className="text-4xl font-bold text-blue-800 mb-6 text-center">
-            Launch Your Career in HVAC Engineering
-          </h3>
-          <p className="text-gray-700 text-lg mb-4">
-            HVAC Engineering is a booming industry with immense demand for
-            skilled professionals. Our training offers comprehensive knowledge
-            of HVAC basics to prepare you for independent project handling from
-            day one. We recruit freshers from Engineering (Mech, EEE, ECE) and
-            Diploma (Mech, EEE, ECE) streams via written tests, providing
-            stipend-based training and opportunities to join{" "}
-            <strong>GVJ Aircon Projects & Services</strong>.
-          </p>
-          <p className="text-gray-700 text-lg mb-4">
-            We believe in precision engineering, quality installation, and
-            regular maintenance to enhance equipment lifespan and reduce energy
-            consumption.
-          </p>
-        </motion.div>
+        {/* Tab Content */}
+        <AnimatePresence>
+          {activeTab === "repair" && (
+            <motion.div
+              className="mt-12 max-w-5xl mx-auto px-4 overflow-x-auto"
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 50, scale: 0.95 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            >
+              <h4 className="text-2xl font-bold text-center mb-6 text-blue-800">
+                Repair & Maintenance Records
+              </h4>
 
-        {/* Packages Section */}
-        <motion.div
-          className="mt-24 max-w-7xl mx-auto px-4"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          <h3 className="text-4xl font-bold text-center text-blue-800 mb-10">
-            Our Service Packages
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              "Comprehensive",
-              "Only Labour Contract",
-              "Revamp/Re-installation of A/C Systems",
-              "Duct Cleaning and Air Balancing",
-            ].map((pkg, index) => (
-              <motion.div
-                key={index}
-                className="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition"
-                whileHover={{ scale: 1.02 }}
-              >
-                <p className="text-gray-700 text-sm">{pkg}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* AC Inspection Chart Section */}
-        <motion.div
-          className="mt-24 max-w-5xl mx-auto px-4 text-center"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h3 className="text-4xl font-bold text-blue-800 mb-6">
-            AC Health Inspection Summary
-          </h3>
-          <p className="text-gray-700 mb-8">
-            Based on our latest inspection report for Butterfly Gandhimathi
-            Appliances, here’s the overall condition of the units:
-          </p>
-          <div className="w-full h-96">
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={inspectionData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={120}
-                  label
+              {/* Dataset Tabs */}
+              <div className="flex justify-center mb-6 space-x-4">
+                <button
+                  onClick={() =>
+                    loadExcelData("/assets/data/customer.xlsx", "customer")
+                  }
+                  className={`px-6 py-2 rounded-lg font-semibold transition shadow ${
+                    activeDataset === "customer"
+                      ? "bg-blue-700 text-white"
+                      : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                  }`}
                 >
-                  {inspectionData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  Customer Data
+                </button>
+                <button
+                  onClick={() =>
+                    loadExcelData("/assets/data/Butterfly.xlsx", "butterfly")
+                  }
+                  className={`px-6 py-2 rounded-lg font-semibold transition shadow ${
+                    activeDataset === "butterfly"
+                      ? "bg-yellow-600 text-white"
+                      : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+                  }`}
+                >
+                  Warranty Data
+                </button>
+              </div>
+
+              {/* Excel Table */}
+              <table className="w-full border border-gray-300 rounded-lg shadow-2xl overflow-hidden">
+                <thead className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white">
+                  <tr>
+                    {excelData.length > 0 &&
+                      Object.keys(excelData[0]).map((key, i) => (
+                        <th
+                          key={i}
+                          className="px-4 py-3 text-left text-sm font-semibold tracking-wide"
+                        >
+                          {key}
+                        </th>
+                      ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {excelData.map((row, rowIndex) => (
+                    <tr
+                      key={rowIndex}
+                      className={`${
+                        rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
+                      } hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100 transition-colors`}
+                    >
+                      {Object.values(row).map((val, colIndex) => (
+                        <td
+                          key={colIndex}
+                          className="px-4 py-2 text-sm text-gray-700 border-b"
+                        >
+                          {val}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </motion.div>
+                </tbody>
+              </table>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
+
+      {/* Training Section */}
+      <motion.div
+        className="mt-24 max-w-5xl mx-auto px-4"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+      >
+        <h3 className="text-4xl font-bold text-blue-800 mb-6 text-center">
+          Launch Your Career in HVAC Engineering
+        </h3>
+        <p className="text-gray-700 text-lg mb-4">
+          HVAC Engineering is a booming industry with immense demand for skilled
+          professionals. Our training offers comprehensive knowledge of HVAC
+          basics to prepare you for independent project handling from day one.
+        </p>
+      </motion.div>
+
+      {/* Packages Section */}
+      <motion.div
+        className="mt-24 max-w-7xl mx-auto px-4"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <h3 className="text-4xl font-bold text-center text-blue-800 mb-10">
+          Our Service Packages
+        </h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[
+            "Comprehensive",
+            "Only Labour Contract",
+            "Revamp/Re-installation of A/C Systems",
+            "Duct Cleaning and Air Balancing",
+          ].map((pkg, index) => (
+            <motion.div
+              key={index}
+              className="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition"
+              whileHover={{ scale: 1.02 }}
+            >
+              <p className="text-gray-700 text-sm">{pkg}</p>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
 
       {/* PDF Section */}
       <motion.div
@@ -216,13 +280,6 @@ function Services() {
           <h3 className="text-4xl font-bold text-blue-800 mb-6">
             Company Authenticity Report
           </h3>
-          <p className="text-gray-700 mb-10">
-            Our credibility is backed by performance. Below is the official
-            document showing the marks and ratings given for each activity done
-            by <strong>GVJ Aircon Projects & Services</strong>.
-          </p>
-
-          {/* Embedded PDF */}
           <div className="w-full h-[600px] border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg mb-8">
             <iframe
               src="/assets/data/mark.pdf"
@@ -230,8 +287,6 @@ function Services() {
               className="w-full h-full"
             ></iframe>
           </div>
-
-          {/* Download Button */}
           <a
             href="/assets/data/mark.pdf"
             download
@@ -240,32 +295,6 @@ function Services() {
             className="inline-block bg-blue-700 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-blue-800 transition text-lg font-semibold"
           >
             📄 Download Full Report
-          </a>
-        </div>
-      </motion.div>
-
-      {/* Customer List Download Section */}
-      <motion.div
-        className="py-16 bg-gradient-to-r from-white to-blue-50"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9 }}
-      >
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h3 className="text-3xl font-bold text-blue-800 mb-6">
-            Customer List
-          </h3>
-          <p className="text-gray-700 mb-8">
-            Download the official customer list for reference.
-          </p>
-          <a
-            href="/assets/data/Customer List.xlsx"
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-green-600 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-green-700 transition text-lg font-semibold"
-          >
-            📊 Download Customer List
           </a>
         </div>
       </motion.div>
