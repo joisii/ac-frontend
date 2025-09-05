@@ -1,7 +1,6 @@
 // src/pages/Services.js
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import * as XLSX from "xlsx";
 
 function Services() {
   const [formData, setFormData] = useState({
@@ -11,11 +10,8 @@ function Services() {
   });
 
   const [loading, setLoading] = useState(false);
-
-  // New states
-  const [activeTab, setActiveTab] = useState(null); // Track which card is open
-  const [excelData, setExcelData] = useState([]);
-  const [activeDataset, setActiveDataset] = useState("customer"); // Track which dataset is selected
+  const [activeTab, setActiveTab] = useState(null);
+  const [activeDataset, setActiveDataset] = useState("customer");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,22 +46,6 @@ function Services() {
     }
   };
 
-  // Load Excel data dynamically
-  const loadExcelData = async (filePath, dataset) => {
-    try {
-      const response = await fetch(filePath);
-      const arrayBuffer = await response.arrayBuffer();
-      const workbook = XLSX.read(arrayBuffer, { type: "array" });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(jsonData);
-      setActiveDataset(dataset);
-    } catch (error) {
-      console.error("Error loading Excel file", error);
-    }
-  };
-
   const serviceData = [
     {
       title: "Installation",
@@ -76,7 +56,7 @@ function Services() {
       title: "Repair & Maintenance",
       desc: "Fast, reliable repairs with flexible AMC plans.",
       img: "/assets/service.png",
-      tab: "repair", // 👈 Tab id
+      tab: "repair",
     },
     {
       title: "Training & Development",
@@ -91,10 +71,83 @@ function Services() {
     } else {
       setActiveTab(tabId);
       if (tabId === "repair") {
-        loadExcelData("/assets/data/customer.xlsx", "customer"); // default dataset
+        setActiveDataset("customer"); // default dataset
       }
     }
   };
+
+  // Dummy customer data
+  const warrantyCustomers = [
+    { sno: 1, client: "Deepam Eye Hospital" },
+    { sno: 2, client: "Dynamic Advertisements" },
+    { sno: 3, client: "Fresh 2 Day" },
+    { sno: 4, client: "Soorya Hospital" },
+    { sno: 5, client: "Fathima Jewellers" },
+    { sno: 6, client: "Gateway International School" },
+    { sno: 7, client: "Sudha Timber" },
+    { sno: 8, client: "Kuralarasan Residence" },
+    { sno: 9, client: "LKS Gold House" },
+    { sno: 10, client: "Sree Gupta Bhavan" },
+    { sno: 11, client: "Innovent Spaces Ltd" },
+    { sno: 12, client: "Dahnay Logistics" },
+    { sno: 13, client: "Selfie Attire" },
+    { sno: 14, client: "Clover Appasamy Apartments" },
+  ];
+
+  const amcCustomers = [
+    { sno: 1, client: "M.C.T.M. CHIDAMBARAM " },
+    { sno: 2, client: "EMPIRE  AUTOS  " },
+    { sno: 3, client: "Indiqube Viceroy" },
+    { sno: 4, client: "Roche Products" },
+    { sno: 5, client: "Sai Kirit Jewellers" },
+    { sno: 6, client: "Ashok Matches And Timber Industries Priv" },
+    { sno: 7, client: "Manna Prayer House Trust " },
+    { sno: 8, client: "Shri Vaari Electricals Pvt Ltd" },
+    { sno: 9, client: "Sri Lakshmi Jewellers" },
+    { sno: 10, client: "Shree Agarwal Sabha" },
+    { sno: 11, client: "TEST YANTRA (Q Spider )" },
+    { sno: 12, client: "Art Glass Edge" },
+    { sno: 13, client: "Esskay Design and Structures Private Limited" },
+    { sno: 14, client: "TSS Marriage Hall" },
+    { sno: 15, client: "DART GLOBAL LOGISTICS PVT LTD" },
+    { sno: 16, client: "ASTORIA VEG RESTAURANT" },
+    { sno: 17, client: "RVM Motors" },
+    { sno: 18, client: "Jaya Residency" },
+    { sno: 19, client: "Dover India Pvt Ltd" },
+    { sno: 20, client: "Slam Fitness Studio" },
+    { sno: 21, client: "Dahnay Logistics Pvt Ltd" },
+    { sno: 22, client: "Uniworld Logistics" },
+    { sno: 23, client: "Vista Hall (Velachery Banq Hall)" },
+    { sno: 24, client: "Mahalakshmi Jewellers" },
+    { sno: 25, client: "Spaces-R K Studio" },
+];
+
+  // Warranty units data
+  const unit1Data = [
+    { sno: 1, description: "Physical condition", condition: "Not good rusting starting at compressor bottom " },
+    { sno: 2, description: "Motor condition", condition: "Working Normal" },
+    { sno: 3, description: "Blower Condition", condition: "Working Normal" },
+    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
+    { sno: 5, description: "Filters", condition: "Damaged" },
+    { sno: 6, description: "PC Board and remote", condition: "Not working" },
+    { sno: 7, description: "Blower Belt", condition: "Damaged" },
+    { sno: 8, description: "ODU - 1", condition: "Fan stand,fan bottom fully damaged" },
+    { sno: 9, description: "ODU - 2", condition: " Gas Leak" },
+    { sno: 10, description: "ODU - 3", condition: "Normal" },
+  ];
+
+  const unit2Data = [
+    { sno: 1, description: "Physical condition", condition: "Rusted" },
+    { sno: 2, description: "Motor condition", condition: "Good" },
+    { sno: 3, description: "Blower Condition", condition: "Good" },
+    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
+    { sno: 5, description: "Filters", condition: "Damaged" },
+    { sno: 6, description: "PC Board and remote", condition: "Working Normal" },
+    { sno: 7, description: "Blower Belt", condition: "Damaged" },
+    { sno: 8, description: "ODU - 1", condition: "ODU Base Plate Rusted, Fan Motor Failure" },
+    { sno: 9, description: "ODU - 2", condition: "Condansor Coil rusted, Fan Motor Failure" },
+    { sno: 10, description: "ODU - 3", condition: "Gas Leak From Condansor Side" },
+  ];
 
   return (
     <section
@@ -146,7 +199,7 @@ function Services() {
         <AnimatePresence>
           {activeTab === "repair" && (
             <motion.div
-              className="mt-12 max-w-5xl mx-auto px-4 overflow-x-auto"
+              className="mt-12 max-w-6xl mx-auto px-4"
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 50, scale: 0.95 }}
@@ -159,9 +212,7 @@ function Services() {
               {/* Dataset Tabs */}
               <div className="flex justify-center mb-6 space-x-4">
                 <button
-                  onClick={() =>
-                    loadExcelData("/assets/data/customer.xlsx", "customer")
-                  }
+                  onClick={() => setActiveDataset("customer")}
                   className={`px-6 py-2 rounded-lg font-semibold transition shadow ${
                     activeDataset === "customer"
                       ? "bg-blue-700 text-white"
@@ -171,11 +222,9 @@ function Services() {
                   Customer Data
                 </button>
                 <button
-                  onClick={() =>
-                    loadExcelData("/assets/data/Butterfly.xlsx", "butterfly")
-                  }
+                  onClick={() => setActiveDataset("warranty")}
                   className={`px-6 py-2 rounded-lg font-semibold transition shadow ${
-                    activeDataset === "butterfly"
+                    activeDataset === "warranty"
                       ? "bg-yellow-600 text-white"
                       : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
                   }`}
@@ -184,120 +233,201 @@ function Services() {
                 </button>
               </div>
 
-              {/* Excel Table */}
-              <table className="w-full border border-gray-300 rounded-lg shadow-2xl overflow-hidden">
-                <thead className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white">
-                  <tr>
-                    {excelData.length > 0 &&
-                      Object.keys(excelData[0]).map((key, i) => (
-                        <th
-                          key={i}
-                          className="px-4 py-3 text-left text-sm font-semibold tracking-wide"
-                        >
-                          {key}
-                        </th>
-                      ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {excelData.map((row, rowIndex) => (
-                    <tr
-                      key={rowIndex}
-                      className={`${
-                        rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
-                      } hover:bg-gradient-to-r hover:from-yellow-50 hover:to-yellow-100 transition-colors`}
-                    >
-                      {Object.values(row).map((val, colIndex) => (
-                        <td
-                          key={colIndex}
-                          className="px-4 py-2 text-sm text-gray-700 border-b"
-                        >
-                          {val}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              {/* Customer Data Tables */}
+              {activeDataset === "customer" && (
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Warranty Customers */}
+                  <div className="max-w-md">
+                    <h5 className="text-lg font-bold text-blue-700 mb-4">
+                      Partial List of Warranty Customers
+                    </h5>
+                    <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white sticky top-0">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              S.no
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Client Name
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {warrantyCustomers.map((row, i) => (
+                            <tr
+                              key={i}
+                              className={`${
+                                i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              } hover:bg-yellow-50 transition-colors`}
+                            >
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.sno}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.client}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* AMC Customers */}
+                  <div className="max-w-md">
+                    <h5 className="text-lg font-bold text-blue-700 mb-4">
+                      Partial List of AMC Customers
+                    </h5>
+                    <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500 text-white sticky top-0">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              S.no
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Client Name
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {amcCustomers.map((row, i) => (
+                            <tr
+                              key={i}
+                              className={`${
+                                i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              } hover:bg-yellow-50 transition-colors`}
+                            >
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.sno}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.client}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Warranty Data Tables */}
+              {activeDataset === "warranty" && (
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Unit 1 */}
+                  <div className="max-w-md">
+                    <h5 className="text-lg font-bold text-yellow-700 mb-4">
+                      Unit No. 1 - 16 TR DPA
+                    </h5>
+                    <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 text-white sticky top-0">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              S.no
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Description
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Present Condition
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {unit1Data.map((row, i) => (
+                            <tr
+                              key={i}
+                              className={`${
+                                i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              } hover:bg-yellow-50 transition-colors`}
+                            >
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.sno}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.description}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.condition}
+                              </td>
+                            </tr>
+                          ))}
+                          {/* Remarks row */}
+                          <tr>
+                            <td
+                              colSpan={3}
+                              className="px-4 py-3 text-sm text-gray-700 bg-yellow-100 font-semibold"
+                            >
+                              Remarks: To be replaced.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* Unit 2 */}
+                  <div className="max-w-md">
+                    <h5 className="text-lg font-bold text-yellow-700 mb-4">
+                      Unit No. 2 - 16 TR DPA
+                    </h5>
+                    <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+                      <table className="w-full">
+                        <thead className="bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-400 text-white sticky top-0">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              S.no
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Description
+                            </th>
+                            <th className="px-4 py-3 text-left text-sm font-semibold tracking-wide">
+                              Present Condition
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {unit2Data.map((row, i) => (
+                            <tr
+                              key={i}
+                              className={`${
+                                i % 2 === 0 ? "bg-gray-50" : "bg-white"
+                              } hover:bg-yellow-50 transition-colors`}
+                            >
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.sno}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.description}
+                              </td>
+                              <td className="px-4 py-2 text-sm text-gray-700 border-b">
+                                {row.condition}
+                              </td>
+                            </tr>
+                          ))}
+                          {/* Remarks row */}
+                          <tr>
+                            <td
+                              colSpan={3}
+                              className="px-4 py-3 text-sm text-gray-700 bg-yellow-100 font-semibold"
+                            >
+                              Remarks: To be replaced.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {/* Training Section */}
-      <motion.div
-        className="mt-24 max-w-5xl mx-auto px-4"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <h3 className="text-4xl font-bold text-blue-800 mb-6 text-center">
-          Launch Your Career in HVAC Engineering
-        </h3>
-        <p className="text-gray-700 text-lg mb-4">
-          HVAC Engineering is a booming industry with immense demand for skilled
-          professionals. Our training offers comprehensive knowledge of HVAC
-          basics to prepare you for independent project handling from day one.
-        </p>
-      </motion.div>
-
-      {/* Packages Section */}
-      <motion.div
-        className="mt-24 max-w-7xl mx-auto px-4"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        <h3 className="text-4xl font-bold text-center text-blue-800 mb-10">
-          Our Service Packages
-        </h3>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[
-            "Comprehensive",
-            "Only Labour Contract",
-            "Revamp/Re-installation of A/C Systems",
-            "Duct Cleaning and Air Balancing",
-          ].map((pkg, index) => (
-            <motion.div
-              key={index}
-              className="bg-white p-6 rounded-2xl shadow hover:shadow-xl transition"
-              whileHover={{ scale: 1.02 }}
-            >
-              <p className="text-gray-700 text-sm">{pkg}</p>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* PDF Section */}
-      <motion.div
-        className="py-20 bg-gradient-to-r from-blue-50 to-white"
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9 }}
-      >
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h3 className="text-4xl font-bold text-blue-800 mb-6">
-            Company Authenticity Report
-          </h3>
-          <div className="w-full h-[600px] border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg mb-8">
-            <iframe
-              src="/assets/data/mark.pdf"
-              title="Company Authenticity PDF"
-              className="w-full h-full"
-            ></iframe>
-          </div>
-          <a
-            href="/assets/data/mark.pdf"
-            download
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-blue-700 text-white px-8 py-4 rounded-2xl shadow-xl hover:bg-blue-800 transition text-lg font-semibold"
-          >
-            📄 Download Full Report
-          </a>
-        </div>
-      </motion.div>
 
       {/* Service Request Form */}
       <div className="py-20 flex-shrink-0 bg-white">

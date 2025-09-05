@@ -23,8 +23,6 @@ import CorporateOfficeProjects from "./pages/CorporateOfficeProjects";
 import ConferenceHallProjects from "./pages/ConferenceHallProjects";
 
 
-
-
 const Home = () => {
   return (
     <main className="text-center">
@@ -46,12 +44,17 @@ function App() {
         <Header />
         <div className="flex-grow">
           <Routes>
+            {/* Main home page */}
             <Route path="/" element={<Home />} />
+
+            {/* General routes */}
             <Route path="/projects" element={<Projects />} />
             <Route path="/sales" element={<Sales />} />
             <Route path="/services" element={<Services />} />
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+            {/* Project category pages */}
             <Route path="/projects/gym" element={<GymProjects />} />
             <Route path="/projects/restaurant" element={<RestaurantProjects />} />
             <Route path="/projects/textile" element={<TextileShopProjects />} />
@@ -61,9 +64,6 @@ function App() {
             <Route path="/projects/hospital" element={<HospitalProjects />} />
             <Route path="/projects/office" element={<CorporateOfficeProjects />} />
             <Route path="/projects/conference" element={<ConferenceHallProjects />} />
-
-
-
           </Routes>
         </div>
         <Footer />
