@@ -32,20 +32,6 @@ const restaurantClients = [
   { id: 25, name: "Sudha Timber Lodge", location: "Chennai",application: "Lodge",acType: "LS" },
   { id: 26, name: "Park Club", location: "Chennai",application: "Bar / Restaurant",acType: "LS" },
 ];
-// Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "restaurant_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
 
 export default function RestaurantProjects() {
   const [search, setSearch] = useState("");
@@ -123,12 +109,6 @@ export default function RestaurantProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-yellow-500"
         />
-        <button
-          onClick={() => downloadCSV(restaurantClients)}
-          className="px-5 py-3 bg-yellow-600 text-white rounded-xl shadow hover:bg-yellow-700 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Data Table */}

@@ -23,24 +23,10 @@ const worshipClients = [
   { id: 15, name: "Shree Jain Sangh Trust", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
   { id: 16, name: "ECI – Thirumangalamp", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
   { id: 17, name: "Healing Gospel Church (HGC)", location: "Chennai", application: "Church", acType: "V Cool" },
-  { id: 18, name: "'Elohim Ministries", location: "Chennai", application: "Church", acType: "SAC" },
-  { id: 19, name: "'Pastor John Jebaraj Ministries", location: "Coimbatore", application: "Church", acType: "V Cool" },
+  { id: 18, name: "Elohim Ministries", location: "Chennai", application: "Church", acType: "SAC" },
+  { id: 19, name: "Pastor John Jebaraj Ministries", location: "Coimbatore", application: "Church", acType: "V Cool" },
 ];
 
-// CSV download helper
-const downloadCSV = (data, filename = "worship_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
 
 export default function WorshipProjects() {
   const [search, setSearch] = useState("");
@@ -112,12 +98,6 @@ export default function WorshipProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button
-          onClick={() => downloadCSV(worshipClients)}
-          className="px-5 py-3 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 text-white rounded-xl shadow hover:opacity-90 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Data Table */}

@@ -55,19 +55,6 @@ const banquetClients = [
   { id: 44, name: "AM Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
 ];
 
-// Helper function to convert data array to CSV and trigger download
-const downloadCSV = (data, filename = "banquet_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
 
 // Main component for Banquet Projects page
 export default function BanquetProjects() {
@@ -134,12 +121,6 @@ export default function BanquetProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        <button
-          onClick={() => downloadCSV(banquetClients)}
-          className="px-5 py-3 bg-purple-600 text-white rounded-xl shadow hover:bg-purple-700 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Table */}

@@ -20,21 +20,6 @@ const gymClients = [
  { id: 12, name: "Sky Motors (Gym)", location: "Chennai",application:"Gym Area", acType: "DSAC " },
 ];  
 
-
-// Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "gym_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
-
 export default function GymProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -111,12 +96,6 @@ export default function GymProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
-        <button
-          onClick={() => downloadCSV(gymClients)}
-          className="px-5 py-3 bg-teal-600 text-white rounded-xl shadow hover:bg-teal-700 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Data Table */}

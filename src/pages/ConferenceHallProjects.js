@@ -46,21 +46,6 @@ const conferenceClients = [
   { id: 38, name: "A Chandranathan (Mr. Vinoth)", location: "Chennai", application: "Residence", acType: "VRF S" },
 ];
 
-// Helper: Convert array to CSV and trigger download
-const downloadCSV = (data, filename = "conference_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
-
 export default function ConferenceHallProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -133,12 +118,6 @@ export default function ConferenceHallProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
-        <button
-          onClick={() => downloadCSV(conferenceClients)}
-          className="px-5 py-3 bg-orange-600 text-white rounded-xl shadow hover:bg-orange-700 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Data Table */}

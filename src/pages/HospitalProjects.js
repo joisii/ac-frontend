@@ -29,21 +29,6 @@ const hospitalClients = [
   { id: 21, name: "'Varian Medical Systems (JIPMER)", location: "Pondichery", application: "Hospital", acType: "DSAC" },
 ];
 
-// CSV download helper
-const downloadCSV = (data, filename = "hospital_clients.csv") => {
-  const headers = Object.keys(data[0]).join(",") + "\n";
-  const rows = data.map((row) => Object.values(row).join(",")).join("\n");
-  const csv = headers + rows;
-
-  const blob = new Blob([csv], { type: "text/csv" });
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  window.URL.revokeObjectURL(url);
-};
-
 export default function HospitalProjects() {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -114,12 +99,6 @@ export default function HospitalProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
-        <button
-          onClick={() => downloadCSV(hospitalClients)}
-          className="px-5 py-3 bg-gradient-to-r from-teal-600 via-teal-500 to-teal-700 text-white rounded-xl shadow hover:opacity-90 transition"
-        >
-          ⬇ Download All
-        </button>
       </motion.div>
 
       {/* Data Table */}
