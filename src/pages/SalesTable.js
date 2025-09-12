@@ -1,61 +1,83 @@
-// src/components/SalesTable.js
-import React, { useEffect, useState } from 'react';
-import API_BASE from '../config';
+import React, { useState } from "react";
+import EditModal from "./EditModal";
+import API_BASE from "../config";
 
-const SalesTable = () => {
-  const [sales, setSales] = useState([]);
+const SalesTable = ({ sales, onDelete, onUpdate }) => {
+  const [editing, setEditing] = useState(null);
 
-  useEffect(() => {
-    fetch(`${API_BASE}/sales`)
-      .then(res => res.json())
-      .then(data => setSales(data))
-      .catch(err => console.error('Error fetching sales:', err));
-  }, []);
-
-  const handleDelete = (id) => {
-    fetch(`${API_BASE}/sales/${id}`, { method: 'DELETE' })
-      .then(() => setSales(prev => prev.filter(s => s._id !== id)))
-      .catch(err => console.error('Error deleting sale:', err));
+  const handleSave = async (updatedData) => {
+    try {
+      const res = await fetch(`${API_BASE}/sales/${updatedData._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedData),
+      });
+      if (res.ok) {
+        onUpdate(updatedData);
+        setEditing(null);
+      }
+    } catch (err) {
+      console.error("Error updating sale:", err);
+    }
   };
 
   return (
     <div className="overflow-x-auto">
-      <h3 className="text-2xl font-semibold text-gray-800 mb-6">Sales Records</h3>
-      {sales.length === 0 ? (
-        <div className="text-center text-gray-500 py-10">
-          <p>No sales records available.</p>
-        </div>
-      ) : (
-        <table className="min-w-full border rounded-lg overflow-hidden text-left text-sm">
-          <thead className="bg-gray-100 text-gray-700 uppercase tracking-wider">
+      <table className="min-w-full border rounded-lg overflow-hidden text-sm">
+        <thead className="bg-yellow-500 text-white">
+          <tr>
+            <th className="px-4 py-3 border">Name</th>
+            <th className="px-4 py-3 border">Email</th>
+            <th className="px-4 py-3 border">Phone</th>
+            <th className="px-4 py-3 border">Message</th>
+            <th className="px-4 py-3 border text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sales.length === 0 ? (
             <tr>
-              <th className="px-4 py-3 border">Name</th>
-              <th className="px-4 py-3 border">Email</th>
-              <th className="px-4 py-3 border">Phone</th>
-              <th className="px-4 py-3 border">Message</th>
-              <th className="px-4 py-3 border">Actions</th>
+              <td colSpan="5" className="text-center py-6 text-gray-500 italic">
+                No sales records found.
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {sales.map((entry) => (
-              <tr key={entry._id} className="hover:bg-gray-50">
-                <td className="px-4 py-3 border">{entry.name}</td>
-                <td className="px-4 py-3 border">{entry.email}</td>
-                <td className="px-4 py-3 border">{entry.phone}</td>
-                <td className="px-4 py-3 border">{entry.message}</td>
-                <td className="px-4 py-3 border">
+          ) : (
+            sales.map((s, idx) => (
+              <tr
+                key={s._id}
+                className={`${
+                  idx % 2 === 0 ? "bg-gray-50" : "bg-white"
+                } hover:bg-yellow-50`}
+              >
+                <td className="px-4 py-3 border">{s.name}</td>
+                <td className="px-4 py-3 border">{s.email}</td>
+                <td className="px-4 py-3 border">{s.phone}</td>
+                <td className="px-4 py-3 border">{s.message}</td>
+                <td className="px-4 py-3 border text-center space-x-2">
                   <button
-                    onClick={() => handleDelete(entry._id)}
-                    className="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-3 rounded shadow"
+                    onClick={() => setEditing(s)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3 rounded"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => onDelete(s._id)}
+                    className="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-3 rounded"
                   >
                     Delete
                   </button>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            ))
+          )}
+        </tbody>
+      </table>
+
+      <EditModal
+        isOpen={!!editing}
+        onClose={() => setEditing(null)}
+        onSave={handleSave}
+        data={editing}
+      />
     </div>
   );
 };
