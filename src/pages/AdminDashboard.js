@@ -1,3 +1,4 @@
+// src/components/AdminDashboard.js
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ServiceRequestsTable from "../pages/ServiceRequestsTable";
@@ -28,17 +29,12 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
+  // ✅ Only delete handlers remain
   const handleDeleteRequest = (id) =>
     setRequests((prev) => prev.filter((r) => r._id !== id));
 
-  const handleUpdateRequest = (updated) =>
-    setRequests((prev) => prev.map((r) => (r._id === updated._id ? updated : r)));
-
   const handleDeleteSale = (id) =>
     setSales((prev) => prev.filter((s) => s._id !== id));
-
-  const handleUpdateSale = (updated) =>
-    setSales((prev) => prev.map((s) => (s._id === updated._id ? updated : s)));
 
   if (loading) {
     return (
@@ -102,7 +98,6 @@ const AdminDashboard = () => {
               JSON.stringify(r).toLowerCase().includes(searchReq.toLowerCase())
             )}
             onDelete={handleDeleteRequest}
-            onUpdate={handleUpdateRequest}
           />
         </motion.div>
 
@@ -128,7 +123,6 @@ const AdminDashboard = () => {
               JSON.stringify(s).toLowerCase().includes(searchSales.toLowerCase())
             )}
             onDelete={handleDeleteSale}
-            onUpdate={handleUpdateSale}
           />
         </motion.div>
       </div>

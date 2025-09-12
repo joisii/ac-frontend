@@ -1,26 +1,6 @@
-import React, { useState } from "react";
-import EditModal from "./EditModal";
-import API_BASE from "../config";
+import React from "react";
 
-const ServiceRequestsTable = ({ requests, onDelete, onUpdate }) => {
-  const [editing, setEditing] = useState(null);
-
-  const handleSave = async (updatedData) => {
-    try {
-      const res = await fetch(`${API_BASE}/requests/${updatedData._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedData),
-      });
-      if (res.ok) {
-        onUpdate(updatedData);
-        setEditing(null);
-      }
-    } catch (err) {
-      console.error("Error updating request:", err);
-    }
-  };
-
+const ServiceRequestsTable = ({ requests, onDelete }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border rounded-lg overflow-hidden text-sm">
@@ -44,21 +24,13 @@ const ServiceRequestsTable = ({ requests, onDelete, onUpdate }) => {
             requests.map((req, idx) => (
               <tr
                 key={req._id}
-                className={`${
-                  idx % 2 === 0 ? "bg-gray-50" : "bg-white"
-                } hover:bg-blue-50`}
+                className={`${idx % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-blue-50`}
               >
                 <td className="px-4 py-3 border">{req.name}</td>
                 <td className="px-4 py-3 border">{req.contact}</td>
                 <td className="px-4 py-3 border">{req.issue}</td>
                 <td className="px-4 py-3 border">{req.status}</td>
-                <td className="px-4 py-3 border text-center space-x-2">
-                  <button
-                    onClick={() => setEditing(req)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white text-xs py-1 px-3 rounded"
-                  >
-                    Edit
-                  </button>
+                <td className="px-4 py-3 border text-center">
                   <button
                     onClick={() => onDelete(req._id)}
                     className="bg-red-500 hover:bg-red-600 text-white text-xs py-1 px-3 rounded"
@@ -71,13 +43,6 @@ const ServiceRequestsTable = ({ requests, onDelete, onUpdate }) => {
           )}
         </tbody>
       </table>
-
-      <EditModal
-        isOpen={!!editing}
-        onClose={() => setEditing(null)}
-        onSave={handleSave}
-        data={editing}
-      />
     </div>
   );
 };
