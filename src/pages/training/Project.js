@@ -1,11 +1,8 @@
 // src/pages/training/Project.js
-import React, { useEffect, useState } from "react";
-import * as XLSX from "xlsx";
+import React from "react";
 import { motion } from "framer-motion";
 
 function Project() {
-  const [tableData, setTableData] = useState([]);
-
   // Customer Data (copied from Repair.js)
   const warrantyCustomers = [
     { sno: 1, client: "ABC Corp" },
@@ -40,19 +37,6 @@ function Project() {
     { name: "Qspiders", logo: "/assets/qspiders.png" },
   ];
 
-  useEffect(() => {
-    // Fetch the Excel file from public folder
-    fetch("/project-data.xlsx")
-      .then((res) => res.arrayBuffer())
-      .then((buffer) => {
-        const workbook = XLSX.read(buffer, { type: "array" });
-        const sheetName = workbook.SheetNames[0]; // first sheet
-        const sheet = workbook.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(sheet, { header: 1 }); // raw array format
-        setTableData(data);
-      });
-  }, []);
-
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg">
       <h5 className="text-2xl font-bold text-blue-700 mb-4">
@@ -73,48 +57,28 @@ function Project() {
         <span className="font-medium">troubleshooting</span> and{" "}
         <span className="font-medium">maintenance strategies</span>. By working
         on real-time projects, you’ll build confidence to handle commercial HVAC
-        setups independently. The table below gives you the complete syllabus
-        roadmap for our project training program.
+        setups independently. Below you can view or download the complete syllabus.
       </p>
 
-      {/* Render Excel Data */}
-      {tableData.length > 0 ? (
-        <div className="overflow-x-auto max-h-[500px] overflow-y-scroll border rounded-lg mb-8">
-          <table className="table-auto border-collapse border border-gray-300 w-full text-sm text-left">
-            <thead className="bg-blue-100 sticky top-0">
-              <tr>
-                {tableData[0].map((col, i) => (
-                  <th
-                    key={i}
-                    className="border border-gray-300 px-4 py-2 font-semibold"
-                  >
-                    {col}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.slice(1).map((row, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className="odd:bg-white even:bg-gray-50 hover:bg-yellow-50"
-                >
-                  {row.map((cell, cellIndex) => (
-                    <td
-                      key={cellIndex}
-                      className="border border-gray-300 px-4 py-2"
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <p className="text-gray-500 mb-8">Loading syllabus data...</p>
-      )}
+      {/* Embed PDF */}
+      <div className="mb-10">
+        <iframe
+          src="/projectmark.pdf"
+          title="Project Syllabus PDF"
+          className="w-full h-[600px] border rounded-lg shadow"
+        />
+        <p className="text-sm text-gray-600 mt-2">
+          Can’t view?{" "}
+          <a
+            href="/projectmark.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            Download the syllabus PDF
+          </a>
+        </p>
+      </div>
 
       {/* Customer Data Tables */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
