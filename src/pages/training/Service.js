@@ -5,15 +5,29 @@ import { motion } from "framer-motion";
 function Service() {
   // Warranty units data
   const unit1Data = [
-    { sno: 1, description: "Compressor", condition: "Good" },
-    { sno: 2, description: "Condenser Coil", condition: "Needs Cleaning" },
-    { sno: 3, description: "Fan Motor", condition: "Working" },
-  ];
+    { sno: 1, description: "Physical condition", condition: "Not good rusting starting at compressor bottom " },
+    { sno: 2, description: "Motor condition", condition: "Working Normal" },
+    { sno: 3, description: "Blower Condition", condition: "Working Normal" },
+    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
+    { sno: 5, description: "Filters", condition: "Damaged" },
+    { sno: 6, description: "PC Board and remote", condition: "Not working" },
+    { sno: 7, description: "Blower Belt", condition: "Damaged" },
+    { sno: 8, description: "ODU - 1", condition: "Fan stand,fan bottom fully damaged" },
+    { sno: 9, description: "ODU - 2", condition: " Gas Leak" },
+    { sno: 10, description: "ODU - 3", condition: "Normal" },
+  ]
 
   const unit2Data = [
-    { sno: 1, description: "Evaporator Coil", condition: "Good" },
-    { sno: 2, description: "Thermostat", condition: "Replace Soon" },
-    { sno: 3, description: "Blower Motor", condition: "Operational" },
+    { sno: 1, description: "Physical condition", condition: "Rusted" },
+    { sno: 2, description: "Motor condition", condition: "Good" },
+    { sno: 3, description: "Blower Condition", condition: "Good" },
+    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
+    { sno: 5, description: "Filters", condition: "Damaged" },
+    { sno: 6, description: "PC Board and remote", condition: "Working Normal" },
+    { sno: 7, description: "Blower Belt", condition: "Damaged" },
+    { sno: 8, description: "ODU - 1", condition: "ODU Base Plate Rusted, Fan Motor Failure" },
+    { sno: 9, description: "ODU - 2", condition: "Condensor Coil rusted, Fan Motor Failure" },
+    { sno: 10, description: "ODU - 3", condition: "Gas Leak From Condensor Side" },
   ];
 
   // Companies logos data
@@ -23,7 +37,7 @@ function Service() {
     { name: "Esskay Design Structures Private", logo: "/assets/Esskey.jpeg" },
     { name: "BELRISE INDUSTRIES LTD", logo: "/assets/Belrise.jpeg" },
     { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg",},
-    { name: "LKS Old House", logo: "/assets/Lks.png" },
+    { name: "LKS Gold House", logo: "/assets/Lks.png" },
     { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
     { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
     { name: "FATHIMA JEWELLERS", logo: "/assets/fathima.jpeg" },
@@ -46,7 +60,7 @@ function Service() {
     { name: "Astoria Restaurant", logo: "/assets/as.png" },
     { name: "'Sooriya Hospital", logo: "/assets/soo.jpg" },
     { name: "'VS Hospital", logo: "/assets/vs.jpg" },
-    { name: "JAIGOPAL GARODDIA Matriculation Higher Secondary School", logo: "/assets/jai.jpg" },
+    { name: "JAIGOPAL GARODDIA Matriculation H.S.S", logo: "/assets/jai.jpg" },
     { name: "M C T M School", logo: "/assets/mc.jpg" },
     { name: "Sky Motors (Gym)", logo: "/assets/gy.png" },
     { name: "Slam Fitness", logo: "/assets/slam.png" },
@@ -132,7 +146,7 @@ function Service() {
                     colSpan={3}
                     className="px-4 py-3 bg-yellow-100 font-semibold"
                   >
-                    Remarks: All components inspected. Minor cleaning required.
+                    Remarks: To be replaced.
                   </td>
                 </tr>
               </tbody>
@@ -170,7 +184,7 @@ function Service() {
                     colSpan={3}
                     className="px-4 py-3 bg-yellow-100 font-semibold"
                   >
-                    Remarks: Thermostat replacement suggested in next service
+                    Remarks: To be replaced.
                     cycle.
                   </td>
                 </tr>
