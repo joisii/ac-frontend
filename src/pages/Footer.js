@@ -32,7 +32,6 @@ const Footer = () => {
                 name: 'more about us',
                 link: 'https://www.google.com/search?q=Gvj+Aircon+Projects+and+services+%2C+No+37+Rathinavel+Pa+diyan+Street%2C+Golden+George+Nagar%2C+Neekundram%2C+chennai+600107&rlz=1C1ONGR_enIN1123IN1124&oq=gvj+ai&gs_lcrp=EgZjaHJvbWUqBggBEEUYOzIGCAAQRRg5MgYIARBFGDsyBggCEEUYO9IBCDMwNTJqMGo3qAIAsAIA&sourceid=chrome&ie=UTF-8',
               },
-              { name: 'Training', link: '/sales' },
             ].map(({ name, link }, idx) => (
               <li key={idx}>
                 <a
