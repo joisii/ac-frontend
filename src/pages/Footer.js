@@ -26,7 +26,7 @@ const Footer = () => {
           </h4>
           <ul className="space-y-2 text-sm">
             {[
-              { name: 'Services', link: '/services' },
+              { name: 'Training', link: '/services' },
               { name: 'Sales', link: '/sales' },
               {
                 name: 'more about us',
