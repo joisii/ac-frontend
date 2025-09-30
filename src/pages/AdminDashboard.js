@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import ServiceRequestsTable from "../pages/ServiceRequestsTable";
 import SalesTable from "../pages/SalesTable";
-import API_BASE from "../config";
+import API_BASE from "../config"; // Make sure this points to your backend URL
 
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [searchReq, setSearchReq] = useState("");
   const [searchSales, setSearchSales] = useState("");
 
+  // ------------------- Fetch Data -------------------
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,13 +30,38 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
-  // ✅ Only delete handlers remain
-  const handleDeleteRequest = (id) =>
-    setRequests((prev) => prev.filter((r) => r._id !== id));
+  // ------------------- Delete Handlers -------------------
+  const handleDeleteRequest = async (id) => {
+    try {
+      const res = await fetch(`${API_BASE}/requests/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setRequests((prev) => prev.filter((r) => r._id !== id));
+      } else {
+        console.error("Failed to delete request");
+      }
+    } catch (err) {
+      console.error("Error deleting request:", err);
+    }
+  };
 
-  const handleDeleteSale = (id) =>
-    setSales((prev) => prev.filter((s) => s._id !== id));
+  const handleDeleteSale = async (id) => {
+    try {
+      const res = await fetch(`${API_BASE}/sales/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setSales((prev) => prev.filter((s) => s._id !== id));
+      } else {
+        console.error("Failed to delete sale");
+      }
+    } catch (err) {
+      console.error("Error deleting sale:", err);
+    }
+  };
 
+  // ------------------- Loading -------------------
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen text-gray-600 text-xl">
@@ -72,9 +98,8 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Content */}
+      {/* ------------------- Service Requests ------------------- */}
       <div className="p-6 max-w-7xl mx-auto">
-        {/* Service Requests */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -101,7 +126,7 @@ const AdminDashboard = () => {
           />
         </motion.div>
 
-        {/* Sales Records */}
+        {/* ------------------- Sales Records ------------------- */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
