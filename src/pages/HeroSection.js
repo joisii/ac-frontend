@@ -140,7 +140,7 @@ const HeroSection = () => {
           variants={childVariants}
           className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-blue-600 to-blue-400 drop-shadow-lg"
         >
-          Air Conditioning Experts
+          AIR CONDITIONING EXPERTS
         </motion.h2>
 
         {/* Subtitle */}

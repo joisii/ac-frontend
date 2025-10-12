@@ -22,11 +22,11 @@ const hospitalClients = [
   { id: 14, name: "Dr Kamatchi Memorial Hospital", location: "Chennai", application: "Diagnostic Lab Area", acType: "DSAC" },
   { id: 15, name: "Stanley Hospital (Blood Bank)", location: "Chennai", application: "Blood Bank", acType: "PAC" },
   { id: 16, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
-  { id: 17, name: "'Scitus Pharma Services Pvt Ltd", location: "Chennai", application: "Pharma ", acType: "SAC" },
+  { id: 17, name: "Scitus Pharma Services Pvt Ltd", location: "Chennai", application: "Pharma ", acType: "SAC" },
   { id: 18, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
   { id: 19, name: "Cure Healthcare Systems Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "SAC" },
-  { id: 20, name: "'Infinity Projects - NOVA IVF", location: "Madurai", application: "Hospital", acType: "VRV" },
-  { id: 21, name: "'Varian Medical Systems (JIPMER)", location: "Pondichery", application: "Hospital", acType: "DSAC" },
+  { id: 20, name: "Infinity Projects - NOVA IVF", location: "Madurai", application: "Hospital", acType: "VRV" },
+  { id: 21, name: "Varian Medical Systems (JIPMER)", location: "Pondichery", application: "Hospital", acType: "DSAC" },
 ];
 
 export default function HospitalProjects() {

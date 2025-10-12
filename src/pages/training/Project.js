@@ -50,12 +50,12 @@ function Project() {
   ];
 
   // Clients Logos
-   const clients = [
+  const clients = [
     { name: "IndiQube Limited", logo: "/assets/indie.jpeg" },
     { name: "Sree Gupta Bhavan", logo: "/assets/srb.png" },
     { name: "Esskay Design Structures Private", logo: "/assets/Esskey.jpeg" },
     { name: "BELRISE INDUSTRIES LTD", logo: "/assets/Belrise.jpeg" },
-    { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg",},
+    { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg" },
     { name: "LKS Gold House", logo: "/assets/Lks.png" },
     { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
     { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
@@ -190,7 +190,7 @@ function Project() {
         </div>
       </div>
 
-      {/* Companies Worked With */}
+      {/* Companies Worked With (client logo)*/}
       <motion.div
         className="mt-12"
         initial={{ opacity: 0, y: 30 }}
@@ -206,13 +206,13 @@ function Project() {
             <motion.div
               key={index}
               className="flex flex-col items-center w-36 h-36 md:w-40 md:h-40 bg-white p-4 rounded-2xl shadow hover:shadow-2xl transition group"
-              whileHover={{ scale: 1.07 }}
+              whileHover={{ scale: 1.15 }}
             >
               <div className="flex-grow flex items-center justify-center">
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain grayscale group-hover:grayscale-0 transition"
+                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain transition-transform duration-300 ease-in-out"
                 />
               </div>
               <p className="mt-2 text-xs md:text-sm text-center text-gray-700 font-medium">

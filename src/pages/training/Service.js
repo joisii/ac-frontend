@@ -15,7 +15,7 @@ function Service() {
     { sno: 8, description: "ODU - 1", condition: "Fan stand,fan bottom fully damaged" },
     { sno: 9, description: "ODU - 2", condition: " Gas Leak" },
     { sno: 10, description: "ODU - 3", condition: "Normal" },
-  ]
+  ];
 
   const unit2Data = [
     { sno: 1, description: "Physical condition", condition: "Rusted" },
@@ -36,7 +36,7 @@ function Service() {
     { name: "Sree Gupta Bhavan", logo: "/assets/srb.png" },
     { name: "Esskay Design Structures Private", logo: "/assets/Esskey.jpeg" },
     { name: "BELRISE INDUSTRIES LTD", logo: "/assets/Belrise.jpeg" },
-    { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg",},
+    { name: "Southern Chemical India Private Limited", logo: "/assets/southern chemical.jpeg" },
     { name: "LKS Gold House", logo: "/assets/Lks.png" },
     { name: "DART GLOBAL LOGISTICS PVT LTD", logo: "/assets/dart.jpeg" },
     { name: "Deepam Eye Hospital", logo: "/assets/Deepam.png" },
@@ -210,13 +210,14 @@ function Service() {
             <motion.div
               key={index}
               className="flex flex-col items-center w-36 h-36 md:w-40 md:h-40 bg-white p-4 rounded-2xl shadow hover:shadow-2xl transition group"
-              whileHover={{ scale: 1.07 }}
+              whileHover={{ scale: 1.1 }}
             >
-              <div className="flex-grow flex items-center justify-center">
-                <img
+              <div className="flex-grow flex items-center justify-center overflow-hidden">
+                <motion.img
                   src={client.logo}
                   alt={client.name}
-                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain grayscale group-hover:grayscale-0 transition"
+                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain transition-transform duration-300"
+                  whileHover={{ scale: 1.15 }}
                 />
               </div>
               <p className="mt-2 text-xs md:text-sm text-center text-gray-700 font-medium">
