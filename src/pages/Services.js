@@ -18,7 +18,7 @@ function Services() {
   const serviceData = [
     {
       title: "Training",
-      desc: "Job-oriented HVAC training programs to prepare you for a successful career.                                                                             Clickto know more",
+      desc: "Job-oriented HVAC training programs to prepare you for a successful career.",
       img: "/assets/train.png",
       tab: "training",
     },
