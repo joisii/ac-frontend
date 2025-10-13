@@ -14,7 +14,7 @@ function Services() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
   const [activeTrainingTab, setActiveTrainingTab] = useState("project");
-  const [showPdfModal, setShowPdfModal] = useState(false);
+
 
   const serviceData = [
     {
