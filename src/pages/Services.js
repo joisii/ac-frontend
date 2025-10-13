@@ -14,6 +14,7 @@ function Services() {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
   const [activeTrainingTab, setActiveTrainingTab] = useState("project");
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
   const serviceData = [
     {
@@ -83,10 +84,11 @@ function Services() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 1 }}
         >
-          Delivering <span className="font-semibold">end-to-end HVAC solutions</span> — from large-scale{" "}
-          <span className="font-semibold">installations</span> to reliable{" "}
-          <span className="font-semibold">after-sales service</span>. Our expert team ensures
-          energy-efficient performance, reduced downtime, and long-term savings for your business.
+          Delivering <span className="font-semibold">end-to-end HVAC solutions</span> —
+          from large-scale <span className="font-semibold">installations</span> to reliable{" "}
+          <span className="font-semibold">after-sales service</span>.
+          Our expert team ensures energy-efficient performance,
+          reduced downtime, and long-term savings for your business.
         </motion.p>
 
         <motion.p
@@ -95,7 +97,7 @@ function Services() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 1 }}
         >
-          Plus, our <span className="font-semibold text-white">job-oriented training programs</span>{" "}
+          Plus, our <span className="font-semibold text-white">job-oriented training programs </span>
           prepare the next generation of HVAC professionals with real-world skills and hands-on projects.
         </motion.p>
       </motion.div>
@@ -117,8 +119,10 @@ function Services() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.2, duration: 0.8 }}
           >
+            {/* Glow effect */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-yellow-400 via-blue-300 to-transparent opacity-0 group-hover:opacity-20 blur-3xl transition duration-500"></div>
 
+            {/* Image */}
             <div className="h-52 bg-gradient-to-r from-blue-300 to-yellow-200 rounded-xl mb-6 flex items-center justify-center overflow-hidden relative z-10 shadow-lg">
               <motion.img
                 src={item.img}
@@ -129,10 +133,12 @@ function Services() {
               />
             </div>
 
+            {/* Title */}
             <h3 className="text-3xl font-extrabold text-center text-white drop-shadow-lg relative z-10">
               {item.title}
             </h3>
 
+            {/* Description */}
             <p className="text-center text-blue-100 mt-4 text-lg leading-relaxed relative z-10">
               {item.desc}
             </p>
@@ -140,7 +146,7 @@ function Services() {
         ))}
       </div>
 
-      {/* Training Tab */}
+      {/* Training Tab (animated expand) */}
       <AnimatePresence>
         {activeTab === "training" && (
           <motion.div
@@ -190,78 +196,7 @@ function Services() {
         )}
       </AnimatePresence>
 
-      {/* 📄 PDF Download Section — ✨ UPGRADED ✨ */}
-      <div className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_#3b82f620,_transparent_70%)]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_#facc1530,_transparent_70%)]"></div>
-
-        <motion.div
-          className="max-w-6xl mx-auto text-center px-4 relative z-10"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <h4 className="text-3xl font-bold mb-12 text-blue-800 drop-shadow">
-            Download Brochures
-          </h4>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Project Mark PDF */}
-            <motion.div
-              whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2 }}
-              className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-gray-200 relative overflow-hidden group transition"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-transparent to-yellow-400/10 opacity-0 group-hover:opacity-100 blur-2xl transition duration-700"></div>
-              <a
-                href="/assets/projectmark.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-800 transition font-semibold text-lg mb-4 flex items-center justify-center relative z-10"
-              >
-                📘 Project Mark PDF
-              </a>
-              <motion.div
-                className="w-full h-96 overflow-hidden rounded-lg border border-gray-300 shadow-inner relative z-10"
-                whileHover={{ scale: 1.01 }}
-              >
-                <iframe
-                  src="/assets/projectmark.pdf"
-                  title="Project Mark PDF"
-                  className="w-full h-full"
-                ></iframe>
-              </motion.div>
-            </motion.div>
-
-            {/* Service Data PDF */}
-            <motion.div
-              whileHover={{ scale: 1.02, rotateX: 2, rotateY: 2 }}
-              className="bg-white/70 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-gray-200 relative overflow-hidden group transition"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 blur-2xl transition duration-700"></div>
-              <a
-                href="/assets/servicedata.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full bg-yellow-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-yellow-700 transition font-semibold text-lg mb-4 flex items-center justify-center relative z-10"
-              >
-                📄 Service Data PDF
-              </a>
-              <motion.div
-                className="w-full h-96 overflow-hidden rounded-lg border border-gray-300 shadow-inner relative z-10"
-                whileHover={{ scale: 1.01 }}
-              >
-                <iframe
-                  src="/assets/servicedata.pdf"
-                  title="Service Data PDF"
-                  className="w-full h-full"
-                ></iframe>
-              </motion.div>
-            </motion.div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Service Request Form */}
+ {/* Service Request Form */}
       <div className="py-20 bg-white">
         <motion.div
           className="max-w-3xl mx-auto px-4"
