@@ -111,26 +111,6 @@ function Project() {
         setups independently. Below you can view or download the complete syllabus.
       </p>
 
-      {/* Embed PDF */}
-      <div className="mb-10">
-        <iframe
-          src="/projectmark.pdf"
-          title="Project Syllabus PDF"
-          className="w-full h-[600px] border rounded-lg shadow"
-        />
-        <p className="text-sm text-gray-600 mt-2">
-          Can’t view?{" "}
-          <a
-            href="/projectmark.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            Download the syllabus PDF
-          </a>
-        </p>
-      </div>
-
       {/* Customer Data Tables */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         {/* Warranty Customers */}

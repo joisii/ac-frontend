@@ -3,32 +3,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 function Service() {
-  // Warranty units data
-  const unit1Data = [
-    { sno: 1, description: "Physical condition", condition: "Not good rusting starting at compressor bottom " },
-    { sno: 2, description: "Motor condition", condition: "Working Normal" },
-    { sno: 3, description: "Blower Condition", condition: "Working Normal" },
-    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
-    { sno: 5, description: "Filters", condition: "Damaged" },
-    { sno: 6, description: "PC Board and remote", condition: "Not working" },
-    { sno: 7, description: "Blower Belt", condition: "Damaged" },
-    { sno: 8, description: "ODU - 1", condition: "Fan stand,fan bottom fully damaged" },
-    { sno: 9, description: "ODU - 2", condition: " Gas Leak" },
-    { sno: 10, description: "ODU - 3", condition: "Normal" },
-  ];
-
-  const unit2Data = [
-    { sno: 1, description: "Physical condition", condition: "Rusted" },
-    { sno: 2, description: "Motor condition", condition: "Good" },
-    { sno: 3, description: "Blower Condition", condition: "Good" },
-    { sno: 4, description: "Evaporator coil condition", condition: "Normal condition and rusting starts at bottom of the coil tray" },
-    { sno: 5, description: "Filters", condition: "Damaged" },
-    { sno: 6, description: "PC Board and remote", condition: "Working Normal" },
-    { sno: 7, description: "Blower Belt", condition: "Damaged" },
-    { sno: 8, description: "ODU - 1", condition: "ODU Base Plate Rusted, Fan Motor Failure" },
-    { sno: 9, description: "ODU - 2", condition: "Condensor Coil rusted, Fan Motor Failure" },
-    { sno: 10, description: "ODU - 3", condition: "Gas Leak From Condensor Side" },
-  ];
 
   // Companies logos data
   const clients = [
@@ -94,105 +68,7 @@ function Service() {
         expert.
       </p>
 
-      {/* Embed PDF - Mobile Friendly */}
-      <div className="mb-10">
-        <iframe
-          src="/servicedata.pdf"
-          title="Service Syllabus PDF"
-          className="w-full h-[400px] md:h-[600px] border rounded-lg shadow"
-        />
-        <p className="text-sm text-gray-600 mt-2 text-center">
-          Can’t view the file?{" "}
-          <a
-            href="/servicedata.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-yellow-600 underline"
-          >
-            Download the syllabus PDF
-          </a>
-        </p>
-      </div>
 
-      {/* Warranty Data Tables */}
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Unit 1 */}
-        <div className="max-w-md">
-          <h5 className="text-lg font-bold text-yellow-700 mb-4">
-            Unit No. 1 - 16 TR DPA
-          </h5>
-          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
-            <table className="w-full">
-              <thead className="bg-yellow-500 text-white sticky top-0">
-                <tr>
-                  <th className="px-4 py-3 text-left">S.no</th>
-                  <th className="px-4 py-3 text-left">Description</th>
-                  <th className="px-4 py-3 text-left">Present Condition</th>
-                </tr>
-              </thead>
-              <tbody>
-                {unit1Data.map((row, i) => (
-                  <tr
-                    key={i}
-                    className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-                  >
-                    <td className="px-4 py-2 border-b">{row.sno}</td>
-                    <td className="px-4 py-2 border-b">{row.description}</td>
-                    <td className="px-4 py-2 border-b">{row.condition}</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td
-                    colSpan={3}
-                    className="px-4 py-3 bg-yellow-100 font-semibold"
-                  >
-                    Remarks: To be replaced.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Unit 2 */}
-        <div className="max-w-md">
-          <h5 className="text-lg font-bold text-yellow-700 mb-4">
-            Unit No. 2 - 16 TR DPA
-          </h5>
-          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
-            <table className="w-full">
-              <thead className="bg-yellow-500 text-white sticky top-0">
-                <tr>
-                  <th className="px-4 py-3 text-left">S.no</th>
-                  <th className="px-4 py-3 text-left">Description</th>
-                  <th className="px-4 py-3 text-left">Present Condition</th>
-                </tr>
-              </thead>
-              <tbody>
-                {unit2Data.map((row, i) => (
-                  <tr
-                    key={i}
-                    className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
-                  >
-                    <td className="px-4 py-2 border-b">{row.sno}</td>
-                    <td className="px-4 py-2 border-b">{row.description}</td>
-                    <td className="px-4 py-2 border-b">{row.condition}</td>
-                  </tr>
-                ))}
-                <tr>
-                  <td
-                    colSpan={3}
-                    className="px-4 py-3 bg-yellow-100 font-semibold"
-                  >
-                    Remarks: To be replaced.
-                    cycle.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
 
       {/* Companies Section */}
       <motion.div
