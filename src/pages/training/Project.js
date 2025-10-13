@@ -3,7 +3,6 @@ import React from "react";
 import { motion } from "framer-motion";
 
 function Project() {
-  // Customer Data (copied from Repair.js)
   const warrantyCustomers = [
     { sno: 1, client: "Deepam Eye Hospital" },
     { sno: 2, client: "Dynamic Advertisements" },
@@ -49,7 +48,6 @@ function Project() {
     { sno: 25, client: "Spaces-R K Studio" },
   ];
 
-  // Clients Logos
   const clients = [
     { name: "IndiQube Limited", logo: "/assets/indie.jpeg" },
     { name: "Sree Gupta Bhavan", logo: "/assets/srb.png" },
@@ -88,37 +86,62 @@ function Project() {
     { name: "Healing Gospel Church (HGC)", logo: "/assets/hgc.jpg" },
   ];
 
+  // Motion variants
+  const fadeUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const scaleHover = {
+    whileHover: { scale: 1.03, boxShadow: "0px 15px 25px rgba(0,0,0,0.2)" },
+  };
+
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg">
-      <h5 className="text-2xl font-bold text-blue-700 mb-4">
-        Project Training – Detailed Syllabus
-      </h5>
-      <p className="text-gray-700 mb-4 leading-relaxed">
-        At <span className="font-semibold text-blue-600">GVJ</span>, project
-        training isn’t just about theory—it’s a step-by-step journey into the
-        real world of{" "}
-        <span className="font-semibold">HVAC systems</span>. Our structured
-        syllabus is designed to bridge the gap between classroom knowledge and
-        hands-on expertise.
-      </p>
-      <p className="text-gray-700 mb-6 leading-relaxed">
-        This curriculum covers everything from{" "}
-        <span className="font-medium">system design</span> and{" "}
-        <span className="font-medium">installation practices</span> to{" "}
-        <span className="font-medium">troubleshooting</span> and{" "}
-        <span className="font-medium">maintenance strategies</span>. By working
-        on real-time projects, you’ll build confidence to handle commercial HVAC
-        setups independently. Below you can view or download the complete syllabus.
-      </p>
+      {/* Header */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <h5 className="text-2xl font-bold text-blue-700 mb-4">
+          Project Training – Detailed Syllabus
+        </h5>
+        <p className="text-gray-700 mb-4 leading-relaxed">
+          At <span className="font-semibold text-blue-600">GVJ</span>, project
+          training isn’t just about theory—it’s a step-by-step journey into the
+          real world of{" "}
+          <span className="font-semibold">HVAC systems</span>. Our structured
+          syllabus is designed to bridge the gap between classroom knowledge and
+          hands-on expertise.
+        </p>
+        <p className="text-gray-700 mb-6 leading-relaxed">
+          This curriculum covers everything from{" "}
+          <span className="font-medium">system design</span> and{" "}
+          <span className="font-medium">installation practices</span> to{" "}
+          <span className="font-medium">troubleshooting</span> and{" "}
+          <span className="font-medium">maintenance strategies</span>. By working
+          on real-time projects, you’ll build confidence to handle commercial HVAC
+          setups independently. Below you can view or download the complete syllabus.
+        </p>
+      </motion.div>
 
-      {/* Customer Data Tables */}
+      {/* Customer Tables */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         {/* Warranty Customers */}
-        <div className="max-w-md">
+        <motion.div
+          className="max-w-md"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          {...scaleHover}
+        >
           <h5 className="text-lg font-bold text-blue-700 mb-4">
             Partial List of Warranty Customers
           </h5>
-          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow hover:shadow-lg transition">
             <table className="w-full">
               <thead className="bg-blue-600 text-white sticky top-0">
                 <tr>
@@ -130,7 +153,7 @@ function Project() {
                 {warrantyCustomers.map((row, i) => (
                   <tr
                     key={i}
-                    className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                    className={i % 2 === 0 ? "bg-gray-50 hover:bg-gray-100 transition" : "bg-white hover:bg-gray-100 transition"}
                   >
                     <td className="px-4 py-2 border-b">{row.sno}</td>
                     <td className="px-4 py-2 border-b">{row.client}</td>
@@ -139,14 +162,21 @@ function Project() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
 
         {/* AMC Customers */}
-        <div className="max-w-md">
+        <motion.div
+          className="max-w-md"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          {...scaleHover}
+        >
           <h5 className="text-lg font-bold text-blue-700 mb-4">
             Partial List of AMC Customers
           </h5>
-          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow">
+          <div className="max-h-64 overflow-y-auto border border-gray-300 rounded-lg shadow hover:shadow-lg transition">
             <table className="w-full">
               <thead className="bg-blue-600 text-white sticky top-0">
                 <tr>
@@ -158,7 +188,7 @@ function Project() {
                 {amcCustomers.map((row, i) => (
                   <tr
                     key={i}
-                    className={i % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                    className={i % 2 === 0 ? "bg-gray-50 hover:bg-gray-100 transition" : "bg-white hover:bg-gray-100 transition"}
                   >
                     <td className="px-4 py-2 border-b">{row.sno}</td>
                     <td className="px-4 py-2 border-b">{row.client}</td>
@@ -167,16 +197,40 @@ function Project() {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Companies Worked With (client logo)*/}
+      {/* Embedded PDF Viewer */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        className="mb-12"
+        {...scaleHover}
+      >
+        <h5 className="text-lg font-bold text-blue-700 mb-4 text-center">
+          Project Syllabus PDF
+        </h5>
+        <div className="w-full h-[600px] md:h-[800px] border border-gray-300 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300">
+          <iframe
+            src="/assets/projectsyllabus.pdf"
+            title="Project Syllabus"
+            className="w-full h-full"
+          ></iframe>
+        </div>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Scroll to view the syllabus. <a href="/assets/projectmark.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Download PDF</a>
+        </p>
+      </motion.div>
+
+      {/* Companies Worked With (client logos)*/}
       <motion.div
         className="mt-12"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
+        variants={fadeUp}
       >
         <h4 className="text-2xl md:text-3xl font-bold text-center text-blue-800 mb-8 drop-shadow">
           Companies We’ve Worked With
@@ -186,13 +240,13 @@ function Project() {
             <motion.div
               key={index}
               className="flex flex-col items-center w-36 h-36 md:w-40 md:h-40 bg-white p-4 rounded-2xl shadow hover:shadow-2xl transition group"
-              whileHover={{ scale: 1.15 }}
+              whileHover={{ scale: 1.1, boxShadow: "0px 20px 30px rgba(0,0,0,0.25)" }}
             >
               <div className="flex-grow flex items-center justify-center">
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain transition-transform duration-300 ease-in-out"
+                  className="max-h-14 md:max-h-16 max-w-[100px] md:max-w-[120px] object-contain transition-transform duration-300 ease-in-out group-hover:scale-110"
                 />
               </div>
               <p className="mt-2 text-xs md:text-sm text-center text-gray-700 font-medium">
