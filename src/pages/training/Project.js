@@ -86,7 +86,6 @@ function Project() {
     { name: "Healing Gospel Church (HGC)", logo: "/assets/hgc.jpg" },
   ];
 
-  // Motion variants
   const fadeUp = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -127,7 +126,39 @@ function Project() {
         </p>
       </motion.div>
 
-      {/* Customer Tables */}
+      {/* Embedded PDF Viewer */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+        className="mb-12"
+        {...scaleHover}
+      >
+        <h5 className="text-lg font-bold text-blue-700 mb-4 text-center">
+          Project Evaluation Sheet
+        </h5>
+        <div className="w-full h-[600px] md:h-[800px] border border-gray-300 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300">
+          <iframe
+            src="/assets/Project Evaluation Sheet.pdf"
+            title="Project Syllabus"
+            className="w-full h-full"
+          ></iframe>
+        </div>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Scroll to view the evaluation sheet.{" "}
+          <a
+            href="/assets/Project Evaluation Sheet.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            Download PDF
+          </a>
+        </p>
+      </motion.div>
+
+      {/* Customer Tables moved below PDF */}
       <div className="grid md:grid-cols-2 gap-8 mb-12">
         {/* Warranty Customers */}
         <motion.div
@@ -153,7 +184,11 @@ function Project() {
                 {warrantyCustomers.map((row, i) => (
                   <tr
                     key={i}
-                    className={i % 2 === 0 ? "bg-gray-50 hover:bg-gray-100 transition" : "bg-white hover:bg-gray-100 transition"}
+                    className={
+                      i % 2 === 0
+                        ? "bg-gray-50 hover:bg-gray-100 transition"
+                        : "bg-white hover:bg-gray-100 transition"
+                    }
                   >
                     <td className="px-4 py-2 border-b">{row.sno}</td>
                     <td className="px-4 py-2 border-b">{row.client}</td>
@@ -188,7 +223,11 @@ function Project() {
                 {amcCustomers.map((row, i) => (
                   <tr
                     key={i}
-                    className={i % 2 === 0 ? "bg-gray-50 hover:bg-gray-100 transition" : "bg-white hover:bg-gray-100 transition"}
+                    className={
+                      i % 2 === 0
+                        ? "bg-gray-50 hover:bg-gray-100 transition"
+                        : "bg-white hover:bg-gray-100 transition"
+                    }
                   >
                     <td className="px-4 py-2 border-b">{row.sno}</td>
                     <td className="px-4 py-2 border-b">{row.client}</td>
@@ -199,30 +238,6 @@ function Project() {
           </div>
         </motion.div>
       </div>
-
-      {/* Embedded PDF Viewer */}
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-        className="mb-12"
-        {...scaleHover}
-      >
-        <h5 className="text-lg font-bold text-blue-700 mb-4 text-center">
-          Project Syllabus PDF
-        </h5>
-        <div className="w-full h-[600px] md:h-[800px] border border-gray-300 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300">
-          <iframe
-            src="/assets/projectsyllabus.pdf"
-            title="Project Syllabus"
-            className="w-full h-full"
-          ></iframe>
-        </div>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Scroll to view the syllabus. <a href="/assets/projectmark.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">Download PDF</a>
-        </p>
-      </motion.div>
 
       {/* Companies Worked With (client logos)*/}
       <motion.div

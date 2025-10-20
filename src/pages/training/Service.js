@@ -52,12 +52,12 @@ function Service() {
 
       {/* Embedded PDF Viewer */}
       <motion.div className="mb-12" initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} {...scaleHover}>
-        <h5 className="text-lg font-bold text-yellow-700 mb-4 text-center">Service Syllabus PDF</h5>
+        <h5 className="text-lg font-bold text-yellow-700 mb-4 text-center">Service Evaluation Sheet</h5>
         <div className="w-full h-[600px] md:h-[800px] border border-gray-300 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300">
-          <iframe src="/assets/servicesyllabus.pdf" title="Service Syllabus" className="w-full h-full"></iframe>
+          <iframe src="/assets/Service Evaluation Sheet.pdf" title="Service Syllabus" className="w-full h-full"></iframe>
         </div>
         <p className="mt-2 text-center text-sm text-gray-600">
-          Scroll to view the syllabus. <a href="/assets/servicesyllabus.pdf" target="_blank" rel="noopener noreferrer" className="text-yellow-600 underline">Download PDF</a>
+          Scroll to view the evaluation sheet. <a href="/assets/Service Evaluation Sheet.pdf" target="_blank" rel="noopener noreferrer" className="text-yellow-600 underline">Download PDF</a>
         </p>
       </motion.div>
 

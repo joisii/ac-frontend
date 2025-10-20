@@ -1,6 +1,6 @@
 // src/pages/Services.js
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion,} from "framer-motion";
 import Project from "./training/Project";
 import Service from "./training/Service";
 
@@ -12,9 +12,7 @@ function Services() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState(null);
   const [activeTrainingTab, setActiveTrainingTab] = useState("project");
-
 
   const serviceData = [
     {
@@ -24,10 +22,6 @@ function Services() {
       tab: "training",
     },
   ];
-
-  const toggleTab = (tabId) => {
-    setActiveTab(activeTab === tabId ? null : tabId);
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -109,12 +103,9 @@ function Services() {
             key={idx}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}
-            onClick={item.tab ? () => toggleTab(item.tab) : undefined}
             className={`relative bg-gradient-to-b from-blue-700/80 via-blue-600/80 to-yellow-500/70 
               backdrop-blur-lg border border-blue-500/40 p-10 rounded-3xl shadow-xl cursor-pointer group 
-              overflow-hidden max-w-md w-full sm:w-2/3 lg:w-1/2 transition-all duration-500 ${
-                activeTab === item.tab ? "ring-4 ring-yellow-400" : ""
-              }`}
+              overflow-hidden max-w-md w-full sm:w-2/3 lg:w-1/2 transition-all duration-500`}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.2, duration: 0.8 }}
@@ -146,57 +137,42 @@ function Services() {
         ))}
       </div>
 
-      {/* Training Tab (animated expand) */}
-      <AnimatePresence>
-        {activeTab === "training" && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-            className="overflow-hidden"
+      {/* Training Tab - Always Visible Now */}
+      <motion.div
+        className="max-w-6xl mx-auto px-4 pb-16"
+        initial={{ y: 30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+      >
+        <div className="flex justify-center mb-6 space-x-4">
+          <button
+            onClick={() => setActiveTrainingTab("project")}
+            className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
+              activeTrainingTab === "project"
+                ? "bg-blue-700 text-white"
+                : "bg-blue-100 text-blue-700 hover:bg-blue-200"
+            }`}
           >
-            <motion.div
-              className="max-w-6xl mx-auto px-4 pb-16"
-              initial={{ y: 30, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-            >
-              <h4 className="text-3xl font-bold text-center mb-6 text-blue-800 drop-shadow">
-                Training
-              </h4>
-              <div className="flex justify-center mb-6 space-x-4">
-                <button
-                  onClick={() => setActiveTrainingTab("project")}
-                  className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
-                    activeTrainingTab === "project"
-                      ? "bg-blue-700 text-white"
-                      : "bg-blue-100 text-blue-700 hover:bg-blue-200"
-                  }`}
-                >
-                  Project Training
-                </button>
-                <button
-                  onClick={() => setActiveTrainingTab("service")}
-                  className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
-                    activeTrainingTab === "service"
-                      ? "bg-yellow-600 text-white"
-                      : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                  }`}
-                >
-                  Service Training
-                </button>
-              </div>
-              <div>
-                {activeTrainingTab === "project" && <Project />}
-                {activeTrainingTab === "service" && <Service />}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Project Training
+          </button>
+          <button
+            onClick={() => setActiveTrainingTab("service")}
+            className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
+              activeTrainingTab === "service"
+                ? "bg-yellow-600 text-white"
+                : "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
+            }`}
+          >
+            Service Training
+          </button>
+        </div>
+        <div>
+          {activeTrainingTab === "project" && <Project />}
+          {activeTrainingTab === "service" && <Service />}
+        </div>
+      </motion.div>
 
- {/* Service Request Form */}
+      {/* Service Request Form */}
       <div className="py-20 bg-white">
         <motion.div
           className="max-w-3xl mx-auto px-4"
