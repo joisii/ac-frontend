@@ -65,11 +65,42 @@ const Header = () => {
 
   const navLinks = (
     <>
-      <button onClick={() => handleNavClick('hero')} className={navLinkClass('hero')}>Home</button>
-      <button onClick={() => handleNavClick('sales')} className={navLinkClass('sales')}>Sales</button>
-      <button onClick={() => handleNavClick('projects')} className={navLinkClass('projects')}>Projects</button>
-      <button onClick={() => handleNavClick('services')} className={navLinkClass('services')}>Service</button>
-      <button onClick={() => handleNavClick('about')} className={navLinkClass('about')}>About</button>
+      <button
+  onClick={() => handleNavClick('hero')}
+  className={navLinkClass('hero')}
+  aria-label="Go to Home section"
+>
+  Home
+</button>
+<button
+  onClick={() => handleNavClick('sales')}
+  className={navLinkClass('sales')}
+  aria-label="Go to Sales section"
+>
+  Sales
+</button>
+<button
+  onClick={() => handleNavClick('projects')}
+  className={navLinkClass('projects')}
+  aria-label="Go to Projects section"
+>
+  Projects
+</button>
+<button
+  onClick={() => handleNavClick('services')}
+  className={navLinkClass('services')}
+  aria-label="Go to Services section"
+>
+  Service
+</button>
+<button
+  onClick={() => handleNavClick('about')}
+  className={navLinkClass('about')}
+  aria-label="Go to About section"
+>
+  About
+</button>
+
     </>
   );
 
