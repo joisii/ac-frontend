@@ -112,10 +112,15 @@ const Header = () => {
         <motion.button
           className="md:hidden focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
           animate={{ rotate: menuOpen ? 225 : 0 }}
           transition={{ duration: 0.5 }}
         >
-          {menuOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
+           {menuOpen ? (
+    <FaTimes size={28} aria-hidden="true" />
+  ) : (
+    <FaBars size={28} aria-hidden="true" />
+  )}
         </motion.button>
       </motion.div>
 

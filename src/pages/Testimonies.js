@@ -156,9 +156,10 @@ export default function TestimonialsPage() {
           <div className="absolute top-1/2 right-2 transform -translate-y-1/2 z-10">
             <button
               onClick={() => paginate(1)}
+               aria-label="Go to next slide"
               className="bg-blue-800 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110"
             >
-              <FaChevronRight />
+              <FaChevronRight aria-hidden="true" />
             </button>
           </div>
         </div>

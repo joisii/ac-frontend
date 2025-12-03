@@ -147,6 +147,7 @@ function Services() {
         <div className="flex justify-center mb-6 space-x-4">
           <button
             onClick={() => setActiveTrainingTab("project")}
+            aria-label="View technical training"
             className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
               activeTrainingTab === "project"
                 ? "bg-blue-700 text-white"
@@ -157,6 +158,7 @@ function Services() {
           </button>
           <button
             onClick={() => setActiveTrainingTab("service")}
+            aria-label="View service training"
             className={`px-6 py-2 rounded-lg font-semibold shadow transition ${
               activeTrainingTab === "service"
                 ? "bg-yellow-600 text-white"
@@ -217,9 +219,12 @@ function Services() {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none"
               whileFocus={{ scale: 1.02, borderColor: "#2563eb" }}
             ></motion.textarea>
+
             <motion.button
               type="submit"
               disabled={loading}
+              aria-label={loading ? "Submitting request" : "Submit request"}
+              aria-busy={loading}
               className={`px-6 py-3 rounded-lg shadow-md text-white font-semibold ${
                 loading ? "bg-gray-400" : "bg-blue-700 hover:bg-blue-800"
               }`}

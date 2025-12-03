@@ -235,17 +235,18 @@ function Sales() {
             className="w-full px-4 py-3 border rounded resize-none"
             required
           />
-          <button
-            type="submit"
-            disabled={loading}
-            className={`px-6 py-3 rounded transition text-white ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-green-700 hover:bg-green-800"
-            }`}
-          >
-            {loading ? "Submitting..." : "Submit Request"}
-          </button>
+      <button
+  type="submit"
+  disabled={loading}
+  aria-label={loading ? "Submitting request" : "Submit request"}
+  aria-busy={loading}
+  className={`px-6 py-3 rounded transition text-white ${
+    loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-700 hover:bg-green-800"
+  }`}
+>
+  {loading ? "Submitting..." : "Submit Request"}
+</button>
+
         </form>
       </div>
     </section>

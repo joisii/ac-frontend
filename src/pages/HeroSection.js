@@ -157,23 +157,26 @@ const HeroSection = () => {
           variants={childVariants}
           className="mt-10 flex flex-wrap justify-center gap-4"
         >
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: -2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => scrollToSection("projects")}
-            className="flex items-center gap-2 bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-xl hover:bg-blue-800 hover:shadow-2xl transition"
-          >
-            Explore Projects <FaArrowRight />
-          </motion.button>
+         <motion.button
+  aria-label="Explore Projects"
+  whileHover={{ scale: 1.1, rotate: -2 }}
+  whileTap={{ scale: 0.95 }}
+  onClick={() => scrollToSection("projects")}
+  className="flex items-center gap-2 bg-blue-700 text-white px-8 py-4 rounded-xl font-semibold shadow-xl hover:bg-blue-800 hover:shadow-2xl transition"
+>
+  Explore Projects <FaArrowRight aria-hidden="true" />
+</motion.button>
 
-          <motion.button
-            whileHover={{ scale: 1.1, rotate: 2 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => scrollToSection("services")}
-            className="flex items-center gap-2 bg-white text-blue-700 border border-blue-700 px-8 py-4 rounded-xl font-semibold shadow-lg hover:bg-blue-50 transition"
-          >
-            Our Services <FaTools />
-          </motion.button>
+<motion.button
+  aria-label="View Our Services"
+  whileHover={{ scale: 1.1, rotate: 2 }}
+  whileTap={{ scale: 0.95 }}
+  onClick={() => scrollToSection("services")}
+  className="flex items-center gap-2 bg-white text-blue-700 border border-blue-700 px-8 py-4 rounded-xl font-semibold shadow-lg hover:bg-blue-50 transition"
+>
+  Our Services <FaTools aria-hidden="true" />
+</motion.button>
+
         </motion.div>
       </motion.div>
     </section>
