@@ -15,7 +15,7 @@ const Footer = () => {
             </span>
           </div>
           <p className="text-sm text-gray-400 leading-relaxed max-w-xs mx-auto md:mx-0">
-            Delivering exceptional air conditioning services and solutions with integrity since 2020.
+            Delivering exceptional air conditioning services and solutions with integrity since 2017.
           </p>
         </div>
 
