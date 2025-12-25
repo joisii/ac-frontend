@@ -15,12 +15,12 @@ export default function BanquetProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch banquet projects from backend
+  // 🔹 Fetch banquet projects from backend (Render)
   useEffect(() => {
     const fetchBanquetProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=banquet"
+          "https://ac-backend-cpsu.onrender.com/projects?category=banquet"
         );
         const data = await res.json();
         setProjects(data);
@@ -103,7 +103,10 @@ export default function BanquetProjects() {
       </motion.div>
 
       {/* Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
