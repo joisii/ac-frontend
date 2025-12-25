@@ -10,6 +10,7 @@ const AdminProjectsTable = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [uniqueCategories, setUniqueCategories] = useState([]);
+  const [actionLoadingId, setActionLoadingId] = useState(null); // 👈 key fix
 
   useEffect(() => {
     const categories = [
@@ -22,6 +23,27 @@ const AdminProjectsTable = ({
   const totalPages = Math.ceil(projects.length / PAGE_SIZE);
   const start = (currentPage - 1) * PAGE_SIZE;
   const currentProjects = projects.slice(start, start + PAGE_SIZE);
+
+  const handleEdit = (project) => {
+    if (actionLoadingId) return; // prevent double click
+    setActionLoadingId(project._id);
+    onEdit(project);
+    setActionLoadingId(null); // modal opens instantly, so unlock
+  };
+
+  const handleDelete = async (id) => {
+    if (actionLoadingId) return;
+    setActionLoadingId(id);
+
+    try {
+      await onDelete(id);
+    } catch (err) {
+      console.error("Delete failed", err);
+      alert("Failed to delete project");
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
 
   return (
     <div>
@@ -53,29 +75,44 @@ const AdminProjectsTable = ({
               </tr>
             </thead>
             <tbody>
-              {currentProjects.map((proj) => (
-                <tr key={proj._id} className="border-t">
-                  <td className="px-4 py-2">{proj.name}</td>
-                  <td className="px-4 py-2">{proj.location}</td>
-                  <td className="px-4 py-2">{proj.category}</td>
-                  <td className="px-4 py-2">{proj.application}</td>
-                  <td className="px-4 py-2">{proj.acType}</td>
-                  <td className="px-4 py-2 flex gap-2">
-                    <button
-                      onClick={() => onEdit(proj)}
-                      className="px-3 py-1 bg-blue-500 text-white rounded"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => onDelete(proj._id)}
-                      className="px-3 py-1 bg-red-500 text-white rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {currentProjects.map((proj) => {
+                const isLoading = actionLoadingId === proj._id;
+
+                return (
+                  <tr key={proj._id} className="border-t">
+                    <td className="px-4 py-2">{proj.name}</td>
+                    <td className="px-4 py-2">{proj.location}</td>
+                    <td className="px-4 py-2">{proj.category}</td>
+                    <td className="px-4 py-2">{proj.application}</td>
+                    <td className="px-4 py-2">{proj.acType}</td>
+                    <td className="px-4 py-2 flex gap-2">
+                      <button
+                        onClick={() => handleEdit(proj)}
+                        disabled={isLoading}
+                        className={`px-3 py-1 rounded text-white ${
+                          isLoading
+                            ? "bg-blue-300 cursor-not-allowed"
+                            : "bg-blue-500 hover:bg-blue-600"
+                        }`}
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(proj._id)}
+                        disabled={isLoading}
+                        className={`px-3 py-1 rounded text-white ${
+                          isLoading
+                            ? "bg-red-300 cursor-not-allowed"
+                            : "bg-red-500 hover:bg-red-600"
+                        }`}
+                      >
+                        {isLoading ? "Deleting..." : "Delete"}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 

@@ -23,11 +23,12 @@ const EMPTY_FORM = {
 
 const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
   const [form, setForm] = useState(EMPTY_FORM);
+  const [saving, setSaving] = useState(false); // <-- track saving state
 
   useEffect(() => {
     if (!isOpen) {
-      // Modal closed → reset form
       setForm(EMPTY_FORM);
+      setSaving(false); // reset saving when modal closes
       return;
     }
 
@@ -46,7 +47,7 @@ const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.category) {
@@ -54,7 +55,18 @@ const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
       return;
     }
 
-    onSave(form);
+    if (saving) return; // <-- prevent multiple submissions
+    setSaving(true);      // <-- disable button while saving
+
+    try {
+      await onSave(form);
+      onClose();
+    } catch (err) {
+      console.error("Error saving project:", err);
+      alert("Failed to save project. Please try again.");
+    } finally {
+      setSaving(false); // <-- re-enable button
+    }
   };
 
   if (!isOpen) return null;
@@ -134,16 +146,22 @@ const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 transition"
+              disabled={saving} // disable cancel if saving
+              className={`px-4 py-2 rounded ${
+                saving ? "bg-gray-200 cursor-not-allowed" : "bg-gray-300 hover:bg-gray-400"
+              } transition`}
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600 transition"
+              disabled={saving} // disable save while saving
+              className={`px-4 py-2 rounded text-white ${
+                saving ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+              } transition`}
             >
-              Save
+              {saving ? "Saving..." : "Save"}
             </button>
           </div>
         </form>
