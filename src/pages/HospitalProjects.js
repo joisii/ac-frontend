@@ -4,50 +4,51 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 
-// Static data (replace with Excel import later)
-const hospitalClients = [
-  { id: 1, name: "Sri Manakula Vinayakar Medical college and Hospital", location: "Pondichery", application: "Hospital Area", acType: "Casstte SAC" },
-  { id: 2, name: "SRM Institute of Medical Sciences", location: "Chennai", application: "Hospital Area", acType: "DSAC/LDPA" },
-  { id: 3, name: "Vedant Air Management Products", location: "Chennai", application: "Operation Theatre", acType: "DSAC" },
-  { id: 4, name: "Aditya Floor Tech Pvtl Ltd (For Balaji Hospital )", location: "Chennai", application: "Hospital Area", acType: "DSAC" },
-  { id: 5, name: "I Clean", location: "Chennai", application: "Clean Room", acType: "DSAC" },
-  { id: 6, name: "BM Hospital", location: "Chennai", application: "Hospital Area", acType: "DSAC/LDPA" },
-  { id: 7, name: "SRM Institute of Medical Sciences", location: "Chennai", application: "Clinic", acType: "DSAC" },
-  { id: 8, name: "Vijaya Diagnostic Centre", location: "Nellore", application: "Lab Area", acType: "Free Match" },
-  { id: 9, name: "Sugam Hospital", location: "Chennai", application: "Hospital Area", acType: "DSAC" },
-  { id: 10, name: "Capelin Point", location: "Chennai", application: "Pharma Storage", acType: "DSAC" },
-  { id: 11, name: "Westminister health care", location: "Chennai", application: "Hospital Area", acType: "VRF" },
-  { id: 12, name: "Jananam Hospital", location: "Chennai", application: "Lab Area", acType: "DSAC" },
-  { id: 13, name: "Eakcon Systems Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "DSAC" },
-  { id: 14, name: "Dr Kamatchi Memorial Hospital", location: "Chennai", application: "Diagnostic Lab Area", acType: "DSAC" },
-  { id: 15, name: "Stanley Hospital (Blood Bank)", location: "Chennai", application: "Blood Bank", acType: "PAC" },
-  { id: 16, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
-  { id: 17, name: "Scitus Pharma Services Pvt Ltd", location: "Chennai", application: "Pharma ", acType: "SAC" },
-  { id: 18, name: "Morrisons Life Care Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "Verti Cool" },
-  { id: 19, name: "Cure Healthcare Systems Pvt Ltd", location: "Chennai", application: "Lab Area", acType: "SAC" },
-  { id: 20, name: "Infinity Projects - NOVA IVF", location: "Madurai", application: "Hospital", acType: "VRV" },
-  { id: 21, name: "Varian Medical Systems (JIPMER)", location: "Pondichery", application: "Hospital", acType: "DSAC" },
-];
-
 export default function HospitalProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = hospitalClients.filter(
+  // 🔹 Fetch hospital projects from backend
+  useEffect(() => {
+    const fetchHospitalProjects = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/projects?category=hospital"
+        );
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching hospital projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHospitalProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
   };
 
   const itemVariants = {
@@ -87,7 +88,7 @@ export default function HospitalProjects() {
         Hospital Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -114,10 +115,16 @@ export default function HospitalProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Loading hospital projects...
+                </td>
+              </tr>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -125,11 +132,12 @@ export default function HospitalProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
+                    background:
+                      "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>

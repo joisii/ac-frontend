@@ -1,86 +1,65 @@
-// Import React and hooks for state and lifecycle management
+// src/pages/BanquetProjects.js
 import React, { useState, useEffect } from "react";
-// Import navigation hook from react-router-dom
 import { useNavigate } from "react-router-dom";
-// Import motion for animations from framer-motion
 import { motion } from "framer-motion";
-// Import gradients config for background styling
 import gradients from "../config/gradients";
 
-// Temporary static data for banquet clients (replace later with Excel import)
-const banquetClients = [
-  { id: 1, name: "Jain Kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 2, name: "Rajasekaran Kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 3, name: "Mahalakshmi Kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 4, name: "Perundhalaivar Kamrajar Kalyana Mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 5, name: "Pon Pandiyan kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 6, name: "eN kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 7, name: "Mohan Towers", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 8, name: "KVT Kalyana mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 9, name: "Navarathna Properties", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 10, name: "Periyapallayam kalyana Mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 11, name: "KRS Car Care (Kalyana mandapam)", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 12, name: "JShree Lakshmi Narayani Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 13, name: "Hotel Manickam Grand", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 14, name: "AGP Homes ", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 15, name: "TKP Marriage Hall", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 16, name: "Agarwal saba", location: "Chennai", application: "Marriage Hall", acType: "Inv DSAC" },
-  { id: 17, name: "Balaji jewellers ", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 18, name: "Brindavan mahal (Periyapalayam)", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 19, name: "SPS Kalyana Mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 20, name: "Vadachennai vazum TSS Nadar KM", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },  
-  { id: 21, name: "Sri Naryana Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 22, name: "Jain Temple KM", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 23, name: "KNE Foundation", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 24, name: "Sri Devi Prasana Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 25, name: "Mr Saravanan ", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 26, name: "Sakthi Thiruman malaigai", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 27, name: "Vijaya Seha Mahal", location: "Salem", application: "Marriage Hall", acType: "PAC" },
-  { id: 28, name: "SRKK Agarwal Kalyanan Mandapam", location: "Chennai", application: "Marriage Hall", acType: "I DSAC" },
-  { id: 29, name: "AVS Mahal", location: "Thiruthani", application: "Marriage Hall", acType: "DSAC" },
-  { id: 30, name: "Lion Bhaskar Marriage Hall", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 31, name: "Mr Asokan (Viaar Builders)", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 32, name: "KN Swamy Kalayana Mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 33, name: "KVR Vivaha Vedika", location: "Goodur", application: "Marriage Hall", acType: "DSAC" },
-  { id: 34, name: "Sky Palace", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 35, name: "Muruga Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 36, name: "Vijay Shree Mahal", location: "Aarani", application: "Marriage Hall", acType: "DSAC" },
-  { id: 37, name: "KVMG Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 38, name: "Sivandhi Adithanar Marriage Hall", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 39, name: "Ramachandran Annachi KM", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 40, name: "Goldmine Infoteck Pvt Ltd (Maduvankarai)", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 41, name: "Allandhur Vattarah Nadar Kalyana Mandapam", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 42, name: "Adigaud Brahin Mahasaha ", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 43, name: "'Adigaud Brahmin Mahasabha Marriage hall", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-  { id: 44, name: "AM Mahal", location: "Chennai", application: "Marriage Hall", acType: "DSAC" },
-];
-
-
-// Main component for Banquet Projects page
 export default function BanquetProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
-  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Filter logic
-  const filteredClients = banquetClients.filter(
+  // 🔹 Fetch banquet projects from backend
+  useEffect(() => {
+    const fetchBanquetProjects = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/projects?category=banquet"
+        );
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching banquet projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanquetProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Animation configs
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
   };
-  const itemVariants = { hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } };
-  const rowVariants = { hidden: { opacity: 0, x: 50 }, visible: { opacity: 1, x: 0, transition: { duration: 0.5 } } };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
+  const rowVariants = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
+  };
 
   return (
     <motion.div
@@ -109,7 +88,7 @@ export default function BanquetProjects() {
         Banquet Hall Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -136,10 +115,16 @@ export default function BanquetProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Loading banquet projects...
+                </td>
+              </tr>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -147,11 +132,12 @@ export default function BanquetProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(128,0,128,0.1), rgba(255,255,255,0.05))"
+                    background:
+                      "linear-gradient(90deg, rgba(128,0,128,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>

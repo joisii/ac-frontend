@@ -2,33 +2,44 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import gradients from "../config/gradients"; // ✅ use centralized gradients
-
-// Temporary static data (replace later with Excel import)
-const textileClients = [
-  { id: 1, name: "GLOFIL FIBRES & PLASTICS", location: "Chennai", application: "Textile Show Room", acType: "Inv DSAC" },
-  { id: 2, name: "New Lakshmi Fashion Stores", location: "Chennai", application: "Textile Show Room", acType: "DSAC" },
-  { id: 3, name: "Kai Rasi Silks", location: "Chennai", application: "Showroom", acType: "I PAC" },
-  { id: 4, name: "Mahalakshmi Sarress", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 5, name: "Golden Textiles", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 6, name: "Smile Textile Show Room", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 7, name: "Gani Textiles", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 8, name: "'Fashion World", location: "Chennai", application: "Store", acType: "DSAC" },
-];
+import gradients from "../config/gradients";
 
 export default function TextileShopProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = textileClients.filter(
+  // 🔹 Fetch textile projects from backend
+  useEffect(() => {
+    const fetchTextileProjects = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/projects?category=textile"
+        );
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching textile projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTextileProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Motion variants
@@ -57,7 +68,6 @@ export default function TextileShopProjects() {
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      // 🔵 using centralized gradient from gradients.js
       className={`min-h-screen bg-gradient-to-b ${gradients.textile} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
@@ -78,7 +88,7 @@ export default function TextileShopProjects() {
         Textile Shop Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -105,10 +115,16 @@ export default function TextileShopProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Loading textile projects...
+                </td>
+              </tr>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -121,7 +137,7 @@ export default function TextileShopProjects() {
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>

@@ -1,41 +1,48 @@
 // src/pages/GymProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion"; // ✅ for animations
+import { motion } from "framer-motion";
 import gradients from "../config/gradients";
-
-// Temporary static data (replace with Excel import later)
-const gymClients = [
-  { id: 1, name: "Score Gym", location: "Chennai", application: "Gym Area", acType: "DSAC " },
-  { id: 2, name: "Air force Officers Mess ", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 3, name: "KDH Investments Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 4, name: "Pedal Beat", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 5, name: "Ramaniam at omr", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
-  { id: 6, name: "Flux Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 7, name: "PINK Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-  { id: 8, name: "SPIN Fitness Pvt Ltd", location: "Chennai",application:"Gym Area", acType: "Casst " },
-  { id: 9, name: "Stringrays Swimming and Fittness Centre", location: "Chennai",application:"Gym Area", acType: "DSAC " },
- { id: 10, name: "24 x 7 Fitness Gym", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 11, name: "Gym Square", location: "Chennai",application:"Gym Area", acType: "DSAC " }, 
- { id: 12, name: "Sky Motors (Gym)", location: "Chennai",application:"Gym Area", acType: "DSAC " },
-];  
 
 export default function GymProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = gymClients.filter(
+  // 🔹 Fetch gym projects from backend
+  useEffect(() => {
+    const fetchGymProjects = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:5000/projects?category=gym"
+        );
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching gym projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGymProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants for staggered fade-in
+  // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -84,7 +91,7 @@ export default function GymProjects() {
         Gym Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -98,7 +105,7 @@ export default function GymProjects() {
         />
       </motion.div>
 
-      {/* Data Table */}
+      {/* Table */}
       <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
@@ -111,10 +118,16 @@ export default function GymProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="5" className="p-4 text-center text-gray-500">
+                  Loading gym projects...
+                </td>
+              </tr>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -122,11 +135,12 @@ export default function GymProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
+                    background:
+                      "linear-gradient(90deg, rgba(0,128,128,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>
@@ -135,7 +149,7 @@ export default function GymProjects() {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="p-4 text-center text-gray-500">
+                <td colSpan="5" className="p-4 text-center text-gray-500">
                   No results found
                 </td>
               </tr>
