@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function HospitalProjects() {
   const [search, setSearch] = useState("");
@@ -15,13 +16,18 @@ export default function HospitalProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch hospital projects from backend
+  // 🔹 Fetch hospital projects from backend (LIVE SAFE)
   useEffect(() => {
     const fetchHospitalProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=hospital"
+          `${API_BASE}/projects?category=hospital`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {
@@ -103,7 +109,10 @@ export default function HospitalProjects() {
       </motion.div>
 
       {/* Data Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function BanquetProjects() {
   const [search, setSearch] = useState("");
@@ -15,13 +16,18 @@ export default function BanquetProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch banquet projects from backend (Render)
+  // 🔹 Fetch banquet projects from backend (LIVE SAFE)
   useEffect(() => {
     const fetchBanquetProjects = async () => {
       try {
         const res = await fetch(
-          "https://ac-backend-cpsu.onrender.com/projects?category=banquet"
+          `${API_BASE}/projects?category=banquet`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {

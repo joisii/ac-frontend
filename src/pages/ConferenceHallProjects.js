@@ -1,7 +1,9 @@
+// src/pages/ConferenceHallProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function ConferenceHallProjects() {
   const [search, setSearch] = useState("");
@@ -10,18 +12,23 @@ export default function ConferenceHallProjects() {
 
   const navigate = useNavigate();
 
-  // Always scroll to top
+  // Always scroll to top (basic UX, not optional)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch conference hall projects from backend
+  // 🔹 Fetch conference hall projects from backend (production-safe)
   useEffect(() => {
     const fetchConferenceProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=conference"
+          `${API_BASE}/projects?category=conference`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function SuperMarketProjects() {
   const [search, setSearch] = useState("");
@@ -15,13 +16,18 @@ export default function SuperMarketProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch supermarket projects from backend
+  // 🔹 Fetch supermarket projects from backend (LIVE SAFE)
   useEffect(() => {
     const fetchSuperMarketProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=supermarket"
+          `${API_BASE}/projects?category=supermarket`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {
@@ -103,7 +109,10 @@ export default function SuperMarketProjects() {
       </motion.div>
 
       {/* Data Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">

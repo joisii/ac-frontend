@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function CorporateOfficeProjects() {
   const [search, setSearch] = useState("");
@@ -11,18 +12,23 @@ export default function CorporateOfficeProjects() {
 
   const navigate = useNavigate();
 
-  // Always scroll to top
+  // Always scroll to top (UX 101)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch corporate office projects from backend
+  // 🔹 Fetch corporate office projects from backend (production-safe)
   useEffect(() => {
     const fetchCorporateProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=corporate"
+          `${API_BASE}/projects?category=corporate`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {
