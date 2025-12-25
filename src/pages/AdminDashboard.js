@@ -28,7 +28,9 @@ const AdminDashboard = () => {
         const [reqRes, salesRes, projRes] = await Promise.all([
           fetch(`${API_BASE}/requests`),
           fetch(`${API_BASE}/sales`),
-          fetch(`${API_BASE}/projects`),
+
+          // 🔴 THIS IS THE FIX
+          fetch(`${API_BASE}/projects?admin=true`),
         ]);
 
         const reqData = await reqRes.json();
