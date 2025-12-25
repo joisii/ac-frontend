@@ -1,7 +1,9 @@
+// src/pages/RestaurantProjects.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
 export default function RestaurantProjects() {
   const [search, setSearch] = useState("");
@@ -14,13 +16,18 @@ export default function RestaurantProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch projects from backend
+  // 🔹 Fetch projects from backend (FIXED)
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const res = await fetch(
-          "http://localhost:5000/projects?category=restaurant"
+          `${API_BASE}/projects?category=restaurant`
         );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
         setProjects(data);
       } catch (error) {
@@ -33,7 +40,7 @@ export default function RestaurantProjects() {
     fetchProjects();
   }, []);
 
-  // 🔹 Search filtering (unchanged logic, just new data source)
+  // 🔹 Search filtering
   const filteredClients = projects.filter(
     (c) =>
       c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -46,10 +53,7 @@ export default function RestaurantProjects() {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
     },
   };
 
@@ -105,14 +109,17 @@ export default function RestaurantProjects() {
       </motion.div>
 
       {/* Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
               <th className="p-3 border">Sl No</th>
-              <th className="p-3 border">Project/Customer Details</th>
+              <th className="p-3 border">Project / Customer</th>
               <th className="p-3 border">Location</th>
-              <th className="p-3 border">Industry/Application</th>
+              <th className="p-3 border">Industry / Application</th>
               <th className="p-3 border">AC Type</th>
             </tr>
           </thead>
@@ -134,8 +141,6 @@ export default function RestaurantProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background:
-                      "linear-gradient(90deg, rgba(255,255,0,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
