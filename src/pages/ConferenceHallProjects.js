@@ -5,6 +5,19 @@ import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 import API_BASE from "../config";
 
+// 🔹 Skeleton Row Component (Reusable, Dumb, Perfect)
+const SkeletonRow = () => {
+  return (
+    <tr className="animate-pulse">
+      {[1, 2, 3, 4, 5].map((_, i) => (
+        <td key={i} className="p-3 border">
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
+
 export default function ConferenceHallProjects() {
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState([]);
@@ -17,7 +30,7 @@ export default function ConferenceHallProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch conference hall projects from backend (production-safe)
+  // 🔹 Fetch conference hall projects
   useEffect(() => {
     const fetchConferenceProjects = async () => {
       try {
@@ -41,7 +54,7 @@ export default function ConferenceHallProjects() {
     fetchConferenceProjects();
   }, []);
 
-  // 🔹 Search filter
+  // 🔹 Search filter (UNCHANGED logic)
   const filteredClients = projects.filter(
     (c) =>
       c.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -50,7 +63,7 @@ export default function ConferenceHallProjects() {
       c.application?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants
+  // Animation configs
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -88,12 +101,12 @@ export default function ConferenceHallProjects() {
         </button>
       </motion.div>
 
-      {/* Title */}
+      {/* Page Title */}
       <motion.h1
         variants={itemVariants}
         className="text-4xl font-bold text-center mb-10 text-orange-800"
       >
-        Conference Hall Projects
+        Residence Projects
       </motion.h1>
 
       {/* Search */}
@@ -110,14 +123,14 @@ export default function ConferenceHallProjects() {
         />
       </motion.div>
 
-      {/* Data Table */}
+      {/* Table */}
       <motion.div
         variants={itemVariants}
-        className="overflow-x-auto max-w-5xl mx-auto bg-white/80 backdrop-blur-md rounded-2xl shadow-lg"
+        className="overflow-x-auto max-w-5xl mx-auto"
       >
-        <table className="w-full border border-gray-300 rounded-xl text-sm">
+        <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
-            <tr className="bg-gray-200 text-left">
+            <tr className="bg-gray-100 text-left">
               <th className="p-3 border">Sl No</th>
               <th className="p-3 border">Name</th>
               <th className="p-3 border">Location</th>
@@ -127,25 +140,11 @@ export default function ConferenceHallProjects() {
           </thead>
           <tbody>
             {loading ? (
-              Array.from({ length: 6 }).map((_, index) => (
-                <tr key={index} className="animate-pulse">
-                  <td className="p-3 border">
-                    <div className="h-4 bg-gray-300 rounded w-8" />
-                  </td>
-                  <td className="p-3 border">
-                    <div className="h-4 bg-gray-300 rounded w-3/4" />
-                  </td>
-                  <td className="p-3 border">
-                    <div className="h-4 bg-gray-300 rounded w-2/3" />
-                  </td>
-                  <td className="p-3 border">
-                    <div className="h-4 bg-gray-300 rounded w-4/5" />
-                  </td>
-                  <td className="p-3 border">
-                    <div className="h-4 bg-gray-300 rounded w-1/2" />
-                  </td>
-                </tr>
-              ))
+              <>
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonRow key={index} />
+                ))}
+              </>
             ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
@@ -153,7 +152,7 @@ export default function ConferenceHallProjects() {
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
-                  transition={{ delay: 0.3 + index * 0.08 }}
+                  transition={{ duration: 0.3 }}
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",

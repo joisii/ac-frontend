@@ -9,7 +9,7 @@ const CATEGORY_OPTIONS = [
   "supermarket",
   "hospital",
   "corporate",
-  "conference",
+  "residence",
 ];
 
 const EMPTY_FORM = {
