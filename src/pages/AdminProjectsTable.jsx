@@ -2,33 +2,46 @@ import React, { useState, useEffect } from "react";
 
 const PAGE_SIZE = 10;
 
-const AdminProjectsTable = ({
-  projects,
-  onEdit,
-  onDelete,
-  onCategoryFilter,
-}) => {
+const AdminProjectsTable = ({ projects, onEdit, onDelete, onCategoryFilter }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [uniqueCategories, setUniqueCategories] = useState([]);
-  const [actionLoadingId, setActionLoadingId] = useState(null); // 👈 key fix
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  useEffect(() => {
-    const categories = [
-      ...new Set(projects.map((p) => p.category).filter(Boolean)),
-    ];
-    setUniqueCategories(categories);
+  // Update categories whenever projects change
+ useEffect(() => {
+  if (!projects || projects.length === 0) {
+    setUniqueCategories([]);
+    return;
+  }
+
+  const categories = [...new Set(projects.map((p) => p.category).filter(Boolean))];
+  setUniqueCategories(categories);
+
+  const filteredProjects = selectedCategory ? projects.filter((p) => p.category === selectedCategory) : projects;
+  const totalPages = Math.ceil(filteredProjects.length / PAGE_SIZE);
+
+  if (currentPage > totalPages) {
     setCurrentPage(1);
-  }, [projects]);
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [projects, selectedCategory]);
 
-  const totalPages = Math.ceil(projects.length / PAGE_SIZE);
+
+  // Filter projects by selected category
+  const filteredProjects = selectedCategory
+    ? projects.filter((p) => p.category === selectedCategory)
+    : projects;
+
+  const totalPages = Math.ceil(filteredProjects.length / PAGE_SIZE);
   const start = (currentPage - 1) * PAGE_SIZE;
-  const currentProjects = projects.slice(start, start + PAGE_SIZE);
+  const currentProjects = filteredProjects.slice(start, start + PAGE_SIZE);
 
   const handleEdit = (project) => {
-    if (actionLoadingId) return; // prevent double click
+    if (actionLoadingId) return;
     setActionLoadingId(project._id);
     onEdit(project);
-    setActionLoadingId(null); // modal opens instantly, so unlock
+    setActionLoadingId(null);
   };
 
   const handleDelete = async (id) => {
@@ -48,15 +61,22 @@ const AdminProjectsTable = ({
   return (
     <div>
       <select
-        onChange={(e) => onCategoryFilter(e.target.value)}
+        onChange={(e) => {
+          setSelectedCategory(e.target.value);
+          setCurrentPage(1); // reset page when category changes
+          if (onCategoryFilter) onCategoryFilter(e.target.value);
+        }}
         className="mb-3 px-3 py-2 border rounded"
+        value={selectedCategory}
       >
         <option value="">All Categories</option>
-        {uniqueCategories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
+        {uniqueCategories.length > 0
+          ? uniqueCategories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))
+          : <option disabled>No categories</option>}
       </select>
 
       {currentProjects.length === 0 ? (
