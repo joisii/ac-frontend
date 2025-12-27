@@ -125,11 +125,25 @@ export default function SuperMarketProjects() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">
-                  Loading supermarket projects...
-                </td>
-              </tr>
+              [...Array(6)].map((_, index) => (
+                <tr key={index} className="animate-pulse">
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-6" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-2/3" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-1/2" />
+                  </td>
+                </tr>
+              ))
             ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr

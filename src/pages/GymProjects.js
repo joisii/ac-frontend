@@ -5,6 +5,19 @@ import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 import API_BASE from "../config";
 
+// 🔹 Skeleton Row Component
+const SkeletonRow = () => {
+  return (
+    <tr className="animate-pulse">
+      {[1, 2, 3, 4, 5].map((_, i) => (
+        <td key={i} className="p-3 border">
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
+
 export default function GymProjects() {
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState([]);
@@ -16,7 +29,7 @@ export default function GymProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch gym projects from backend (FIXED)
+  // 🔹 Fetch gym projects from backend
   useEffect(() => {
     const fetchGymProjects = async () => {
       try {
@@ -48,57 +61,31 @@ export default function GymProjects() {
       c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Motion variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
-  const rowVariants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.5 } },
-  };
-
   return (
     <motion.div
       key="gym-page"
       initial="hidden"
       animate="visible"
       exit="hidden"
-      variants={containerVariants}
       className={`min-h-screen bg-gradient-to-b ${gradients.gym} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
-      <motion.div variants={itemVariants} className="max-w-5xl mx-auto mb-6">
+      <div className="max-w-5xl mx-auto mb-6">
         <button
           onClick={() => navigate(-1)}
           className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition"
         >
           ⬅ Back
         </button>
-      </motion.div>
+      </div>
 
       {/* Title */}
-      <motion.h1
-        variants={itemVariants}
-        className="text-4xl font-bold text-center mb-10 text-teal-800"
-      >
+      <h1 className="text-4xl font-bold text-center mb-10 text-teal-800">
         Gym Projects
-      </motion.h1>
+      </h1>
 
       {/* Search */}
-      <motion.div
-        variants={itemVariants}
-        className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
-      >
+      <div className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4">
         <input
           type="text"
           placeholder="Search by name, location, or AC type..."
@@ -106,13 +93,10 @@ export default function GymProjects() {
           onChange={(e) => setSearch(e.target.value)}
           className="flex-1 p-3 border border-gray-300 rounded-xl shadow focus:outline-none focus:ring-2 focus:ring-teal-500"
         />
-      </motion.div>
+      </div>
 
       {/* Table */}
-      <motion.div
-        variants={itemVariants}
-        className="overflow-x-auto max-w-5xl mx-auto"
-      >
+      <div className="overflow-x-auto max-w-5xl mx-auto">
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
@@ -125,19 +109,18 @@ export default function GymProjects() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">
-                  Loading gym projects...
-                </td>
-              </tr>
+              <>
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonRow key={index} />
+                ))}
+              </>
             ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
                   key={c._id}
-                  variants={rowVariants}
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ delay: 0.3 + index * 0.1 }}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
@@ -160,7 +143,7 @@ export default function GymProjects() {
             )}
           </tbody>
         </table>
-      </motion.div>
+      </div>
     </motion.div>
   );
 }

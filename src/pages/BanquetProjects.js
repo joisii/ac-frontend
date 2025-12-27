@@ -5,6 +5,19 @@ import { motion } from "framer-motion";
 import gradients from "../config/gradients";
 import API_BASE from "../config";
 
+// 🔹 Skeleton Row Component (Reusable, Dumb, Perfect)
+const SkeletonRow = () => {
+  return (
+    <tr className="animate-pulse">
+      {[1, 2, 3, 4, 5].map((_, i) => (
+        <td key={i} className="p-3 border">
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
+
 export default function BanquetProjects() {
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState([]);
@@ -16,7 +29,7 @@ export default function BanquetProjects() {
     window.scrollTo(0, 0);
   }, []);
 
-  // 🔹 Fetch banquet projects from backend (LIVE SAFE)
+  // 🔹 Fetch banquet projects
   useEffect(() => {
     const fetchBanquetProjects = async () => {
       try {
@@ -125,11 +138,11 @@ export default function BanquetProjects() {
           </thead>
           <tbody>
             {loading ? (
-              <tr>
-                <td colSpan="5" className="p-4 text-center text-gray-500">
-                  Loading banquet projects...
-                </td>
-              </tr>
+              <>
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonRow key={index} />
+                ))}
+              </>
             ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
@@ -137,7 +150,7 @@ export default function BanquetProjects() {
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
-                  transition={{ delay: 0.3 + index * 0.1 }}
+                  transition={{ duration: 0.3 }}
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
