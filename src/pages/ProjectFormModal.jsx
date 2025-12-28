@@ -23,27 +23,27 @@ const EMPTY_FORM = {
 
 const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
   const [form, setForm] = useState(EMPTY_FORM);
-  const [saving, setSaving] = useState(false); // <-- track saving state
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!isOpen) {
       setForm(EMPTY_FORM);
-      setSaving(false); // reset saving when modal closes
+      setSaving(false);
       return;
     }
 
     if (project) {
-      setForm({ ...project });
+      setForm({ ...project, isActive: true });
     } else {
       setForm(EMPTY_FORM);
     }
   }, [isOpen, project]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
@@ -55,111 +55,151 @@ const ProjectFormModal = ({ isOpen, onClose, onSave, project }) => {
       return;
     }
 
-    if (saving) return; // <-- prevent multiple submissions
-    setSaving(true);      // <-- disable button while saving
+    if (saving) return;
+    setSaving(true);
 
     try {
-      await onSave(form);
+      await onSave({ ...form, isActive: true });
       onClose();
     } catch (err) {
       console.error("Error saving project:", err);
       alert("Failed to save project. Please try again.");
     } finally {
-      setSaving(false); // <-- re-enable button
+      setSaving(false);
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-lg p-6">
-        <h2 className="text-xl font-bold mb-4">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center">
+      <div className="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-xl p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+
+        <h2 className="text-lg sm:text-xl font-semibold mb-6 text-center sm:text-left">
           {project ? "Edit Project" : "Create Project"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Name *"
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-          <input
-            type="text"
-            name="location"
-            value={form.location}
-            onChange={handleChange}
-            placeholder="Location *"
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
+          {/* Project Name */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Project Name <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                🗂️
+              </span>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                className="w-full border rounded-lg pl-10 pr-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
-          >
-            <option value="">Select Category *</option>
-            {CATEGORY_OPTIONS.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </option>
-            ))}
-          </select>
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Location <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                📍
+              </span>
+              <input
+                type="text"
+                name="location"
+                value={form.location}
+                onChange={handleChange}
+                required
+                className="w-full border rounded-lg pl-10 pr-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          <input
-            type="text"
-            name="application"
-            value={form.application}
-            onChange={handleChange}
-            placeholder="Application"
-            className="w-full border px-3 py-2 rounded"
-          />
+          {/* Category */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Category <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                🏷️
+              </span>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                required
+                className="w-full border rounded-lg pl-10 pr-3 py-2 text-sm sm:text-base bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select category</option>
+                {CATEGORY_OPTIONS.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-          <input
-            type="text"
-            name="acType"
-            value={form.acType}
-            onChange={handleChange}
-            placeholder="AC Type"
-            className="w-full border px-3 py-2 rounded"
-          />
+          {/* Application */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Application
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                🧩
+              </span>
+              <input
+                type="text"
+                name="application"
+                value={form.application}
+                onChange={handleChange}
+                className="w-full border rounded-lg pl-10 pr-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={form.isActive}
-              onChange={handleChange}
-            />
-            Active
-          </label>
+          {/* AC Type */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              AC Type
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
+                ❄️
+              </span>
+              <input
+                type="text"
+                name="acType"
+                value={form.acType}
+                onChange={handleChange}
+                className="w-full border rounded-lg pl-10 pr-3 py-2 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          <div className="flex justify-end gap-3 mt-4">
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-6">
             <button
               type="button"
               onClick={onClose}
-              disabled={saving} // disable cancel if saving
-              className={`px-4 py-2 rounded ${
-                saving ? "bg-gray-200 cursor-not-allowed" : "bg-gray-300 hover:bg-gray-400"
-              } transition`}
+              disabled={saving}
+              className="w-full sm:w-auto px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 disabled:cursor-not-allowed"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              disabled={saving} // disable save while saving
-              className={`px-4 py-2 rounded text-white ${
-                saving ? "bg-blue-300 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
-              } transition`}
+              disabled={saving}
+              className="w-full sm:w-auto px-4 py-2 rounded-lg text-white bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 disabled:cursor-not-allowed"
             >
               {saving ? "Saving..." : "Save"}
             </button>

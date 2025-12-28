@@ -21,24 +21,19 @@ const AdminDashboard = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState("");
 
-  // ------------------- Fetch Data -------------------
+  /* ---------------- FETCH DATA ---------------- */
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [reqRes, salesRes, projRes] = await Promise.all([
           fetch(`${API_BASE}/requests`),
           fetch(`${API_BASE}/sales`),
-
-          // 🔴 THIS IS THE FIX
           fetch(`${API_BASE}/projects?admin=true`),
         ]);
 
-        const reqData = await reqRes.json();
-        const salesData = await salesRes.json();
+        setRequests(await reqRes.json());
+        setSales(await salesRes.json());
         const projData = await projRes.json();
-
-        setRequests(reqData);
-        setSales(salesData);
         setProjects(projData);
         setFilteredProjects(projData);
       } catch (err) {
@@ -51,19 +46,15 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
-  // ------------------- Handlers -------------------
+  /* ---------------- HANDLERS ---------------- */
   const handleDeleteRequest = async (id) => {
     const res = await fetch(`${API_BASE}/requests/${id}`, { method: "DELETE" });
-    if (res.ok) {
-      setRequests((prev) => prev.filter((r) => r._id !== id));
-    }
+    if (res.ok) setRequests((prev) => prev.filter((r) => r._id !== id));
   };
 
   const handleDeleteSale = async (id) => {
     const res = await fetch(`${API_BASE}/sales/${id}`, { method: "DELETE" });
-    if (res.ok) {
-      setSales((prev) => prev.filter((s) => s._id !== id));
-    }
+    if (res.ok) setSales((prev) => prev.filter((s) => s._id !== id));
   };
 
   const handleEditProject = (project) => {
@@ -73,11 +64,8 @@ const AdminDashboard = () => {
 
   const handleDeleteProject = async (id) => {
     if (!window.confirm("Are you sure you want to delete this project?")) return;
-
     const res = await fetch(`${API_BASE}/projects/${id}`, { method: "DELETE" });
-    if (res.ok) {
-      setProjects((prev) => prev.filter((p) => p._id !== id));
-    }
+    if (res.ok) setProjects((prev) => prev.filter((p) => p._id !== id));
   };
 
   const handleSaveProject = async (projData) => {
@@ -104,7 +92,7 @@ const AdminDashboard = () => {
     setEditingProject(null);
   };
 
-  // ------------------- Filters -------------------
+  /* ---------------- FILTERS ---------------- */
   const applyFilters = useCallback(() => {
     let data = [...projects];
 
@@ -129,9 +117,10 @@ const AdminDashboard = () => {
     ...new Set(projects.map((p) => p.category).filter(Boolean)),
   ];
 
+  /* ---------------- LOADER ---------------- */
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1.2 }}
@@ -141,21 +130,30 @@ const AdminDashboard = () => {
     );
   }
 
+  /* ---------------- UI ---------------- */
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="sticky top-0 bg-white shadow p-4 z-50">
-        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+    <div className="min-h-screen bg-gray-100">
+      {/* Header */}
+      <div className="sticky top-0 bg-white shadow z-40">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+        </div>
       </div>
 
-      <div className="p-6 max-w-7xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-10">
+
         {/* Service Requests */}
-        <div>
-          <input
-            value={searchReq}
-            onChange={(e) => setSearchReq(e.target.value)}
-            placeholder="Search service requests..."
-            className="mb-3 px-4 py-2 border rounded w-full md:w-1/3"
-          />
+        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-lg font-semibold">Service Requests</h2>
+            <input
+              value={searchReq}
+              onChange={(e) => setSearchReq(e.target.value)}
+              placeholder="Search service requests..."
+              className="px-4 py-2 border rounded-lg w-full sm:w-72"
+            />
+          </div>
+
           <ServiceRequestsTable
             requests={requests.filter((r) =>
               JSON.stringify(r)
@@ -164,16 +162,20 @@ const AdminDashboard = () => {
             )}
             onDelete={handleDeleteRequest}
           />
-        </div>
+        </section>
 
         {/* Sales */}
-        <div>
-          <input
-            value={searchSales}
-            onChange={(e) => setSearchSales(e.target.value)}
-            placeholder="Search sales..."
-            className="mb-3 px-4 py-2 border rounded w-full md:w-1/3"
-          />
+        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-lg font-semibold">Sales</h2>
+            <input
+              value={searchSales}
+              onChange={(e) => setSearchSales(e.target.value)}
+              placeholder="Search sales..."
+              className="px-4 py-2 border rounded-lg w-full sm:w-72"
+            />
+          </div>
+
           <SalesTable
             sales={sales.filter((s) =>
               JSON.stringify(s)
@@ -182,26 +184,30 @@ const AdminDashboard = () => {
             )}
             onDelete={handleDeleteSale}
           />
-        </div>
+        </section>
 
         {/* Projects */}
-        <div>
-          <div className="flex gap-3 mb-3">
-            <input
-              value={searchProj}
-              onChange={(e) => setSearchProj(e.target.value)}
-              placeholder="Search projects..."
-              className="px-4 py-2 border rounded w-full md:w-1/3"
-            />
-            <button
-              onClick={() => {
-                setEditingProject(null);
-                setModalOpen(true);
-              }}
-              className="px-4 py-2 bg-green-600 text-white rounded"
-            >
-              + Add Project
-            </button>
+        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-lg font-semibold">Projects</h2>
+
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <input
+                value={searchProj}
+                onChange={(e) => setSearchProj(e.target.value)}
+                placeholder="Search projects..."
+                className="px-4 py-2 border rounded-lg w-full sm:w-72"
+              />
+              <button
+                onClick={() => {
+                  setEditingProject(null);
+                  setModalOpen(true);
+                }}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+              >
+                + Add Project
+              </button>
+            </div>
           </div>
 
           <AdminProjectsTable
@@ -210,7 +216,7 @@ const AdminDashboard = () => {
             onDelete={handleDeleteProject}
             onCategoryFilter={setCategoryFilter}
           />
-        </div>
+        </section>
       </div>
 
       <ProjectFormModal
