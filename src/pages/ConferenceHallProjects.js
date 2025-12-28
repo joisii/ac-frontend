@@ -1,4 +1,4 @@
-// src/pages/ConferenceHallProjects.js
+// src/pages/residence.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -35,7 +35,7 @@ export default function ConferenceHallProjects() {
     const fetchConferenceProjects = async () => {
       try {
         const res = await fetch(
-          `${API_BASE}/projects?category=conference`
+          `${API_BASE}/projects?category=residence`
         );
 
         if (!res.ok) {
