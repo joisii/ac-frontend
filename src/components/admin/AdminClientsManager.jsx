@@ -74,7 +74,7 @@ export default function AdminClientsManager() {
   const handleEdit = (client) => {
     setEditingId(client._id);
     setName(client.name);
-    setPreview(`${API_BASE}${client.logo}`);
+   setPreview(client.logo); // ✅ just the Cloudinary URL
     setLogo(null);
 
     if (fileRef.current) {
@@ -171,11 +171,11 @@ export default function AdminClientsManager() {
             className="bg-gray-50 rounded-lg p-4 flex flex-col items-center"
           >
             <div className="w-24 h-24 mb-3 border rounded-lg bg-white flex items-center justify-center">
-              <img
-                src={`${API_BASE}${client.logo}`}
-                alt={client.name}
-                className="object-contain w-full h-full"
-              />
+             <img
+  src={client.logo} // use the URL as-is
+  alt={client.name}
+  className="object-contain w-full h-full"
+/>
             </div>
 
             <p className="text-sm font-semibold mb-3 text-center">
