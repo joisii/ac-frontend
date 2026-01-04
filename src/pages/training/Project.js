@@ -82,7 +82,7 @@ function Project() {
   useEffect(() => {
     const fetchPdfPath = async () => {
       try {
-        const res = await fetch(`${API_BASE}/admin//get-pdf/project`);
+        const res = await fetch(`${API_BASE}/admin/get-pdf/project`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
         setPdfPath(`${API_BASE}${data.pdfUrl}`);
