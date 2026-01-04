@@ -85,7 +85,7 @@ function Project() {
         const res = await fetch(`${API_BASE}/admin/get-pdf/project`);
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
-        setPdfPath(`${API_BASE}${data.pdfUrl}`);
+        setPdfPath(data.pdfUrl);
       } catch (err) {
         console.error("Failed to fetch Project PDF:", err);
         setError("Unable to load PDF");
@@ -279,11 +279,9 @@ function Project() {
                 className="bg-white border rounded-xl shadow-md p-4 flex flex-col items-center justify-center transition"
               >
                 <div className="h-16 flex items-center justify-center mb-3">
-                  <img
-                    src={`${API_BASE}${client.logo}`}
+                  <img src={client.logo}
                     alt={client.name}
-                    className="max-h-14 object-contain"
-                  />
+                    className="max-h-14 object-contain"/>
                 </div>
                 <p className="text-sm font-medium text-gray-700 text-center">
                   {client.name}

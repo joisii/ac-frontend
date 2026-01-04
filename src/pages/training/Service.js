@@ -104,7 +104,7 @@ function Service() {
         const data = await res.json();
         if (!data.pdfUrl) throw new Error("PDF URL missing");
 
-        const fullPdfUrl = `${API_BASE}${data.pdfUrl}`;
+        const fullPdfUrl = data.pdfUrl;
         const pdf = await pdfjsLib.getDocument(fullPdfUrl).promise;
         if (!active) return;
         pdfDocRef.current = pdf;
@@ -181,7 +181,8 @@ function Service() {
           {clients.length > 0 ? clients.map((client) => (
             <motion.div key={client._id} className="flex flex-col items-center w-36 h-36 md:w-40 md:h-40 bg-white p-4 rounded-2xl shadow hover:shadow-2xl transition group" whileHover={{ scale: 1.1, boxShadow: "0px 20px 30px rgba(0,0,0,0.25)" }}>
               <div className="flex-grow flex items-center justify-center">
-                <img src={`${API_BASE}${client.logo}`} alt={client.name} className="max-h-14 md:max-h-16 max-w-[120px] object-contain group-hover:scale-110 transition-transform duration-300" />
+                <img src={client.logo} 
+ alt={client.name} className="max-h-14 md:max-h-16 max-w-[120px] object-contain group-hover:scale-110 transition-transform duration-300" />
               </div>
               <p className="mt-2 text-xs md:text-sm text-center text-gray-700 font-medium">{client.name}</p>
             </motion.div>
