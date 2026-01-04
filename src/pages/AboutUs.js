@@ -1,9 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import CountUp from "react-countup";
+import API_BASE from "../config";
 
 const AboutUs = () => {
   const sectionRef = useRef(null);
+
+  const [stats, setStats] = useState({
+    coolingInstalledTR: 0,
+    clientsServed: 0,
+  });
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
@@ -11,6 +18,21 @@ const AboutUs = () => {
 
   const blobX = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const blobY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+
+  // Fetch About stats
+  useEffect(() => {
+    fetch(`${API_BASE}/about-stats`)
+      .then((res) => res.json())
+      .then((data) => {
+        setStats({
+          coolingInstalledTR: data.coolingInstalledTR || 0,
+          clientsServed: data.clientsServed || 0,
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to fetch About stats:", err);
+      });
+  }, []);
 
   return (
     <section
@@ -28,9 +50,8 @@ const AboutUs = () => {
         className="absolute bottom-0 right-0 w-64 h-64 bg-yellow-200 opacity-20 blur-3xl rounded-full z-0"
       />
 
-      {/* CONTENT - Centered */}
+      {/* CONTENT */}
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-8 relative z-10">
-        {/* Heading */}
         <motion.h2
           className="text-4xl md:text-5xl font-extrabold leading-snug text-transparent bg-clip-text bg-gradient-to-r from-blue-800 via-yellow-500 to-blue-800 animate-pulse"
           initial={{ opacity: 0, y: -20 }}
@@ -41,7 +62,6 @@ const AboutUs = () => {
           <span className="text-yellow-500">Three Decades</span>
         </motion.h2>
 
-        {/* Description */}
         <motion.p
           className="text-gray-800 text-lg leading-relaxed font-medium max-w-2xl"
           initial={{ opacity: 0, x: -20 }}
@@ -61,9 +81,10 @@ const AboutUs = () => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
         >
-          We have highly skilled and well-trained service engineers, technicians
-          with necessary tools & tackles to meet our customer service
-          requirements. We adhere to quality service processes and safety norms.
+          We have highly skilled and well-trained service engineers and
+          technicians, equipped with the necessary tools to meet customer
+          service requirements while adhering to strict safety and quality
+          standards.
         </motion.p>
 
         {/* Counters */}
@@ -79,7 +100,12 @@ const AboutUs = () => {
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
             <span className="text-3xl md:text-4xl font-bold text-blue-700 mb-1">
-              <CountUp end={20000} duration={3} separator="," /> TR
+              <CountUp
+                end={stats.coolingInstalledTR}
+                duration={3}
+                separator=","
+              />{" "}
+              TR
             </span>
             <span className="text-sm">Cooling Installed</span>
           </motion.div>
@@ -89,7 +115,12 @@ const AboutUs = () => {
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
           >
             <span className="text-3xl md:text-4xl font-bold text-yellow-600 mb-1">
-              <CountUp end={1200} duration={3} separator="," />+
+              <CountUp
+                end={stats.clientsServed}
+                duration={3}
+                separator=","
+              />
+              +
             </span>
             <span className="text-sm">Clients Served</span>
           </motion.div>
@@ -115,9 +146,8 @@ const AboutUs = () => {
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 0.5 }}
             >
-              <span className="text-green-600 text-xl shadow-md">✔</span>
+              <span className="text-green-600 text-xl">✔</span>
               <span>{item}</span>
             </motion.div>
           ))}

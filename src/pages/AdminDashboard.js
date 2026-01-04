@@ -4,7 +4,12 @@ import ServiceRequestsTable from "../pages/ServiceRequestsTable";
 import SalesTable from "../pages/SalesTable";
 import AdminProjectsTable from "../pages/AdminProjectsTable";
 import ProjectFormModal from "./ProjectFormModal";
+import AdminAboutStats from "./AdminAboutStats";
+import AdminCustomersManager from "./AdminCustomersManager";
+import PdfManager from "../components/admin/PdfManager";
+import AdminClientsManager from "../components/admin/AdminClientsManager";
 import API_BASE from "../config";
+
 
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -142,6 +147,20 @@ const AdminDashboard = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-6 space-y-10">
 
+        {/* About Section Stats */}
+<section className="bg-white rounded-xl shadow p-4 sm:p-6">
+  <AdminAboutStats />
+</section>
+
+<section>
+  <AdminCustomersManager />
+</section>
+<section>
+<PdfManager />
+</section>
+<section>
+  <AdminClientsManager />
+</section>
         {/* Service Requests */}
         <section className="bg-white rounded-xl shadow p-4 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
@@ -218,7 +237,6 @@ const AdminDashboard = () => {
           />
         </section>
       </div>
-
       <ProjectFormModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
