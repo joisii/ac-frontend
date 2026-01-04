@@ -81,7 +81,7 @@ function Service() {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/clients`);
+        const res = await fetch(`${API_BASE}/admin/service`);
         const data = await res.json();
         setClients(data || []);
       } catch (err) {
