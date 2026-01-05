@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
-import "pdfjs-dist/build/pdf.worker.min.js";
 import API_BASE from "../../config"; // ✅ use config for production/local
 
 // PDF.js worker
@@ -79,30 +78,10 @@ function Project() {
   // -------------------------------------
   // Load PDF dynamically from backend
   // -------------------------------------
-  useEffect(() => {
-    const fetchPdfPath = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/admin/get-pdf/project`);
-        let data;
-try {
-  data = await res.json();
-} catch {
-  throw new Error("Server returned invalid response");
-}
+useEffect(() => {
+  setPdfPath(`${API_BASE}/admin/pdf/project`);
+}, []);
 
-if (!res.ok) {
-  throw new Error(data.message || "Upload failed");
-}
-
-        if (!res.ok) throw new Error(data.message);
-        setPdfPath(data.pdfUrl);
-      } catch (err) {
-        console.error("Failed to fetch Project PDF:", err);
-        setError("Unable to load PDF");
-      }
-    };
-    fetchPdfPath();
-  }, []);
 
   useEffect(() => {
     if (!pdfPath) return;
