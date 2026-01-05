@@ -17,7 +17,7 @@ function Service() {
   // -------------------------------------
   // 🎞️ PDF SYSTEM
   // -------------------------------------
-  const pdfJsonPath = `${API_BASE}/admin/get-pdf/service`; // JSON route
+  const pdfJsonPath = `${API_BASE}/admin/pdf/service`;
   const containerRef = useRef(null);
   const pageRefs = useRef([]);
   const pdfDocRef = useRef(null);
