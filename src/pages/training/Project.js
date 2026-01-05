@@ -1,7 +1,10 @@
+// src/pages/project/Project.jsx
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import API_BASE from "../../config";
+
 import PdfViewer from "./PdfViewer";
+import AmcWarrantyTables from "./AmcWarrantyTables";
 
 function Project() {
   const [warrantyCustomers, setWarranty] = useState([]);
@@ -45,6 +48,7 @@ function Project() {
         <h5 className="text-2xl font-bold text-blue-700 mb-4">
           Project Training – Detailed Syllabus
         </h5>
+
         <p className="text-gray-700 mb-6">
           At <b className="text-blue-600">GVJ</b>, training means real-world HVAC
           exposure. No fairy tales.
@@ -57,20 +61,11 @@ function Project() {
         pdfUrl={`${API_BASE}/admin/pdf/project`}
       />
 
-      {/* Warranty + AMC */}
-      <div className="grid md:grid-cols-2 gap-8 mb-12">
-        {/* Warranty */}
-        <CustomerTable
-          title="Partial List of Warranty Customers"
-          data={warrantyCustomers}
-        />
-
-        {/* AMC */}
-        <CustomerTable
-          title="Partial List of AMC Customers"
-          data={amcCustomers}
-        />
-      </div>
+      {/* AMC + Warranty Tables */}
+      <AmcWarrantyTables
+        warrantyCustomers={warrantyCustomers}
+        amcCustomers={amcCustomers}
+      />
 
       {/* Clients */}
       <motion.div initial="hidden" whileInView="visible" variants={fadeUp}>
@@ -93,6 +88,7 @@ function Project() {
                     className="max-h-14 object-contain"
                   />
                 </div>
+
                 <p className="text-sm font-medium text-gray-700 text-center">
                   {client.name}
                 </p>
@@ -105,43 +101,6 @@ function Project() {
           )}
         </div>
       </motion.div>
-    </div>
-  );
-}
-
-// -------------------------------------
-// Reusable table (bonus cleanup 💅)
-// -------------------------------------
-function CustomerTable({ title, data }) {
-  return (
-    <div>
-      <h5 className="text-lg font-bold text-blue-700 mb-4">{title}</h5>
-      <div className="max-h-64 overflow-y-auto border rounded-lg shadow">
-        <table className="w-full">
-          <thead className="bg-blue-600 text-white sticky top-0">
-            <tr>
-              <th className="px-4 py-3">S.No</th>
-              <th className="px-4 py-3">Client Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.length > 0 ? (
-              data.map((row, i) => (
-                <tr key={i} className={i % 2 ? "bg-gray-50" : "bg-white"}>
-                  <td className="px-4 py-2 border-b">{row.sno}</td>
-                  <td className="px-4 py-2 border-b">{row.client}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="2" className="text-center py-3 text-gray-500">
-                  No data available
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
     </div>
   );
 }

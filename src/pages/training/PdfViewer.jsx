@@ -1,9 +1,40 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
 import workerSrc from "pdfjs-dist/build/pdf.worker.min.js";
 
 // PDF.js worker setup
 pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
+
+// -------------------------------------
+// Skeleton page (PDF loading animation)
+// -------------------------------------
+function PdfSkeletonPage({ index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.12 }}
+      className="w-full flex justify-center py-6"
+    >
+      <div className="w-[90%] md:w-[800px] h-[420px] md:h-[1100px]
+        bg-gray-200 rounded-xl overflow-hidden relative"
+      >
+        {/* shimmer */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r
+            from-gray-200 via-gray-300 to-gray-200"
+          animate={{ x: ["-100%", "100%"] }}
+          transition={{
+            repeat: Infinity,
+            duration: 1.4,
+            ease: "linear",
+          }}
+        />
+      </div>
+    </motion.div>
+  );
+}
 
 export default function PdfViewer({ pdfUrl, title }) {
   const containerRef = useRef(null);
@@ -13,6 +44,7 @@ export default function PdfViewer({ pdfUrl, title }) {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [pageCount, setPageCount] = useState(4); // fallback skeleton count
 
   // -------------------------------------
   // Render single page
@@ -98,8 +130,9 @@ export default function PdfViewer({ pdfUrl, title }) {
         if (!active) return;
 
         pdfDocRef.current = pdf;
-        const container = containerRef.current;
+        setPageCount(pdf.numPages);
 
+        const container = containerRef.current;
         container.innerHTML = "";
         pageRefs.current = [];
 
@@ -111,7 +144,7 @@ export default function PdfViewer({ pdfUrl, title }) {
           ph.innerHTML = `
             <div class="w-[90%] md:w-[800px] h-[400px] md:h-[1100px]
             bg-gray-100 border rounded-lg flex items-center justify-center text-gray-400">
-              Loading page ${i}…
+              Rendering page ${i}…
             </div>
           `;
           container.appendChild(ph);
@@ -119,7 +152,9 @@ export default function PdfViewer({ pdfUrl, title }) {
         }
 
         setupObserver();
-        pageRefs.current.forEach((ph) => observerRef.current.observe(ph));
+        pageRefs.current.forEach((ph) =>
+          observerRef.current.observe(ph)
+        );
       } catch (err) {
         if (active) setError("Unable to load PDF.");
         console.error(err);
@@ -145,16 +180,29 @@ export default function PdfViewer({ pdfUrl, title }) {
       )}
 
       <div className="w-full max-h-[85vh] overflow-y-auto bg-gray-50 rounded-xl shadow-inner px-2 md:px-6 py-6">
-        {loading && (
-          <div className="text-center text-gray-600 h-full flex items-center justify-center">
-            Loading document…
+        {/* Skeleton Loader */}
+        <AnimatePresence>
+          {loading && !error && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {[...Array(Math.min(pageCount, 5))].map((_, i) => (
+                <PdfSkeletonPage key={i} index={i} />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Error */}
+        {error && (
+          <div className="text-center text-red-600 py-6">
+            {error}
           </div>
         )}
 
-        {error && (
-          <div className="text-center text-red-600 py-6">{error}</div>
-        )}
-
+        {/* Actual PDF */}
         <div ref={containerRef} className="w-full" />
       </div>
     </div>
