@@ -17,14 +17,13 @@ const PdfManager = () => {
 
     const formData = new FormData();
     formData.append("pdf", file);
-    formData.append("type", type);
 
     try {
       setLoadingType(type);
       setMessage("");
       setInfoMessage("");
 
-      const res = await fetch(`${API_BASE}/admin/upload-pdf`, {
+      const res = await fetch(`${API_BASE}/admin/upload-pdf/${type}`, {
         method: "POST",
         body: formData,
       });
