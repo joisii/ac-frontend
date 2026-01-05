@@ -10,6 +10,25 @@ import PdfManager from "../components/admin/PdfManager";
 import AdminClientsManager from "../components/admin/AdminClientsManager";
 import API_BASE from "../config";
 
+/* ----------------------------------
+   Animation presets (UI ONLY)
+---------------------------------- */
+const sectionFade = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+const hoverCard = {
+  whileHover: {
+    y: -4,
+    boxShadow: "0px 10px 25px rgba(0,0,0,0.12)",
+    transition: { duration: 0.25 },
+  },
+};
 
 const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
@@ -145,24 +164,59 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6 space-y-10">
+      <div className="max-w-7xl mx-auto px-4 py-6 space-y-12">
 
-        {/* About Section Stats */}
-<section className="bg-white rounded-xl shadow p-4 sm:p-6">
-  <AdminAboutStats />
-</section>
+        {/* About Stats */}
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+          className="bg-white rounded-xl shadow p-4 sm:p-6"
+        >
+          <AdminAboutStats />
+        </motion.section>
 
-<section>
-  <AdminCustomersManager />
-</section>
-<section>
-<PdfManager />
-</section>
-<section>
-  <AdminClientsManager />
-</section>
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+        >
+          <AdminCustomersManager />
+        </motion.section>
+
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+        >
+          <PdfManager />
+        </motion.section>
+
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+        >
+          <AdminClientsManager />
+        </motion.section>
+
         {/* Service Requests */}
-        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+          className="bg-white rounded-xl shadow p-4 sm:p-6"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <h2 className="text-lg font-semibold">Service Requests</h2>
             <input
@@ -181,10 +235,17 @@ const AdminDashboard = () => {
             )}
             onDelete={handleDeleteRequest}
           />
-        </section>
+        </motion.section>
 
         {/* Sales */}
-        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+          className="bg-white rounded-xl shadow p-4 sm:p-6"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <h2 className="text-lg font-semibold">Sales</h2>
             <input
@@ -203,10 +264,17 @@ const AdminDashboard = () => {
             )}
             onDelete={handleDeleteSale}
           />
-        </section>
+        </motion.section>
 
         {/* Projects */}
-        <section className="bg-white rounded-xl shadow p-4 sm:p-6">
+        <motion.section
+          variants={sectionFade}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          {...hoverCard}
+          className="bg-white rounded-xl shadow p-4 sm:p-6"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <h2 className="text-lg font-semibold">Projects</h2>
 
@@ -235,8 +303,9 @@ const AdminDashboard = () => {
             onDelete={handleDeleteProject}
             onCategoryFilter={setCategoryFilter}
           />
-        </section>
+        </motion.section>
       </div>
+
       <ProjectFormModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
