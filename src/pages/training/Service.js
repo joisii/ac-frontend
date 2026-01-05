@@ -1,30 +1,42 @@
 // src/pages/training/Service.js
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import API_BASE from "../../config";
+
 import PdfViewer from "./PdfViewer";
 import AmcWarrantyTables from "./AmcWarrantyTables";
 
 function Service() {
-  // -------------------------------------
-  // 🔗 Backend Fetch States
-  // -------------------------------------
+  const [warrantyCustomers, setWarranty] = useState([]);
+  const [amcCustomers, setAmc] = useState([]);
   const [clients, setClients] = useState([]);
+  const [clientsLoading, setClientsLoading] = useState(true);
 
   // -------------------------------------
-  // Fetch clients from backend
+  // Fetch data (same as Project)
   // -------------------------------------
   useEffect(() => {
-    const fetchClients = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/clients`);
-        const data = await res.json();
-        setClients(data || []);
+        const [custRes, clientRes] = await Promise.all([
+          fetch(`${API_BASE}/customers`),
+          fetch(`${API_BASE}/api/clients`),
+        ]);
+
+        const custData = await custRes.json();
+        setWarranty(custData?.warranty || []);
+        setAmc(custData?.amc || []);
+
+        const clientData = await clientRes.json();
+        setClients(clientData || []);
       } catch (err) {
-        console.error("Fetching Clients Failed ➜", err);
+        console.error("Failed to fetch data:", err);
+      } finally {
+        setClientsLoading(false);
       }
     };
-    fetchClients();
+
+    fetchData();
   }, []);
 
   // -------------------------------------
@@ -38,6 +50,23 @@ function Service() {
       transition: { duration: 0.6 },
     },
   };
+
+  // -------------------------------------
+  // Client skeleton card
+  // -------------------------------------
+  const ClientSkeleton = ({ index }) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: index * 0.08 }}
+      className="bg-white border rounded-xl shadow-md p-4 flex flex-col items-center"
+    >
+      <div className="h-16 w-full flex items-center justify-center mb-3">
+        <div className="h-10 w-24 bg-gray-200 rounded animate-pulse" />
+      </div>
+      <div className="h-3 w-20 bg-gray-200 rounded animate-pulse" />
+    </motion.div>
+  );
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-lg">
@@ -54,14 +83,17 @@ function Service() {
 
         <p className="text-gray-700 mb-4 leading-relaxed">
           At{" "}
-          <span className="font-semibold text-yellow-600">GVJ</span>, our service
-          training program prepares HVAC professionals for real-world
-          troubleshooting, repairing, and maintenance.
+          <span className="font-semibold text-yellow-600">GVJ</span>, service
+          training is all about mastering real-world HVAC troubleshooting,
+          repairs, and preventive maintenance.
         </p>
 
         <p className="text-gray-700 mb-6 leading-relaxed">
-          Understanding components, electrical controls, preventive maintenance,
-          and fault analysis—this syllabus builds industry-grade service experts.
+          This curriculum focuses on{" "}
+          <span className="font-medium">fault diagnosis</span>,{" "}
+          <span className="font-medium">electrical controls</span>, and{" "}
+          <span className="font-medium">hands-on service practices</span> to
+          build industry-ready professionals.
         </p>
       </motion.div>
 
@@ -71,52 +103,52 @@ function Service() {
         pdfUrl={`${API_BASE}/admin/pdf/service`}
       />
 
-  {/* AMC + Warranty Tables */}
+      {/* AMC + Warranty Tables */}
       <AmcWarrantyTables
         warrantyCustomers={warrantyCustomers}
         amcCustomers={amcCustomers}
       />
 
-      {/* Companies Worked With */}
-      <motion.div
-        className="mt-12"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={fadeUp}
-      >
-        <h4 className="text-2xl md:text-3xl font-bold text-center text-yellow-700 mb-8 drop-shadow">
+      {/* Clients */}
+      <motion.div initial="hidden" whileInView="visible" variants={fadeUp}>
+        <h4 className="text-3xl font-bold text-center text-yellow-700 mb-10">
           Companies We’ve Worked With
         </h4>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 place-items-center">
-          {clients.length > 0 ? (
-            clients.map((client) => (
-              <motion.div
-                key={client._id}
-                className="flex flex-col items-center w-36 h-36 md:w-40 md:h-40 bg-white p-4 rounded-2xl shadow hover:shadow-2xl transition group"
-                whileHover={{
-                  scale: 1.1,
-                  boxShadow: "0px 20px 30px rgba(0,0,0,0.25)",
-                }}
-              >
-                <div className="flex-grow flex items-center justify-center">
-                  <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-14 md:max-h-16 max-w-[120px] object-contain group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-                <p className="mt-2 text-xs md:text-sm text-center text-gray-700 font-medium">
-                  {client.name}
-                </p>
-              </motion.div>
-            ))
-          ) : (
-            <p className="text-gray-500 col-span-full text-center">
-              No client data available
-            </p>
-          )}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <AnimatePresence>
+            {clientsLoading ? (
+              [...Array(8)].map((_, i) => (
+                <ClientSkeleton key={i} index={i} />
+              ))
+            ) : clients.length > 0 ? (
+              clients.map((client, i) => (
+                <motion.div
+                  key={client._id}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.05 }}
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  className="bg-white border rounded-xl shadow-md p-4 flex flex-col items-center"
+                >
+                  <div className="h-16 flex items-center justify-center mb-3">
+                    <img
+                      src={client.logo}
+                      alt={client.name}
+                      className="max-h-14 object-contain"
+                    />
+                  </div>
+                  <p className="text-sm font-medium text-gray-700 text-center">
+                    {client.name}
+                  </p>
+                </motion.div>
+              ))
+            ) : (
+              <p className="text-gray-500 col-span-full text-center">
+                No client data available
+              </p>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
     </div>
