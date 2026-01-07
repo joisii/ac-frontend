@@ -13,6 +13,12 @@ function AdminLogin() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // 👁️ visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,7 +51,6 @@ function AdminLogin() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        // 🔐 FIRST LOGIN FLOW
         if (data.firstLogin) {
           setIsFirstLogin(true);
           setMode("change");
@@ -106,7 +111,6 @@ function AdminLogin() {
 
       if (res.ok && data.success) {
         setSuccess("Password updated successfully");
-
         setTimeout(() => {
           localStorage.setItem("isAdmin", "true");
           navigate("/admin/dashboard");
@@ -160,14 +164,23 @@ function AdminLogin() {
                 required
               />
 
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full px-4 py-3 bg-white/30 rounded-xl"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              {/* Password with eye */}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-white/80"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
 
               <button
                 type="submit"
@@ -178,7 +191,6 @@ function AdminLogin() {
               </button>
             </form>
 
-            {/* 🔁 Manual Change Password */}
             <p
               className="mt-6 text-sm text-center text-white/80 cursor-pointer hover:text-white"
               onClick={() => {
@@ -206,35 +218,60 @@ function AdminLogin() {
               disabled={isFirstLogin}
             />
 
-            {/* 🔐 Old password only for normal change */}
             {!isFirstLogin && (
-              <input
-                type="password"
-                placeholder="Old Password"
-                className="w-full px-4 py-3 bg-white/30 rounded-xl"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showOldPassword ? "text" : "password"}
+                  placeholder="Old Password"
+                  className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                  onClick={() => setShowOldPassword(!showOldPassword)}
+                >
+                  {showOldPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
             )}
 
-            <input
-              type="password"
-              placeholder="New Password"
-              className="w-full px-4 py-3 bg-white/30 rounded-xl"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="New Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+              <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
 
-            <input
-              type="password"
-              placeholder="Confirm New Password"
-              className="w-full px-4 py-3 bg-white/30 rounded-xl"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm New Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+              >
+                {showConfirmPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
 
             <button
               type="submit"
