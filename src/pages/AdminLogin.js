@@ -33,7 +33,7 @@ function AdminLogin() {
 
     try {
       const res = await fetch(
-        'https://ac-backend-cpsu.onrender.com/admin/auth/login',
+        'https://ac-backend-cpsu.onrender.com/adminlog/auth/login',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
