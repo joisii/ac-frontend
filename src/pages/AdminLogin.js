@@ -81,7 +81,7 @@ function AdminLogin() {
     try {
       // ✅ STEP 1: VERIFY EXISTING USERNAME + PASSWORD
       const loginCheck = await fetch(
-        'https://ac-backend-cpsu.onrender.com/admin/auth/login',
+        'https://ac-backend-cpsu.onrender.com/adminlog/auth/login',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -103,7 +103,7 @@ function AdminLogin() {
 
       // ✅ STEP 2: UPDATE PASSWORD
       const res = await fetch(
-        'https://ac-backend-cpsu.onrender.com/admin/auth/change-password',
+        'https://ac-backend-cpsu.onrender.com/adminlog/auth/change-password',
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
