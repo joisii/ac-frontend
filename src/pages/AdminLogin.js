@@ -45,7 +45,7 @@ function AdminLogin() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        // 🧠 FIRST LOGIN → FORCE PASSWORD CHANGE
+        // 🔐 FIRST LOGIN FLOW
         if (data.firstLogin) {
           setIsFirstLogin(true);
           setMode("change");
@@ -105,7 +105,8 @@ function AdminLogin() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        setSuccess("Password updated successfully. Redirecting...");
+        setSuccess("Password updated successfully");
+
         setTimeout(() => {
           localStorage.setItem("isAdmin", "true");
           navigate("/admin/dashboard");
@@ -136,7 +137,7 @@ function AdminLogin() {
         }`}
       >
         <h2 className="text-3xl font-bold text-center mb-6">
-          {mode === "login" ? "Admin Login" : "Set New Password"}
+          {mode === "login" ? "Admin Login" : "Change Password"}
         </h2>
 
         {error && (
@@ -148,33 +149,51 @@ function AdminLogin() {
         )}
 
         {mode === "login" ? (
-          <form onSubmit={handleLogin} className="space-y-6">
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full px-4 py-3 bg-white/30 rounded-xl"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+          <>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <input
+                type="text"
+                placeholder="Username"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
 
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full px-4 py-3 bg-white/30 rounded-xl"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-purple-600 rounded-xl font-semibold hover:bg-purple-700"
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 bg-purple-600 rounded-xl font-semibold hover:bg-purple-700"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+
+            {/* 🔁 Manual Change Password */}
+            <p
+              className="mt-6 text-sm text-center text-white/80 cursor-pointer hover:text-white"
+              onClick={() => {
+                setMode("change");
+                setIsFirstLogin(false);
+                setOldPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                setError("");
+                setSuccess("");
+              }}
             >
-              {loading ? "Logging in..." : "Login"}
-            </button>
-          </form>
+              Change password?
+            </p>
+          </>
         ) : (
           <form onSubmit={handleChangePassword} className="space-y-5">
             <input
@@ -186,6 +205,18 @@ function AdminLogin() {
               required
               disabled={isFirstLogin}
             />
+
+            {/* 🔐 Old password only for normal change */}
+            {!isFirstLogin && (
+              <input
+                type="password"
+                placeholder="Old Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+            )}
 
             <input
               type="password"
@@ -212,6 +243,17 @@ function AdminLogin() {
             >
               {loading ? "Updating..." : "Update Password"}
             </button>
+
+            <p
+              className="text-sm text-center text-white/70 cursor-pointer hover:text-white"
+              onClick={() => {
+                setMode("login");
+                setError("");
+                setSuccess("");
+              }}
+            >
+              Back to login
+            </p>
           </form>
         )}
       </div>
