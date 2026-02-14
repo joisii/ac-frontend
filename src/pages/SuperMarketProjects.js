@@ -3,69 +3,58 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
-
-// Static data (replace with Excel import later)
-const supermarketClients = [
-  { id: 1, name: "RMK Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 2, name: "Jaya Super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 3, name: "Joseph super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 4, name: "M/s. Rogers Family Super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 5, name: "Orange Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 6, name: "New Jayam Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 7, name: "M/s. CJ Reddy Hospital + Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 8, name: "Golden Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 9, name: "Namma Super Market ", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 10, name: "Star Kovai Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 11, name: "KPK Super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 12, name: "Ravi Margin Super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 13, name: "Rajam Super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 14, name: "Pazamudiur nilayam - karur", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 15, name: "Airforce (URC - Unit Run canteen)", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 16, name: "APR Super Market", location: "Chennai", application: "Super Market", acType: "Inv DSAC" },
-  { id: 17, name: "Aynnar super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 18, name: "Kamadhenu super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 19, name: "New Jayam Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 20, name: "AAJ Supermarket", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 21, name: "Karts & Baskets Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 22, name: "Elahi super market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 23, name: "Muthu Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 24, name: "Ambika Provisions", location: "Chennai", application: "Super Market", acType: "I DSAC" },
-  { id: 25, name: "Sri Balaji Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 26, name: "ASR VeluS Pazlamudir Solai & Super Market ", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 27, name: "Sri Venkateswara Super Market", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 28, name: "RVV Hyper Stores ", location: "Vellore", application: "Super Market", acType: "DSAC" },
-  { id: 29, name: "Jeyam Stores", location: "Karaikudi", application: "Super Market", acType: "PAC" },
-  { id: 30, name: "R Champalal and co", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 31, name: "Saravana Stores", location: "Chennai", application: "Super Market", acType: "PAC" },
-  { id: 32, name: "Raja Shop", location: "Chennai", application: "Super Market", acType: "Inv DSAC" },
-  { id: 33, name: "The Fresh Basket (Amith Shah Super Market) ", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 34, name: "Transcend Super Mart", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 35, name: "Natraj Traders", location: "Chennai", application: "Super Market", acType: "DSAC" },
-  { id: 36, name: "Gandhimathi Super Market ", location: "Chennai", application: "Super Market", acType: "Inv DSAC" },
-  { id: 37, name: "Vaibhave shoppe Super Market ", location: "Chennai", application: "Super Market", acType: "Inv DSAC" },
-  { id: 38, name: "Amar Communication ", location: "Chennai", application: "Super Market", acType: "DSAC" },
-
-];
+import API_BASE from "../config";
 
 export default function SuperMarketProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = supermarketClients.filter(
+  // 🔹 Fetch supermarket projects from backend (LIVE SAFE)
+  useEffect(() => {
+    const fetchSuperMarketProjects = async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/projects?category=supermarket`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching supermarket projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSuperMarketProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
   };
 
   const itemVariants = {
@@ -105,7 +94,7 @@ export default function SuperMarketProjects() {
         Super Market Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -120,7 +109,10 @@ export default function SuperMarketProjects() {
       </motion.div>
 
       {/* Data Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
@@ -132,10 +124,30 @@ export default function SuperMarketProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              [...Array(6)].map((_, index) => (
+                <tr key={index} className="animate-pulse">
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-6" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-2/3" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-3/4" />
+                  </td>
+                  <td className="p-3 border">
+                    <div className="h-4 bg-gray-300 rounded w-1/2" />
+                  </td>
+                </tr>
+              ))
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -143,11 +155,12 @@ export default function SuperMarketProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,128,0,0.1), rgba(255,255,255,0.05))",
+                    background:
+                      "linear-gradient(90deg, rgba(0,128,0,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>

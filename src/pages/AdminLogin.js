@@ -1,43 +1,127 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [shake, setShake] = useState(false); // new state for shake animation
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState("login"); // login | change
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // 👁️ visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [shake, setShake] = useState(false);
+
+  const triggerShake = () => {
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
+  };
+
+  // ---------------- LOGIN ----------------
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
+    setSuccess("");
 
     if (loading) return;
     setLoading(true);
 
     try {
-      const res = await fetch("https://ac-backend-cpsu.onrender.com/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await fetch(
+        "https://ac-backend-cpsu.onrender.com/adminlog/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       const data = await res.json();
 
       if (res.ok && data.success) {
-        localStorage.setItem('isAdmin', 'true');
-        navigate('/admin/dashboard');
+        if (data.firstLogin) {
+          setIsFirstLogin(true);
+          setMode("change");
+          setOldPassword(password);
+          setSuccess("First login detected. Please set a new password.");
+          return;
+        }
+
+        localStorage.setItem("isAdmin", "true");
+        navigate("/admin/dashboard");
       } else {
-        setError(data.message || 'Invalid credentials');
-        setShake(true); // trigger shake
-        setTimeout(() => setShake(false), 500); // remove after animation
+        setError(data.message || "Invalid credentials");
+        triggerShake();
       }
-    } catch (err) {
-      console.error('Login error:', err);
-      setError('Server error. Please try again later.');
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
+    } catch {
+      setError("Server error. Please try again later.");
+      triggerShake();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ---------------- CHANGE PASSWORD ----------------
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (newPassword !== confirmPassword) {
+      setError("New passwords do not match");
+      triggerShake();
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setError("Password must be at least 6 characters");
+      triggerShake();
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(
+        "https://ac-backend-cpsu.onrender.com/adminlog/change-password",
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username,
+            oldPassword,
+            newPassword,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setSuccess("Password updated successfully");
+        setTimeout(() => {
+          localStorage.setItem("isAdmin", "true");
+          navigate("/admin/dashboard");
+        }, 1200);
+      } else {
+        setError(data.message || "Failed to update password");
+        triggerShake();
+      }
+    } catch {
+      setError("Server error. Please try again later.");
+      triggerShake();
     } finally {
       setLoading(false);
     }
@@ -47,90 +131,175 @@ function AdminLogin() {
     <div
       className="min-h-screen flex items-center justify-center px-4"
       style={{
-        background: 'linear-gradient(135deg, #1e3a8a, #0f172a)',
-        backdropFilter: 'blur(10px)',
-        WebkitBackdropFilter: 'blur(10px)',
+        background: "linear-gradient(135deg, #1e3a8a, #0f172a)",
+        backdropFilter: "blur(10px)",
       }}
     >
       <div
-        className={`backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl p-10 max-w-md w-full shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] text-white 
-        ${shake ? 'animate-shake' : ''}`} // apply shake if error
+        className={`backdrop-blur-lg bg-white/20 border border-white/30 rounded-3xl p-10 max-w-md w-full shadow-xl text-white ${
+          shake ? "animate-shake" : ""
+        }`}
       >
-        <h2 className="text-3xl font-bold text-center mb-8 drop-shadow-md">
-          Admin Login
+        <h2 className="text-3xl font-bold text-center mb-6">
+          {mode === "login" ? "Admin Login" : "Change Password"}
         </h2>
 
         {error && (
-          <p className="text-red-300 text-sm mb-4 text-center font-medium">
-            {error}
-          </p>
+          <p className="text-red-300 text-sm mb-4 text-center">{error}</p>
         )}
 
-        <form onSubmit={handleLogin} className="space-y-6">
-          <input
-            type="text"
-            placeholder="Username"
-            className="w-full px-4 py-3 bg-white/30 text-white placeholder-white/80 rounded-xl border border-white/30 focus:outline-none focus:ring-2 focus:ring-purple-300"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+        {success && (
+          <p className="text-green-300 text-sm mb-4 text-center">{success}</p>
+        )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-3 bg-white/30 text-white placeholder-white/80 rounded-xl border border-white/30 focus:outline-none focus:ring-2 focus:ring-purple-300"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+        {mode === "login" ? (
+          <>
+            <form onSubmit={handleLogin} className="space-y-6">
+              <input
+                type="text"
+                placeholder="Username"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full py-3 rounded-xl font-semibold shadow-lg transition duration-300 text-white flex items-center justify-center ${
-              loading
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-purple-600 hover:bg-purple-700'
-            }`}
-          >
-            {loading ? (
-              <>
-                <svg
-                  className="animate-spin h-5 w-5 mr-2 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
+              {/* Password with eye */}
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-white/80"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                  ></path>
-                </svg>
-                Logging in...
-              </>
-            ) : (
-              'Login'
+                  {showPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 bg-purple-600 rounded-xl font-semibold hover:bg-purple-700"
+              >
+                {loading ? "Logging in..." : "Login"}
+              </button>
+            </form>
+
+            <p
+              className="mt-6 text-sm text-center text-white/80 cursor-pointer hover:text-white"
+              onClick={() => {
+                setMode("change");
+                setIsFirstLogin(false);
+                setOldPassword("");
+                setNewPassword("");
+                setConfirmPassword("");
+                setError("");
+                setSuccess("");
+              }}
+            >
+              Change password?
+            </p>
+          </>
+        ) : (
+          <form onSubmit={handleChangePassword} className="space-y-5">
+            <input
+              type="text"
+              placeholder="Username"
+              className="w-full px-4 py-3 bg-white/30 rounded-xl"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              disabled={isFirstLogin}
+            />
+
+            {!isFirstLogin && (
+              <div className="relative">
+                <input
+                  type={showOldPassword ? "text" : "password"}
+                  placeholder="Old Password"
+                  className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                  onClick={() => setShowOldPassword(!showOldPassword)}
+                >
+                  {showOldPassword ? "🙈" : "👁️"}
+                </span>
+              </div>
             )}
-          </button>
-        </form>
+
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="New Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+              <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() => setShowNewPassword(!showNewPassword)}
+              >
+                {showNewPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
+
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm New Password"
+                className="w-full px-4 py-3 bg-white/30 rounded-xl pr-12"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <span
+                className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={() =>
+                  setShowConfirmPassword(!showConfirmPassword)
+                }
+              >
+                {showConfirmPassword ? "🙈" : "👁️"}
+              </span>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 bg-purple-600 rounded-xl font-semibold hover:bg-purple-700"
+            >
+              {loading ? "Updating..." : "Update Password"}
+            </button>
+
+            <p
+              className="text-sm text-center text-white/70 cursor-pointer hover:text-white"
+              onClick={() => {
+                setMode("login");
+                setError("");
+                setSuccess("");
+              }}
+            >
+              Back to login
+            </p>
+          </form>
+        )}
       </div>
 
-      {/* Tailwind custom animation */}
       <style>{`
         @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20%, 60% { transform: translateX(-8px); }
-          40%, 80% { transform: translateX(8px); }
+          0%,100% { transform: translateX(0); }
+          20%,60% { transform: translateX(-8px); }
+          40%,80% { transform: translateX(8px); }
         }
         .animate-shake {
           animation: shake 0.5s ease-in-out;

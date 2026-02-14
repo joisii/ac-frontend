@@ -2,33 +2,63 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import gradients from "../config/gradients"; // ✅ use centralized gradients
+import gradients from "../config/gradients";
+import API_BASE from "../config";
 
-// Temporary static data (replace later with Excel import)
-const textileClients = [
-  { id: 1, name: "GLOFIL FIBRES & PLASTICS", location: "Chennai", application: "Textile Show Room", acType: "Inv DSAC" },
-  { id: 2, name: "New Lakshmi Fashion Stores", location: "Chennai", application: "Textile Show Room", acType: "DSAC" },
-  { id: 3, name: "Kai Rasi Silks", location: "Chennai", application: "Showroom", acType: "I PAC" },
-  { id: 4, name: "Mahalakshmi Sarress", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 5, name: "Golden Textiles", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 6, name: "Smile Textile Show Room", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 7, name: "Gani Textiles", location: "Chennai", application: "Showroom", acType: "DSAC" },
-  { id: 8, name: "'Fashion World", location: "Chennai", application: "Store", acType: "DSAC" },
-];
+// 🔹 Skeleton Row Component
+const SkeletonRow = () => {
+  return (
+    <tr className="animate-pulse">
+      {[1, 2, 3, 4, 5].map((_, i) => (
+        <td key={i} className="p-3 border">
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
 
 export default function TextileShopProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = textileClients.filter(
+  // 🔹 Fetch textile projects from backend
+  useEffect(() => {
+    const fetchTextileProjects = async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/projects?category=textile`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching textile projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTextileProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Motion variants
@@ -57,7 +87,6 @@ export default function TextileShopProjects() {
       animate="visible"
       exit="hidden"
       variants={containerVariants}
-      // 🔵 using centralized gradient from gradients.js
       className={`min-h-screen bg-gradient-to-b ${gradients.textile} py-16 px-6 font-sans`}
     >
       {/* Back Button */}
@@ -78,7 +107,7 @@ export default function TextileShopProjects() {
         Textile Shop Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -93,7 +122,10 @@ export default function TextileShopProjects() {
       </motion.div>
 
       {/* Data Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
@@ -105,14 +137,20 @@ export default function TextileShopProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <>
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonRow key={index} />
+                ))}
+              </>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
-                  transition={{ delay: 0.3 + index * 0.1 }}
+                  transition={{ duration: 0.3 }}
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
@@ -121,7 +159,7 @@ export default function TextileShopProjects() {
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>

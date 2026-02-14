@@ -3,50 +3,71 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import gradients from "../config/gradients";
+import API_BASE from "../config";
 
-// Static data (replace with Excel import later)
-const worshipClients = [
-  { id: 1, name: "Apostolic Christian Fellowship", location: "Chennai", application: "Church", acType: "PAC" },
-  { id: 2, name: "Shekina Assembly Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 3, name: "RZIM", location: "Chennai", application: "Church", acType: "SAC" },
-  { id: 4, name: "Hebron Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 5, name: "Arc of Victory Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 6, name: "Christ Vision Church Trust", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 7, name: "Blue Breeze AC", location: "Coimbatore", application: "Church", acType: "DSAC" },
-  { id: 8, name: "Harvest Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 9, name: "AG Church at Anagaputur", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 10, name: "CSI Holy Redeemers church", location: "Coimbatore", application: "Church", acType: "V Cool" },
-  { id: 11, name: "Pastor Hagai Melkizethek", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 12, name: "ECI - St Peters Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 13, name: "Full Gospel AG Church", location: "Chennai", application: "Church", acType: "DSAC" },
-  { id: 14, name: "CSI – Immanuel Church", location: "Chennai", application: "Church", acType: "PAC" },
-  { id: 15, name: "Shree Jain Sangh Trust", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
-  { id: 16, name: "ECI – Thirumangalamp", location: "Chennai", application: "Prayer Hall", acType: "DSAC" },
-  { id: 17, name: "Healing Gospel Church (HGC)", location: "Chennai", application: "Church", acType: "V Cool" },
-  { id: 18, name: "Elohim Ministries", location: "Chennai", application: "Church", acType: "SAC" },
-  { id: 19, name: "Pastor John Jebaraj Ministries", location: "Coimbatore", application: "Church", acType: "V Cool" },
-];
-
+// 🔹 Skeleton Row Component
+const SkeletonRow = () => {
+  return (
+    <tr className="animate-pulse">
+      {[1, 2, 3, 4, 5].map((_, i) => (
+        <td key={i} className="p-3 border">
+          <div className="h-4 bg-gray-300 rounded w-full"></div>
+        </td>
+      ))}
+    </tr>
+  );
+};
 
 export default function WorshipProjects() {
   const [search, setSearch] = useState("");
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const filteredClients = worshipClients.filter(
+  // 🔹 Fetch worship projects from backend (LIVE SAFE)
+  useEffect(() => {
+    const fetchWorshipProjects = async () => {
+      try {
+        const res = await fetch(
+          `${API_BASE}/projects?category=worship`
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        setProjects(data);
+      } catch (error) {
+        console.error("Error fetching worship projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorshipProjects();
+  }, []);
+
+  // 🔹 Search filter
+  const filteredClients = projects.filter(
     (c) =>
-      c.name.toLowerCase().includes(search.toLowerCase()) ||
-      c.location.toLowerCase().includes(search.toLowerCase()) ||
-      c.acType.toLowerCase().includes(search.toLowerCase())
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.location?.toLowerCase().includes(search.toLowerCase()) ||
+      c.acType?.toLowerCase().includes(search.toLowerCase())
   );
 
   // Motion variants
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.2 } },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+    },
   };
 
   const itemVariants = {
@@ -86,7 +107,7 @@ export default function WorshipProjects() {
         Worship Center Projects
       </motion.h1>
 
-      {/* Search + Download */}
+      {/* Search */}
       <motion.div
         variants={itemVariants}
         className="max-w-3xl mx-auto mb-8 flex flex-col sm:flex-row items-center gap-4"
@@ -101,7 +122,10 @@ export default function WorshipProjects() {
       </motion.div>
 
       {/* Data Table */}
-      <motion.div variants={itemVariants} className="overflow-x-auto max-w-5xl mx-auto">
+      <motion.div
+        variants={itemVariants}
+        className="overflow-x-auto max-w-5xl mx-auto"
+      >
         <table className="w-full border border-gray-300 rounded-xl shadow-md text-sm">
           <thead>
             <tr className="bg-gray-100 text-left">
@@ -113,10 +137,16 @@ export default function WorshipProjects() {
             </tr>
           </thead>
           <tbody>
-            {filteredClients.length > 0 ? (
+            {loading ? (
+              <>
+                {[...Array(6)].map((_, index) => (
+                  <SkeletonRow key={index} />
+                ))}
+              </>
+            ) : filteredClients.length > 0 ? (
               filteredClients.map((c, index) => (
                 <motion.tr
-                  key={c.id}
+                  key={c._id}
                   variants={rowVariants}
                   initial="hidden"
                   animate="visible"
@@ -124,11 +154,12 @@ export default function WorshipProjects() {
                   whileHover={{
                     y: -3,
                     boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
-                    background: "linear-gradient(90deg, rgba(0,0,255,0.1), rgba(255,255,255,0.05))",
+                    background:
+                      "linear-gradient(90deg, rgba(0,0,255,0.1), rgba(255,255,255,0.05))",
                   }}
                   className="cursor-pointer"
                 >
-                  <td className="p-3 border">{c.id}</td>
+                  <td className="p-3 border">{index + 1}</td>
                   <td className="p-3 border">{c.name}</td>
                   <td className="p-3 border">{c.location}</td>
                   <td className="p-3 border">{c.application}</td>
