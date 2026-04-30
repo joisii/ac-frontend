@@ -1,1 +1,5 @@
+# Allow SSL verification (VERY IMPORTANT)
+/.well-known/acme-challenge/*  /.well-known/acme-challenge/:splat  200
+
+# Your existing SPA fallback
 /*    /index.html   200
